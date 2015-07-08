@@ -4,6 +4,9 @@
 #include <Windows.h>
 namespace Application
 {
+
+	//this is a test to see if git hub gets this updated version
+
 	/*
 	Windows application class
 	defines and maintans a win32 window
