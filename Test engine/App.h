@@ -5,7 +5,6 @@
 namespace Application
 {
 
-	//this is a test to see if git hub gets this updated version
 
 	/*
 	Windows application class
