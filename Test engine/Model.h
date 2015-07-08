@@ -44,9 +44,30 @@ namespace JR_Model
 		Model();
 		//deconstructor--  cleans up dynamic memory of the model object
 		~Model();
+
+		bool init();
+		void shutdown();
+		void render();
+
+		int getIndexCount();
+		ID3D11ShaderResourceView* getTexture();
 	private:
 
-	private:
+		bool initBuffers();
+		void shutdownBuffers();
+		void renderBuffers();
 
+		bool loadTexture();
+		void releaseTexture();
+
+		bool loadModel();
+		void releaseModel();
+
+
+	private:
+		ID3D11Buffer * m_vertexBuffer, *m_indexBuffer;
+		int m_vertexCount, m_indexCount;
+		//Texture* m_texture;
+		ModelType m_model;
 	};
 }
