@@ -13,11 +13,17 @@ namespace JR_Texture
 		//deconstructor-- cleans up dynamic memory for the Texture class
 		~Texture();
 
-		bool init();
+		//init-- initializes the texture
+		//device- the device to use for initialization
+		//filename- the name of the file to load the texture from
+		bool init(ID3D11Device* device, WCHAR* filename);
+		//shutdown-- cleans up and releases the dynamic memory for the texture
 		void shutdown();
 
+		//getTexture-- returns the texture
 		ID3D11ShaderResourceView* getTexture();
 	private:
+		//texture-- the actual texture data for this texture class
 		ID3D11ShaderResourceView* m_texture;
 	};
 }
