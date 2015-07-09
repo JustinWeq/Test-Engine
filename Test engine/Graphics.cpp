@@ -36,7 +36,9 @@ namespace JR_Graphics
 		IDXGIFactory* factory;
 		IDXGIAdapter* adapter;
 		IDXGIOutput* adapterOutput;
-		unsigned int numModes, i, numerator, denominator, stringLength;
+		unsigned int numModes, i, numerator, denominator;
+		int* stringLength = new int[1];
+		stringLength[0] = 0;
 		DXGI_MODE_DESC* displayModeList;
 		DXGI_ADAPTER_DESC adapterDesc;
 		int error;
@@ -104,7 +106,7 @@ namespace JR_Graphics
 		m_videoCardMemory = (int)(adapterDesc.DedicatedVideoMemory / 1024 / 1024);
 
 		//convert the name of the video card to a character array and store it.
-		error = wcstombs_s((size_t*)(&stringLength), m_videoCardDescription, 128, adapterDesc.Description, 128);
+		error = wcstombs_s((size_t*)(stringLength), m_videoCardDescription, 128, adapterDesc.Description, 128);
 		if (error != 0)
 		{
 			return false;

@@ -28,7 +28,7 @@ namespace JR_Shader
 		bool result;
 
 		//init the vertex and pixel shaders
-		result = initShader(device, hwnd, L"shader.vs", L"shader.ps");
+		result = initShader(device, hwnd, L"defualt.vs", L"defualt.ps");
 		if (!result)
 		{
 			return false;
@@ -118,7 +118,7 @@ namespace JR_Shader
 		}
 
 		//Compile the pixel shader code
-		result = D3DX11CompileFromFile(psFilename, NULL, NULL, "DefualtPixelShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(psFilename, NULL, NULL, "defualtPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&pixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{

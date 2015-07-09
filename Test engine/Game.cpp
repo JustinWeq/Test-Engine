@@ -26,7 +26,7 @@ void init()
 {
 	app = App();
 
-	app.init(640, 480, false , L"Test engine");
+	app.init(640, 480, true , L"Test engine");
 
 	//Create view matrix
 	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 10, 0), &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 1, 0));
@@ -42,13 +42,14 @@ void init()
     model = new Model();
 
 	//init the graphics
-	graphics->init(app.getScreenWidth(), app.getScreenHeight(), true, app.getHWND(), false, 1000, 0.2);
+	error =  graphics->init(app.getScreenWidth(), app.getScreenHeight(), true, app.getHWND(), true, 1000, 0.2);
+
 
 	//init the shader
-	shader->init(graphics->getDevice(), app.getHWND());
+	error = shader->init(graphics->getDevice(), app.getHWND());
 
 	//init the model
-	model->init(graphics->getDevice(), "cube.dat", TEXT("texture.dds"));
+	error = model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
 }
 
 bool update()
@@ -88,6 +89,9 @@ bool update()
 			{
 				done = true;
 			}
+
+			//now do the draw updates
+			draw();
 		}
 
 	}
@@ -98,12 +102,28 @@ bool update()
 
 void draw()
 {
+	D3DXMATRIX world,projection;
+	bool result;
 
+	//Clear the buffers to begin the scene.
+	graphics->beginDrawing(0, 0, 0, 1);
+
+	graphics->getWorldMatrix(world);
+	graphics->getProjectionMatrix(projection);
+
+	model->render(graphics->getDeviceContext());
+
+	//render the model using the defualt shader
+	shader->render(graphics->getDeviceContext(), model->getIndexCount(), world, view,
+		projection, model->getTexture(), D3DXVECTOR3(0, 0, 5), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0, 10, 0), D3DXVECTOR4(1, 1, 1, 1), 2);
+
+	//present the rendered scene
+	graphics->endDrawing();
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
-	try
-	{
+
 		init();
 		if (!error)
 		{
@@ -114,13 +134,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 			//there was a problem setting up so tell the user that
 			MessageBox(app.getHWND(), L"There was an error setting up D3D, closing application", L"Error", MB_OK);
 		}
-	}
-	catch (exception e)
-	{
-		const char* error = e.what();
-
-		MessageBox(NULL, L"There was an unknown exception", TEXT("Error"), MB_OK);
-	}
+	
 
 	app.shutdown();
 	return 0;

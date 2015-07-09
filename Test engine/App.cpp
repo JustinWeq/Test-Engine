@@ -95,8 +95,8 @@ namespace Application
 		else
 		{
 			//place the window in the center of the screen
-			m_posX = screenWidth - m_width / 2;
-			m_posY = screenHeight - m_height / 2;
+			m_posX = screenWidth/2 - (m_width / 2);
+			m_posY = screenHeight/2 - (m_height / 2);
 		}
 
 		//create the window with the screen settings and get the handle to it
