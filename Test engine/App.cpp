@@ -83,6 +83,8 @@ namespace Application
 			screenSettings.dmPelsHeight = (unsigned long)screenHeight;
 			screenSettings.dmBitsPerPel = 32;
 			screenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+			m_width = screenWidth;
+			m_height = screenHeight;
 
 			//change the display settings to fullscreen.
 			ChangeDisplaySettings(&screenSettings, CDS_FULLSCREEN);

@@ -160,8 +160,12 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cube.mdl" />
     <None Include="defualt.ps" />
     <None Include="defualt.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="texture.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

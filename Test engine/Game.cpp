@@ -26,7 +26,7 @@ void init()
 {
 	app = App();
 
-	app.init(480, 640, true , L"Test engine");
+	app.init(640, 480, false , L"Test engine");
 
 	//Create view matrix
 	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 10, 0), &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 1, 0));
@@ -42,7 +42,13 @@ void init()
     model = new Model();
 
 	//init the graphics
-	graphics->init()
+	graphics->init(app.getScreenWidth(), app.getScreenHeight(), true, app.getHWND(), false, 1000, 0.2);
+
+	//init the shader
+	shader->init(graphics->getDevice(), app.getHWND());
+
+	//init the model
+	model->init(graphics->getDevice(), "cube.dat", TEXT("texture.dds"));
 }
 
 bool update()

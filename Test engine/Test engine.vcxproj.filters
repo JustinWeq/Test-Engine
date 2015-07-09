@@ -58,5 +58,13 @@
     <None Include="defualt.vs">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="cube.mdl">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="texture.dds">
+      <Filter>Source Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
