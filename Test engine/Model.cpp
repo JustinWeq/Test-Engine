@@ -204,4 +204,101 @@ namespace JR_Model
 		//set the type of primitive topology to use for rendering
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
+
+	//loadTexture-- loads the texture for this model
+	//device- the device to use for loading
+	//filename- the name of the file the texture is in
+	bool Model::loadTexture(ID3D11Device* device, WCHAR* filename)
+	{
+		bool result;
+		//Create the texture object
+		m_texture = new Texture();
+		result = m_texture->init(device, filename);
+		if (!result)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	//releaseTexture-- cleans up memory for the texture
+	void Model::releaseTexture()
+	{
+		if (m_texture)
+		{
+			m_texture->shutdown();
+			delete m_texture;
+			m_texture = NULL;
+		}
+	}
+
+	//loadModel-- loads the model
+	//filename- the name of the file to load the model from
+	bool Model::loadModel(char* filename)
+	{
+		ifstream fin;
+		char input;
+
+		//Open the model file
+		fin.open(filename);
+
+		//If the file could not be opened then exit
+		if (fin.fail())
+		{
+			return false;
+		}
+
+		//Read up to the value of vertex count
+		fin.get(input);
+		while (input != ':')
+		{
+			fin.get(input);
+		}
+
+		//Read in the vertex count
+		fin >> m_vertexCount;
+
+		//Set the number of indices to be the same as the vertex count
+		m_indexCount = m_vertexCount;
+
+		//Create the model using the vertex count that was read in.
+		m_model = new ModelType[m_vertexCount];
+		if (!m_model)
+		{
+			return false;
+		}
+
+		//Read up to the begining of the data
+		fin.get(input);
+		while (input != ':')
+		{
+			fin.get(input);
+		}
+		fin.get(input);
+		fin.get(input);
+
+		//Read in the vertex data
+		for (int i = 0; i < m_vertexCount; i++)
+		{
+			fin >> m_model[i].x >> m_model[i].y >> m_model[i].z;
+			fin >> m_model[i].tu >> m_model[i].tv;
+			fin >> m_model[i].nx >> m_model[i].ny >> m_model[i].nz;
+		}
+
+		//Close the model file.
+		fin.close();
+
+		return true;
+	}
+
+	//releaseModel-- releases the memory for the model
+	void Model::releaseModel()
+	{
+		if (m_model)
+		{
+			delete[] m_model;
+			m_model = NULL;
+		}
+	}
 }
