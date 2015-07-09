@@ -51,4 +51,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="defualt.ps">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="defualt.vs">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
