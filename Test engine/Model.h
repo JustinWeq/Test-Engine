@@ -99,6 +99,6 @@ namespace JR_Model
 		//texture-- the texture for this model
 		Texture* m_texture;
 		//model-- the model information
-		ModelType m_model;
+		ModelType* m_model;
 	};
 }
