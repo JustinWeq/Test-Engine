@@ -42,7 +42,7 @@ void init()
     model = new Model();
 
 	//init the graphics
-
+	graphics->init()
 }
 
 bool update()

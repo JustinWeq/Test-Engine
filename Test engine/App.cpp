@@ -202,5 +202,17 @@ namespace Application
 		return m_hwnd;
 	}
 
+	//getScreenWidth-- reutrns the width of the screen
+	int App::getScreenWidth()
+	{
+		return m_width;
+	}
+
+	//getScreenHeight-- returns the height of the screen
+	int App::getScreenHeight()
+	{
+		return m_height;
+	}
+
 	
 }

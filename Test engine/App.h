@@ -23,6 +23,13 @@ namespace Application
 
 		//getHWND-- returns the HWND of this app
 		HWND getHWND();
+
+		//getScreenWidth-- reutrns the width of the screen
+		int getScreenWidth();
+
+		//getScreenHeight-- reutrns the height of the screen
+		int getScreenHeight();
+
 	private:
 	    
 		void initWindows();
