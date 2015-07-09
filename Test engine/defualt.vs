@@ -35,6 +35,7 @@ PixelInput DefualtVertexShader(VertexInput input)
 
   //Change the position vector to be 4 units for proper matrix calculations
   input.position.w = 1.0f;
+  ///werwewewrgrgegrreg
 
   //Calculate the position of the vertex against the world view and projection matricies
   output.position = mul(input.position,worldMatrix);
@@ -45,7 +46,6 @@ PixelInput DefualtVertexShader(VertexInput input)
   output.tex = input.tex;
   //Calculate the normal vector against the world matrix only
   output.normal = mul(input.normal,(float3x3)worldMatrix);
-
   //Normalize the normal vector
   output.normal = normalize(output.normal);
 
@@ -56,7 +56,8 @@ PixelInput DefualtVertexShader(VertexInput input)
   output.viewDirection = cameraPosition.xyz - worldPosition.xyz;
 
   //Normalize the viewing direction vector
-  output.viewDirection = normalize(output.viewDirection)
+  output.viewDirection = normalize(output.viewDirection);
+  
   
   return output;
 }
