@@ -196,5 +196,11 @@ namespace Application
 		closeWindows();
 	}
 
+	//getHWND-- returns the HWND of this app
+	HWND App::getHWND()
+	{
+		return m_hwnd;
+	}
+
 	
 }

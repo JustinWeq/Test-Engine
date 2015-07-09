@@ -20,6 +20,9 @@ namespace Application
 		void shutdown();
 		LRESULT CALLBACK MessageHandler(HWND parent, UINT command, WPARAM wparam, LPARAM lparam);
         bool frame();
+
+		//getHWND-- returns the HWND of this app
+		HWND getHWND();
 	private:
 	    
 		void initWindows();
