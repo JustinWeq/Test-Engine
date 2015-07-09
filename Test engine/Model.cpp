@@ -133,6 +133,7 @@ namespace JR_Model
 		{
 			return false;
 		}
+
 		//Set up the description of the static index buffer
 		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 		indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
