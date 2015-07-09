@@ -28,7 +28,7 @@ namespace JR_Shader
 		bool result;
 
 		//init the vertex and pixel shaders
-		result = initShader(device, hwnd, L"shader.vs", L"shader.ps");
+		result = initShader(device, hwnd, L"defualt.vs", L"defualt.ps");
 		if (!result)
 		{
 			return false;
