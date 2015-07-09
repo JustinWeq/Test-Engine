@@ -15,11 +15,11 @@ void init();
 bool update();
 void draw();
 App app;
-Shader shader;
+Shader* shader;
 float cubeRot;
 D3DXMATRIX view;
-Graphics graphics;
-Model model;
+Graphics* graphics;
+Model* model;
 bool error = false;
 
 void init()
@@ -32,14 +32,14 @@ void init()
 	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 10, 0), &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 1, 0));
 
 	//Create the graphics
-	graphics = Graphics();
+	graphics = new Graphics();
 
 	//Create the shader
-	shader = Shader();
+	shader = new Shader();
 
 	//Create the model
 
-	model = Model();
+    model = new Model();
 
 	//init the graphics
 
