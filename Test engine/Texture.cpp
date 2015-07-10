@@ -26,6 +26,7 @@ namespace JR_Texture
 		{
 			return false;
 		}
+		return true;
 	}
 
 	//shutdown-- cleans up and releases the dynamic memory for the texture

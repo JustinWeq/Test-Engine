@@ -96,13 +96,13 @@ namespace Application
 		{
 			//place the window in the center of the screen
 			m_posX = screenWidth/2 - (m_width / 2);
-			m_posY = screenHeight/2 - (m_height / 2);
+				m_posY = screenHeight/2 - (m_height / 2);
 		}
 
 		//create the window with the screen settings and get the handle to it
 		m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
 			WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
-			m_posX, m_posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
+			m_posX, m_posY, m_width, m_height, NULL, NULL, m_hinstance, NULL);
 
 		//bring the window up to the screen and request the focus
 		ShowWindow(m_hwnd, SW_SHOW);

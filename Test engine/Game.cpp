@@ -26,10 +26,10 @@ void init()
 {
 	app = App();
 
-	app.init(640, 480, true , L"Test engine");
+	app.init(800, 600, false , L"Test engine");
 
 	//Create view matrix
-	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 10, 0), &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, -10), &D3DXVECTOR3(0, 0, -9), &D3DXVECTOR3(0, 1, 0));
 
 	//Create the graphics
 	graphics = new Graphics();
@@ -42,14 +42,14 @@ void init()
     model = new Model();
 
 	//init the graphics
-	error =  graphics->init(app.getScreenWidth(), app.getScreenHeight(), true, app.getHWND(), true, 1000, 0.2);
+	error !=  graphics->init(app.getScreenWidth(), app.getScreenHeight(),true, app.getHWND(), false, 1000, 0.2);
 
 
 	//init the shader
-	error = shader->init(graphics->getDevice(), app.getHWND());
+	error != shader->init(graphics->getDevice(), app.getHWND());
 
 	//init the model
-	error = model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
+	error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
 }
 
 bool update()
@@ -63,7 +63,7 @@ bool update()
 
 	// Loop until there is a quit message from the window or the user.
 	done = false;
-	while (!done)
+	while (!done && !error)
 	{
 		// Handle the windows messages.
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -106,7 +106,7 @@ void draw()
 	bool result;
 
 	//Clear the buffers to begin the scene.
-	graphics->beginDrawing(0, 0, 0, 1);
+	graphics->beginDrawing(0, 1, 0, 1);
 
 	graphics->getWorldMatrix(world);
 	graphics->getProjectionMatrix(projection);
@@ -114,9 +114,13 @@ void draw()
 	model->render(graphics->getDeviceContext());
 
 	//render the model using the defualt shader
-	shader->render(graphics->getDeviceContext(), model->getIndexCount(), world, view,
-		projection, model->getTexture(), D3DXVECTOR3(0, 0, 5), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0, 10, 0), D3DXVECTOR4(1, 1, 1, 1), 2);
+	result = shader->render(graphics->getDeviceContext(), model->getIndexCount(), world, view,
+		projection, model->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(0.15f, 0.15f, 0.15f, 1),
+		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0, 0, -10), D3DXVECTOR4(1, 1, 1, 1), 32);
+	if (!result)
+	{
+		error = true;
+	}
 
 	//present the rendered scene
 	graphics->endDrawing();

@@ -62,6 +62,7 @@ float4 defualtPixelShader(PixelInput input) :SV_TARGET
    color = color * textureColor;
 
    //Add the specular componenet last to the output color
-
+   color = saturate(color + specular);
+   
    return color;
 }
