@@ -4,6 +4,7 @@
 #include "Model.h"
 #include <D3DX10math.h>
 #include "Graphics.h"
+#include <math.h>
 using namespace Application;
 using namespace std;
 using namespace JR_Model;
@@ -89,7 +90,8 @@ bool update()
 			{
 				done = true;
 			}
-
+			cubeRot += 0.02;
+			 //modf(3.149,&cubeRot);
 			//now do the draw updates
 			draw();
 		}
@@ -110,6 +112,7 @@ void draw()
 
 	graphics->getWorldMatrix(world);
 	graphics->getProjectionMatrix(projection);
+	D3DXMatrixRotationY(&world,cubeRot);
 
 	model->render(graphics->getDeviceContext());
 

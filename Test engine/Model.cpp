@@ -281,9 +281,9 @@ namespace JR_Model
 		//Read in the vertex data
 		for (int i = 0; i < m_vertexCount; i++)
 		{
-			fin >> m_model[i].x >> m_model[i].y >> m_model[i].z;
-			fin >> m_model[i].tu >> m_model[i].tv;
-			fin >> m_model[i].nx >> m_model[i].ny >> m_model[i].nz;
+			fin >> m_model[m_vertexCount-1-i].x >> m_model[m_vertexCount - 1 - i].y >> m_model[m_vertexCount - 1 - i].z;
+			fin >> m_model[m_vertexCount - 1 - i].tu >> m_model[m_vertexCount - 1 - i].tv;
+			fin >> m_model[m_vertexCount - 1 - i].nx >> m_model[m_vertexCount - 1 - i].ny >> m_model[m_vertexCount - 1 - i].nz;
 		}
 
 		//Close the model file.
