@@ -149,16 +149,20 @@
     <ClCompile Include="FBXModel.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="FBXModel.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
