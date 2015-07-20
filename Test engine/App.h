@@ -30,6 +30,9 @@ namespace Application
 		//getScreenHeight-- reutrns the height of the screen
 		int getScreenHeight();
 
+		//getHinstance-- returns the hinstance of this app
+		HINSTANCE getHinstance();
+
 	private:
 	    
 		void initWindows();

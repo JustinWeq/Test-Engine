@@ -5,11 +5,13 @@
 #include <D3DX10math.h>
 #include "Graphics.h"
 #include <math.h>
+#include "Input.h"
 using namespace Application;
 using namespace std;
 using namespace JR_Model;
 using namespace JR_Shader;
 using namespace JR_Graphics;
+using namespace JR_Input;
 
 //prototypes
 void init();
@@ -21,6 +23,8 @@ float cubeRot;
 D3DXMATRIX view;
 Graphics* graphics;
 Model* model;
+Input* input;
+
 bool error = false;
 
 void init()
@@ -51,6 +55,12 @@ void init()
 
 	//init the model
 	error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
+
+	//init the input device
+	input = new Input();
+
+	 input->init(app.getHinstance(), app.getHWND(), app.getScreenWidth(), app.getScreenHeight());
+
 }
 
 bool update()
@@ -94,6 +104,12 @@ bool update()
 			 //modf(3.149,&cubeRot);
 			//now do the draw updates
 			draw();
+		}
+		input->Frame();
+		////check to see if the escape key is pressed
+		if (input->IsKeyPressed(DIK_ESCAPE))
+		{
+			done = true;
 		}
 
 	}

@@ -182,7 +182,7 @@ namespace Application
 			//check to see if its the escape key if it is quit
 			if ((unsigned int)wparam == VK_ESCAPE)
 			{
-				finished = true;
+				//finished = true;
 			}
 			return 0;
 		}
@@ -214,6 +214,12 @@ namespace Application
 	int App::getScreenHeight()
 	{
 		return m_height;
+	}
+
+	//getHinstance-- returns the hinstance of this app
+	HINSTANCE App::getHinstance()
+	{
+		return m_hinstance;
 	}
 
 	

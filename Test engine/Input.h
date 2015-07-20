@@ -8,6 +8,7 @@ namespace JR_Input
 {
 	class Input
 	{
+	public:
 		Input();
 		~Input();
 
