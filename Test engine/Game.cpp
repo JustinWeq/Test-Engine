@@ -7,6 +7,7 @@
 #include <math.h>
 #include "Input.h"
 #include "Sound.h"
+#include "Object.h"
 using namespace Application;
 using namespace std;
 using namespace JR_Model;
@@ -14,6 +15,7 @@ using namespace JR_Shader;
 using namespace JR_Graphics;
 using namespace JR_Input;
 using namespace JR_Sound;
+using namespace JR_Object;
 
 //prototypes
 void init();
@@ -24,7 +26,8 @@ Shader* shader;
 float cubeRot;
 D3DXMATRIX view;
 Graphics* graphics;
-Model* model;
+//Model* model;
+Object* object;
 Input* input;
 Sound* sound;
 bool error = false;
@@ -36,7 +39,7 @@ void init()
 	app.init(800, 600, false , L"Test engine");
 
 	//Create view matrix
-	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, -10), &D3DXVECTOR3(0, 0, -9), &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, 10), &D3DXVECTOR3(0, 0, -9), &D3DXVECTOR3(0, 1, 0));
 
 	//Create the graphics
 	graphics = new Graphics();
@@ -46,7 +49,10 @@ void init()
 
 	//Create the model
 
-    model = new Model();
+    //model = new Model();
+
+	//Create the managed object
+	object = new Object();
 
 	//init the graphics
 	error !=  graphics->init(app.getScreenWidth(), app.getScreenHeight(),true, app.getHWND(), false, 1000, 0.2);
@@ -56,7 +62,9 @@ void init()
 	error != shader->init(graphics->getDevice(), app.getHWND());
 
 	//init the model
-	error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
+	//error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
+
+	error  != object->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
 
 	//init the input device
 	input = new Input();
@@ -119,6 +127,37 @@ bool update()
 			done = true;
 		}
 
+		//read input for player movement.
+		float x = 0, y = 0, z = 0;
+		
+		//read left movement
+		if (input->IsKeyPressed(DIK_A))
+		{
+			x += 1;
+		}
+
+		//read right movement
+		if (input->IsKeyPressed(DIK_D))
+		{
+			x -= 1;
+		}
+
+		//read up movement
+		if (input->IsKeyPressed(DIK_W))
+		{
+			z -= 1;
+		}
+
+		//read down movement
+		if (input->IsKeyPressed(DIK_S))
+		{
+			z += 1;
+		}
+
+		D3DXMATRIX matrix;
+		D3DXMatrixTranslation(&matrix, x, y, z);
+		(*object)*matrix;
+
 	}
 	return true;
 }
@@ -136,12 +175,13 @@ void draw()
 	graphics->getWorldMatrix(world);
 	graphics->getProjectionMatrix(projection);
 	D3DXMatrixRotationY(&world,cubeRot);
-
-	model->render(graphics->getDeviceContext());
+	//(*object)*world;
+	//model->render(graphics->getDeviceContext());
+	object->render(graphics->getDeviceContext());
 
 	//render the model using the defualt shader
-	result = shader->render(graphics->getDeviceContext(), model->getIndexCount(), world, view,
-		projection, model->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(0.15f, 0.15f, 0.15f, 1),
+	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() , object->getWorld(), view,
+		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(0.15f, 0.15f, 0.15f, 1),
 		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0, 0, -10), D3DXVECTOR4(1, 1, 1, 1), 32);
 	if (!result)
 	{
