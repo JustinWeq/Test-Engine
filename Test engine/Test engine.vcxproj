@@ -173,6 +173,9 @@
   <ItemGroup>
     <Image Include="texture.dds" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\Music\BarFight.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

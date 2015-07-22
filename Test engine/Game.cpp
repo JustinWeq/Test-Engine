@@ -6,12 +6,14 @@
 #include "Graphics.h"
 #include <math.h>
 #include "Input.h"
+#include "Sound.h"
 using namespace Application;
 using namespace std;
 using namespace JR_Model;
 using namespace JR_Shader;
 using namespace JR_Graphics;
 using namespace JR_Input;
+using namespace JR_Sound;
 
 //prototypes
 void init();
@@ -24,7 +26,7 @@ D3DXMATRIX view;
 Graphics* graphics;
 Model* model;
 Input* input;
-
+Sound* sound;
 bool error = false;
 
 void init()
@@ -61,6 +63,11 @@ void init()
 
 	 input->init(app.getHinstance(), app.getHWND(), app.getScreenWidth(), app.getScreenHeight());
 
+	 //create and set up the sound
+	 sound = new Sound();
+
+	 error != sound->init(app.getHWND());
+	 
 }
 
 bool update()

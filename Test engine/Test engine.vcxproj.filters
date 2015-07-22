@@ -85,4 +85,9 @@
       <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\Music\BarFight.wav">
+      <Filter>Source Files</Filter>
+    </Media>
+  </ItemGroup>
 </Project>
