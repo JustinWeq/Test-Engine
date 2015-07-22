@@ -154,9 +154,10 @@ bool update()
 			z += 1;
 		}
 
-		D3DXMATRIX matrix;
-		D3DXMatrixTranslation(&matrix, x, y, z);
-		(*object)*matrix;
+		//D3DXMATRIX matrix = object->getWorld();
+		//D3DXMatrixRotationY(&matrix, cubeRot);
+		//D3DXMatrixTranslation(&matrix, x, y, z);
+		//(*object)*matrix;
 
 	}
 	return true;
@@ -175,13 +176,13 @@ void draw()
 	graphics->getWorldMatrix(world);
 	graphics->getProjectionMatrix(projection);
 	D3DXMatrixRotationY(&world,cubeRot);
-	//(*object)*world;
+	(*object)*world;
 	//model->render(graphics->getDeviceContext());
 	object->render(graphics->getDeviceContext());
 
 	//render the model using the defualt shader
-	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() , object->getWorld(), view,
-		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(0.15f, 0.15f, 0.15f, 1),
+	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() , world, view,
+		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(1, 1, 1, 1),
 		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0, 0, -10), D3DXVECTOR4(1, 1, 1, 1), 32);
 	if (!result)
 	{
