@@ -2,7 +2,9 @@
 #include <D3D11.h>
 #include <D3DX10math.h>
 #include <fstream>
+#include <fbxsdk.h>;
 #include "Texture.h"
+#include <vector>
 using namespace std;
 using namespace JR_Texture;
 namespace JR_Model
@@ -83,6 +85,10 @@ namespace JR_Model
 		//loadModel-- loads the model
 		//filename- the name of the file to load the model from
 		bool loadModel(char* filename);
+
+		//loadFBXModel--load the model in a fbx format
+		//filename- the name of the file to load
+		bool loadFBXModel(char* filename);
 		//releaseModel-- releases the memory for the model
 		void releaseModel();
 
