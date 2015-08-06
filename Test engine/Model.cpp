@@ -309,8 +309,8 @@ namespace JR_Model
 		bool result;
 		vector<Vertex> vertices;
 		vector<D3DXVECTOR3> coords;
-		vector<D3DXVECTOR2> uvCoords;
-		vector<D3DXVECTOR3> normals;
+		vector<D3DXVECTOR2> uvCoordsf;
+		vector<D3DXVECTOR3> normalsf;
 
 
 		//set up the fbxmanager
@@ -319,7 +319,15 @@ namespace JR_Model
 		//set the settings for the manager
 		FbxIOSettings* ioSettings = FbxIOSettings::Create(fbxManager, IOSROOT);
 		fbxManager->SetIOSettings(ioSettings);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_MATERIAL, true);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_TEXTURE, true);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_LINK, false);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_SHAPE, false);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_GOBO, false);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_ANIMATION, true);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_GLOBAL_SETTINGS, true);
 
+		//set the settings for the fbx io settings
 		//create and init the importer
 		FbxImporter *importer = FbxImporter::Create(fbxManager,"");
 
@@ -327,7 +335,7 @@ namespace JR_Model
 		FbxScene* fbxScene = FbxScene::Create(fbxManager, "");
 		
 		//init the importer
-		result = importer->Initialize("model.fbx", -1, fbxManager->GetIOSettings());
+		result = importer->Initialize(filename, -1, fbxManager->GetIOSettings());
 		if (!result)
 		{
 			return false;
@@ -367,6 +375,7 @@ namespace JR_Model
 
 				FbxMesh* mesh =(FbxMesh*) fbxChildNode->GetNodeAttribute();
 
+				//get the vertices
 				FbxVector4* vertices = mesh->GetControlPoints();
 
 				for (int j = 0; j < mesh->GetPolygonCount(); j++)
@@ -384,16 +393,52 @@ namespace JR_Model
 						coords.push_back(vertex);
 					}
 				}
+				FbxLayerElementArrayTemplate<FbxVector4>** normals;
+				//get the normals
+				mesh->GetNormals(normals);
+				for (int j = 0; i < mesh->GetPolygonCount(); j++)
+				{
+					int numVertices = mesh->GetPolygonSize(j);
+					for (int k = 0; k < numVertices; k++)
+					{
+						D3DXVECTOR3 vertex;
+						vertex.x = normals[i][j][k].mData[0];
+						vertex.y = normals[i][j][k].mData[1];
+						vertex.z = normals[i][j][k].mData[2];
+						normalsf.push_back(vertex);
+					}
+				}
+				FbxLayerElementArrayTemplate<FbxVector2>** uvCoords;
+			    //get UV coords
+				mesh->GetTextureUV(uvCoords);
+				for (int j = 0; j < mesh->GetPolygonCount(); j++)
+				{
+					int numvertices = mesh->GetPolygonSize(j);
+					for (int k = 0; k < numvertices; k++)
+					{
+						D3DXVECTOR2 vertex;
+						vertex.x = uvCoords[i][j][k].mData[0];
+						vertex.y = uvCoords[i][j][k].mData[1];
+						uvCoordsf.push_back(vertex);
+					}
+				}
 			}
 
 		}
-		
-		//get the normals
-		
 
-		//get the uv coords
-		//get mesh
-		//FBXMesh* lMesh
+		//now add the obtained model information to the m_model
+		m_model = new ModelType[coords.size()];
+		for (int i = 0; i < coords.size(); i++)
+		{
+			m_model[i].x = coords[i].x;
+			m_model[i].y = coords[i].y;
+			m_model[i].z = coords[i].z;
+			m_model[i].nx = normalsf[i].x;
+			m_model[i].ny = normalsf[i].y;
+			m_model[i].nz = normalsf[i].z;
+			m_model[i].tu = uvCoordsf[i].x;
+			m_model[i].tv = uvCoordsf[i].y;
+		}
 		return true;
 	}
 }

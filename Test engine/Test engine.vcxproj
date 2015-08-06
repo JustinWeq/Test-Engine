@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cube.mdl" />
+    <None Include="D:\models\mushroom.fbx" />
     <None Include="defualt.ps" />
     <None Include="defualt.vs" />
   </ItemGroup>

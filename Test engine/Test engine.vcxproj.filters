@@ -79,6 +79,9 @@
     <None Include="cube.mdl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="D:\models\mushroom.fbx">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture.dds">
