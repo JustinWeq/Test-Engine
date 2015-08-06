@@ -306,6 +306,94 @@ namespace JR_Model
 	//filename- the name of the file to load
 	bool Model::loadFBXModel(char* filename)
 	{
+		bool result;
+		vector<Vertex> vertices;
+		vector<D3DXVECTOR3> coords;
+		vector<D3DXVECTOR2> uvCoords;
+		vector<D3DXVECTOR3> normals;
+
+
+		//set up the fbxmanager
+		FbxManager* fbxManager = FbxManager::Create();
+
+		//set the settings for the manager
+		FbxIOSettings* ioSettings = FbxIOSettings::Create(fbxManager, IOSROOT);
+		fbxManager->SetIOSettings(ioSettings);
+
+		//create and init the importer
+		FbxImporter *importer = FbxImporter::Create(fbxManager,"");
+
+		//create and init the scene
+		FbxScene* fbxScene = FbxScene::Create(fbxManager, "");
+		
+		//init the importer
+		result = importer->Initialize("model.fbx", -1, fbxManager->GetIOSettings());
+		if (!result)
+		{
+			return false;
+		}
+
+		//importer the scene
+		result = importer->Import(fbxScene);
+		if (!result)
+		{
+			return false;
+		}
+
+		//destroy the importer
+		importer->Destroy();
+
+		//get the root node
+		FbxNode* fbxRootNode = fbxScene->GetRootNode();
+
+		if (fbxRootNode)
+		{
+			//get the x,y,z coords of the vertices
+			for (int i = 0; i < fbxRootNode->GetChildCount(); i++)
+			{
+				FbxNode* fbxChildNode = fbxRootNode->GetChild(i);
+
+				if (fbxChildNode->GetNodeAttribute() == NULL)
+				{
+					continue;
+				}
+
+				FbxNodeAttribute::EType attributeType = fbxChildNode->GetNodeAttribute()->GetAttributeType();
+
+				if (attributeType != FbxNodeAttribute::eMesh)
+				{
+					continue;
+				}
+
+				FbxMesh* mesh =(FbxMesh*) fbxChildNode->GetNodeAttribute();
+
+				FbxVector4* vertices = mesh->GetControlPoints();
+
+				for (int j = 0; j < mesh->GetPolygonCount(); j++)
+				{
+					int numVerticies = mesh->GetPolygonSize(j);
+
+					for (int k = 0; k < numVerticies; k++)
+					{
+						int iControlPointIndex = mesh->GetPolygonVertex(j, k);
+
+						D3DXVECTOR3 vertex;
+						vertex.x = vertices[iControlPointIndex].mData[0];
+						vertex.y = vertices[iControlPointIndex].mData[1];
+						vertex.z = vertices[iControlPointIndex].mData[2];
+						coords.push_back(vertex);
+					}
+				}
+			}
+
+		}
+		
+		//get the normals
+		
+
+		//get the uv coords
+		//get mesh
+		//FBXMesh* lMesh
 		return true;
 	}
 }
