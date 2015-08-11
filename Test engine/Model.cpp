@@ -26,7 +26,8 @@ namespace JR_Model
 		bool result;
 
 		//load in the model data
-		result = loadModel(modelFilename);
+		result = loadFBXModel(modelFilename);
+		//result = loadModel(modelFilename);
 		if (!result)
 		{
 			return false;
@@ -319,13 +320,13 @@ namespace JR_Model
 		//set the settings for the manager
 		FbxIOSettings* ioSettings = FbxIOSettings::Create(fbxManager, IOSROOT);
 		fbxManager->SetIOSettings(ioSettings);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_MATERIAL, true);
+		/*(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_MATERIAL, true);
 		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_TEXTURE, true);
 		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_LINK, false);
 		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_SHAPE, false);
 		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_GOBO, false);
 		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_ANIMATION, true);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_GLOBAL_SETTINGS, true);
+		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_GLOBAL_SETTINGS, true);*/
 
 		//set the settings for the fbx io settings
 		//create and init the importer
@@ -333,11 +334,16 @@ namespace JR_Model
 
 		//create and init the scene
 		FbxScene* fbxScene = FbxScene::Create(fbxManager, "");
-		
 		//init the importer
-		result = importer->Initialize(filename, -1, fbxManager->GetIOSettings());
+		result = importer->Initialize(filename,-1, fbxManager->GetIOSettings());
 		if (!result)
 		{
+			string error = importer->GetStatus().GetErrorString();
+			FbxStatus status = importer->GetStatus().GetCode();
+			if (importer->GetStatus().GetCode() == FbxStatus::eFailure)
+			{
+				int test = 0;
+			}
 			return false;
 		}
 
@@ -440,5 +446,115 @@ namespace JR_Model
 			m_model[i].tv = uvCoordsf[i].y;
 		}
 		return true;
+	}
+
+	//loadObjModel--loads the model in the obj format
+	//filename- the name of the model to load
+	bool Model::loadObjModel(char * filename)
+	{
+		vector<D3DXVECTOR2> uv_coords;
+		vector<D3DXVECTOR3> coords;
+		vector<D3DXVECTOR3> normals;
+		vector<int> vertexIndices;
+		vector<int> uvIndices;
+		vector<int> normalIndices;
+		//load the model
+
+		FILE* file = fopen(filename, "r");
+
+		//if the file failed to open return false;
+		if (file == NULL)
+		{
+			return false;
+		}
+		//start reading 
+		while (true)
+		{
+			char line[128];
+			int result = fscanf(file, "%s", line);
+			//check to make sure that it is not the end of the file
+			if (result == EOF)
+				break;
+
+			//parse the model information
+			
+			//check to see if its a vertex
+			if (line == "v")
+			{
+				D3DXVECTOR3 vertex;
+				fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+				coords.push_back(vertex);
+			}
+			else
+			//check to see if its a uv coords
+			if (line == "vt")
+			{
+				D3DXVECTOR2 uv_coord;
+				fscanf(file, "%f %f\n", &uv_coord.x, &uv_coord.y);
+				uv_coords.push_back(uv_coord);
+			}
+			else
+			//check to see if its the normal coords
+			if (line == "vn")
+			{
+				D3DXVECTOR3 normal;
+				fscanf(file, "%f %f %f", &normal.x, &normal.y, &normal.z);
+				normals.push_back(normal);
+			}
+			else
+			//check to see if the line is a face
+			if (line == "f")
+			{
+				string v1, v2, v3;
+				unsigned int vertexIndex[3],uvIndex[3],normalIndex[3];
+				int matches = fscanf(file, "%d/%d/%d/%d/%d/%d/%d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+					&vertexIndex[1], &uvIndex[1], &normalIndex[1],
+					&vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+				if (matches != 9)
+				{
+					//close the file before returning
+					fclose(file);
+					return false;
+				}
+				vertexIndices.push_back(vertexIndex[0]);
+				vertexIndices.push_back(vertexIndex[1]);
+				vertexIndices.push_back(vertexIndex[2]);
+				uvIndices.push_back(uvIndex[0]);
+				uvIndices.push_back(uvIndex[1]);
+				uvIndices.push_back(uvIndex[2]);
+				normalIndices.push_back(normalIndex[0]);
+				normalIndices.push_back(normalIndex[1]);
+				normalIndices.push_back(normalIndex[2]);
+			}
+
+
+		}
+
+		//information has been parsed, now load the vertices into the model
+		
+		//set up m_model
+		m_model = new ModelType[vertexIndices.size()];
+
+		//read each vertex of the triangle
+		for (int i = 0; i < vertexIndices.size(); i++)
+		{
+			//read coords
+			m_model[i].x = coords[vertexIndices[i] - 1].x;
+			m_model[i].y = coords[vertexIndices[i] - 1].y;
+			m_model[i].z = coords[vertexIndices[i] - 1].z;
+			//read uvs
+			m_model[i].tu = uv_coords[uvIndices[i] - 1].x;
+			m_model[i].tv = uv_coords[uvIndices[i] - 1].y;
+			//read normals
+			m_model[i].nx = normals[normalIndices[i] - 1].x;
+			m_model[i].ny = normals[normalIndices[i] - 1].y;
+			m_model[i].nz = normals[normalIndices[i] - 1].z;
+
+		}
+
+		//close the file now that we are done reading it.
+		fclose(file);
+		//succesfully loaded model;
+		return true;;
 	}
 }

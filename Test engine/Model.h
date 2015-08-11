@@ -92,6 +92,10 @@ namespace JR_Model
 		//releaseModel-- releases the memory for the model
 		void releaseModel();
 
+		//loadObjModel--loads the model in the obj format
+		//filename- the name of the model to load
+		bool loadObjModel(char* filename);
+
 
 	private:
 		//vertexBuffer-- the vertex buffer

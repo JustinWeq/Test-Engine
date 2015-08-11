@@ -64,7 +64,7 @@ void init()
 	//init the model
 	//error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
 
-	error  != object->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
+	error  != object->init(graphics->getDevice(), "mushroom.fbx", TEXT("texture.dds"));
 
 	//init the input device
 	input = new Input();

@@ -75,8 +75,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2016.0\include;D:\DirectX11 SDK\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2016.0\lib\vs2013\x64\debug;D:\DirectX11 SDK\Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\include;D:\DirectX11 SDK\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\lib\vs2015\x64\debug;D:\DirectX11 SDK\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -108,7 +108,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2016.0\lib\vs2013\x64\release;C:\Program Files\Autodesk\FBX\FBX SDK\2016.0\lib\vs2013\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\lib\vs2015\x64\release;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\lib\vs2015\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -168,8 +168,14 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Downloads\cone.fbx">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="cube.mdl" />
-    <None Include="D:\models\mushroom.fbx" />
+    <None Include="D:\models\mushroom.fbx">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="D:\models\test.fbx" />
     <None Include="defualt.ps" />
     <None Include="defualt.vs" />
   </ItemGroup>
