@@ -42,6 +42,12 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Havoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cpu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -66,6 +72,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Havoch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cpu.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

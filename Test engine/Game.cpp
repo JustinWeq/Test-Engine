@@ -21,6 +21,7 @@ using namespace JR_Object;
 void init();
 bool update();
 void draw();
+void updateViewMatrix();
 App app;
 Shader* shader;
 float cubeRot;
@@ -31,7 +32,12 @@ Object* object;
 Input* input;
 Sound* sound;
 bool error = false;
-
+struct camera
+{
+public:
+	float x, y, z;
+	float rotX, rotY, rotZ;
+};
 void init()
 {
 	app = App();
@@ -161,6 +167,11 @@ bool update()
 
 	}
 	return true;
+}
+
+void updateViewMatrix()
+{
+	//update the position of the camera;
 }
 
 
