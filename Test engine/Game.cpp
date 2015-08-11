@@ -64,7 +64,7 @@ void init()
 	//init the model
 	//error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
 
-	error  != object->init(graphics->getDevice(), "mushroom.fbx", TEXT("texture.dds"));
+	error  != object->init(graphics->getDevice(), "Cube.obj", TEXT("texture.dds"));
 
 	//init the input device
 	input = new Input();
@@ -182,7 +182,7 @@ void draw()
 
 	//render the model using the defualt shader
 	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() , world, view,
-		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(1, 1, 1, 1),
+		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(1, 1, 1, 0.2),
 		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0, 0, -10), D3DXVECTOR4(1, 1, 1, 1), 32);
 	if (!result)
 	{

@@ -26,7 +26,7 @@ namespace JR_Model
 		bool result;
 
 		//load in the model data
-		result = loadFBXModel(modelFilename);
+		result = loadObjModel(modelFilename);
 		//result = loadModel(modelFilename);
 		if (!result)
 		{
@@ -479,7 +479,7 @@ namespace JR_Model
 			//parse the model information
 			
 			//check to see if its a vertex
-			if (line == "v")
+			if (strcmp(line,"v")==0)
 			{
 				D3DXVECTOR3 vertex;
 				fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
@@ -487,7 +487,7 @@ namespace JR_Model
 			}
 			else
 			//check to see if its a uv coords
-			if (line == "vt")
+			if (strcmp(line, "vt") == 0)
 			{
 				D3DXVECTOR2 uv_coord;
 				fscanf(file, "%f %f\n", &uv_coord.x, &uv_coord.y);
@@ -495,7 +495,7 @@ namespace JR_Model
 			}
 			else
 			//check to see if its the normal coords
-			if (line == "vn")
+			if (strcmp(line, "vn") == 0)
 			{
 				D3DXVECTOR3 normal;
 				fscanf(file, "%f %f %f", &normal.x, &normal.y, &normal.z);
@@ -503,11 +503,11 @@ namespace JR_Model
 			}
 			else
 			//check to see if the line is a face
-			if (line == "f")
+			if (strcmp(line, "f") == 0)
 			{
 				string v1, v2, v3;
 				unsigned int vertexIndex[3],uvIndex[3],normalIndex[3];
-				int matches = fscanf(file, "%d/%d/%d/%d/%d/%d/%d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+				int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
 					&vertexIndex[1], &uvIndex[1], &normalIndex[1],
 					&vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 				if (matches != 9)
@@ -534,6 +534,8 @@ namespace JR_Model
 		
 		//set up m_model
 		m_model = new ModelType[vertexIndices.size()];
+		m_vertexCount = vertexIndices.size();
+		m_indexCount = vertexIndices.size();
 
 		//read each vertex of the triangle
 		for (int i = 0; i < vertexIndices.size(); i++)
