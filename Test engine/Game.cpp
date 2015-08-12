@@ -89,7 +89,7 @@ void init()
 	 bitmap = new Bitmap();
 
 	 //init bitmap
-	 bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 100, 100);
+	 bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 32, 32);
 	 
 }
 

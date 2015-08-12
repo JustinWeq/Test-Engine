@@ -51,6 +51,9 @@
     <ClCompile Include="Bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -86,6 +89,9 @@
     <ClInclude Include="Bitmap.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="defualt.ps">
@@ -111,10 +117,18 @@
     <Image Include="texture.dds">
       <Filter>Source Files</Filter>
     </Image>
+    <Image Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\font.dds">
+      <Filter>Source Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\..\..\Music\BarFight.wav">
       <Filter>Source Files</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\fontdata.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

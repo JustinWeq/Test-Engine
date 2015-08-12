@@ -156,6 +156,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Cpu.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Havoc.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Cpu.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Havoch.h" />
     <ClInclude Include="Input.h" />
@@ -192,10 +194,14 @@
     <None Include="defualt.vs" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\font.dds" />
     <Image Include="texture.dds" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\..\..\Music\BarFight.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\fontdata.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
