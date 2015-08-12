@@ -11,6 +11,11 @@ cbuffer Light
  float4 specularColor;
 };
 
+cbuffer PixelColor
+{
+ float4 pixelColor;
+}
+
 struct PixelInput
 {
   float4 position : SV_POSITION;
@@ -24,6 +29,7 @@ struct TexturePixelInput
  float4 position: SV_POSITION;
  float2 tex : TEXCOORD0;
 };
+
 
 float4 defualtPixelShader(PixelInput input) :SV_TARGET
 {
@@ -82,4 +88,26 @@ float4 texturePixelShader(TexturePixelInput input) :SV_TARGET
 
    
    return textureColor;
+}
+
+float4 fontPixelShader(TexturePixelInput input) :SV_TARGET
+{
+   float4 color;
+
+   //Sample the pixel color from the texture using the sampler at this texture coordinate
+   color = shaderTexture.Sample(SampleType,input.tex);
+   //if the color is black on the texture then treat this pixel as transparent.
+   if(color.r == 0.0f)
+   {
+    color.a = 0.0f;
+   }
+   //if the color is other then black on the texture then this is a pixel in the font so draw it using the font color.
+   else
+   {
+    color.a = 1.0f;
+    color = color*pixelColor;
+   }
+   
+
+   return color;
 }

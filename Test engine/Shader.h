@@ -53,6 +53,14 @@ namespace JR_Shader
 			D3DXVECTOR4 specularColor;
 		};
 
+		//PixelColorBuffer-- contains information for the pixelColor to be passed into the
+		//pixel shader
+		struct PixelColorBuffer
+		{
+			//pixelColor-- the color of the pixel to be multiplied with.
+			D3DXVECTOR4 pixelColor;
+		};
+
 	public:
 		//defualt constructor-- creates a new Shader object with defualt parameters
 		Shader();
@@ -128,7 +136,7 @@ namespace JR_Shader
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection,
 			D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor, D3DXVECTOR3 cameraPostition, D3DXVECTOR4 specularColor, float specularPower);
 		
-		//setShaderParameters-- sets the parameters for the texture shader
+		//setTextureShaderParameters-- sets the parameters for the texture shader
 		//deviceContext- the device context to use for drawing
 		//indexCount- the number of indicies
 		//worldMatrix- the world matrix to use
@@ -137,6 +145,17 @@ namespace JR_Shader
 		//texture- the texture to use for the model
 		bool setTextureShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
+
+		//setFontShaderParameters-- sets the parameters for the texture shader
+		//deviceContext- the device context to use for drawing
+		//indexCount- the number of indicies
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		//texture- the texture to use for the model
+		//fontColor- the color to drw the font with
+		bool setFontShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture,D3DXVECTOR4 fontColor);
 
 		//renderShader-- renders the model currently in the device context
 		//deviceContext- the device context to use for rendering
@@ -148,6 +167,12 @@ namespace JR_Shader
 		//indexCount- the number of indices in the model
 		void renderTextureShader(ID3D11DeviceContext* deviceContext, int indexCount);
 
+		//renderFontShader-- renders the model currently in the device context
+		//deviceContext- the device context to use for rendering
+		//indexCount- the number of indices in the model
+		void renderFontShader(ID3D11DeviceContext* deviceContext, int indexCount);
+
+
 		private:
 			//vertexShader-- the vertex shader
 			ID3D11VertexShader* m_vertexShader;
@@ -157,10 +182,10 @@ namespace JR_Shader
 			ID3D11VertexShader* m_textureVertexShader;
 			//texturePixelShader-- the texture pixel shader
 			ID3D11PixelShader* m_texturePixelShader;
+			//fontPixelShader-- the pixel shader for the font
+			ID3D11PixelShader* m_fontPixelShader;
 			//layout-- the layout of the shader
 			ID3D11InputLayout* m_layout;
-			//textureLayout-- the layout of the texture shader
-			//ID3D11InputLayout* m_textureLayout;
 			//matrixBuffer-- the buffer for the matricies
 			ID3D11Buffer* m_matrixBuffer;
 			//sampleState-- the state of the sampler
@@ -169,5 +194,7 @@ namespace JR_Shader
 			ID3D11Buffer* m_cameraBuffer;
 			//lightBuffer-- the buffer for the light
 			ID3D11Buffer* m_lightBuffer;
+			//pixelColorBuffer-- the buffer for the pixel color
+			ID3D11Buffer* m_pixelColorBuffer;
 	};
 }
