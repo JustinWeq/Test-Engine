@@ -84,13 +84,23 @@ namespace JR_Shader
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor,
 			D3DXVECTOR3 cameraPosition, D3DXVECTOR4 specularColor, float specularPower);
 
+		//renderTexture-- renders using the shader and the passed in parameters
+		//deviceContext- the device context to use for drawing
+		//indexCount- the number of indicies
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		//texture- the texture to use for the model
+		bool renderTexture(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
+
 	private:
 		//initShader-- sets up the shader
 		//device- The device to use to create the shader
 		//hwnd- the parent window
 		//vsFilename- the name of the vertex shader
 		//psFilename- the name of the pixel shader
-		bool initShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename);
+		bool initShader(ID3D11Device* device, HWND hwnd);
 
 		//shutdownShader-- cleans up memory for the shader
 		void shutdownShader();
@@ -117,19 +127,40 @@ namespace JR_Shader
 		bool setShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection,
 			D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor, D3DXVECTOR3 cameraPostition, D3DXVECTOR4 specularColor, float specularPower);
+		
+		//setShaderParameters-- sets the parameters for the texture shader
+		//deviceContext- the device context to use for drawing
+		//indexCount- the number of indicies
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		//texture- the texture to use for the model
+		bool setTextureShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
 
 		//renderShader-- renders the model currently in the device context
 		//deviceContext- the device context to use for rendering
 		//indexCount- the number of indices in the model
 		void renderShader(ID3D11DeviceContext* deviceContext, int indexCount);
 
+		//renderTextureShader-- renders the model currently in the device context
+		//deviceContext- the device context to use for rendering
+		//indexCount- the number of indices in the model
+		void renderTextureShader(ID3D11DeviceContext* deviceContext, int indexCount);
+
 		private:
 			//vertexShader-- the vertex shader
 			ID3D11VertexShader* m_vertexShader;
 			//pixelShader-- the pixel shader
 			ID3D11PixelShader* m_pixelShader;
+			//textureVertexShader-- the texture vertex shader
+			ID3D11VertexShader* m_textureVertexShader;
+			//texturePixelShader-- the texture pixel shader
+			ID3D11PixelShader* m_texturePixelShader;
 			//layout-- the layout of the shader
 			ID3D11InputLayout* m_layout;
+			//textureLayout-- the layout of the texture shader
+			ID3D11InputLayout* m_textureLayout;
 			//matrixBuffer-- the buffer for the matricies
 			ID3D11Buffer* m_matrixBuffer;
 			//sampleState-- the state of the sampler

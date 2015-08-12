@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "Sound.h"
 #include "Object.h"
+#include "Bitmap.h"
 using namespace Application;
 using namespace std;
 using namespace JR_Model;
@@ -16,6 +17,7 @@ using namespace JR_Graphics;
 using namespace JR_Input;
 using namespace JR_Sound;
 using namespace JR_Object;
+using namespace JR_Bitmap;
 
 //prototypes
 void init();
@@ -31,6 +33,7 @@ Graphics* graphics;
 Object* object;
 Input* input;
 Sound* sound;
+Bitmap* bitmap;
 bool error = false;
 struct camera
 {
@@ -81,6 +84,12 @@ void init()
 	 sound = new Sound();
 
 	 error != sound->init(app.getHWND());
+
+	 //create and set up the test bitmap
+	 bitmap = new Bitmap();
+
+	 //init bitmap
+	 bitmap->init(graphics->getDevice(), app.getScreenWidth, app.getScreenHeight, TEXT("texture.dds"), 100, 100);
 	 
 }
 
@@ -178,7 +187,7 @@ void updateViewMatrix()
 
 void draw()
 {
-	D3DXMATRIX world,projection;
+	D3DXMATRIX world,projection,ortho;
 	bool result;
 
 	//Clear the buffers to begin the scene.
@@ -186,6 +195,7 @@ void draw()
 
 	graphics->getWorldMatrix(world);
 	graphics->getProjectionMatrix(projection);
+	graphics->getOrthoMatrix(ortho);
 	D3DXMatrixRotationY(&world,cubeRot);
 	(*object)*world;
 	//model->render(graphics->getDeviceContext());
@@ -200,6 +210,26 @@ void draw()
 		error = true;
 	}
 
+	//begin 2D drawing now
+	//disable 2 buffer
+	graphics->zBufferState(false);
+
+	//prepare the bitmap for rendering
+	result = bitmap->render(graphics->getDeviceContext(), 100, 100);
+	if (!result)
+	{
+		error = true;
+	}
+
+	//render the bitmap with the texture shader
+	result = shader->renderTexture(graphics->getDeviceContext(), bitmap->getIndexCount(), world, view, ortho, bitmap->getTexture());
+	if (!result)
+	{
+		error = true;;
+	}
+
+	//turn the z buffer back on now that 2D rendering is over
+	graphics->zBufferState(true);
 	//present the rendered scene
 	graphics->endDrawing();
 }
