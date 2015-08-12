@@ -13,6 +13,7 @@ namespace JR_Graphics
 		m_swapChain = NULL;
 		m_vsync = false;
 		m_videoCardMemory = 0;
+		m_depthStencilDiabledState = 0;
 	}
 
 	Graphics::~Graphics()
@@ -49,6 +50,7 @@ namespace JR_Graphics
 		D3D11_RASTERIZER_DESC rasterDesc;
 		D3D11_VIEWPORT viewport;
 		float fieldOfView, screenAspect;
+		D3D11_DEPTH_STENCIL_DESC depthDisabledDesc;
 
 
 		// Store the vsync setting.
@@ -348,6 +350,32 @@ namespace JR_Graphics
 		// Create an orthographic projection matrix for 2D rendering.
 		D3DXMatrixOrthoLH(&m_orthoMatrix, (float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 
+		//Clear the second depth stencil state before setting the parameters.
+		ZeroMemory(&depthDisabledDesc, sizeof(depthDisabledDesc));
+
+		//Now create a second depth stencil state which turns off the z buffer for 2D rendering.
+		depthDisabledDesc.DepthEnable = false;
+		depthDisabledDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		depthDisabledDesc.DepthFunc = D3D11_COMPARISON_LESS;
+		depthDisabledDesc.StencilEnable = true;
+		depthStencilDesc.StencilReadMask = 0xFF;
+		depthStencilDesc.StencilWriteMask = 0xFF;
+		depthDisabledDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+		depthDisabledDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		depthDisabledDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+		depthDisabledDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+		//create the state using the device
+		result = m_device->CreateDepthStencilState(&depthDisabledDesc, &m_depthStencilDiabledState);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -364,6 +392,12 @@ namespace JR_Graphics
 		{
 			m_rasterState->Release();
 			m_rasterState = NULL;
+		}
+
+		if (m_depthStencilDiabledState)
+		{
+			m_depthStencilDiabledState->Release();
+			m_depthStencilDiabledState = NULL;
 		}
 
 		if (m_depthStencilView)
@@ -475,5 +509,24 @@ namespace JR_Graphics
 	{
 		strcpy_s(description, 128, m_videoCardDescription);
 		vram = m_videoCardMemory;
+	}
+
+	//zBufferState-- turns the z buffer on or off
+	//state- the state to turn the zbuffer to
+	void Graphics::zBufferState(bool state)
+	{
+		switch(state)
+		{
+		case true: 
+		{
+			m_deviceContext->OMSetDepthStencilState(m_depthStencil, 1);
+			break;
+		}
+		case false:
+		{
+			m_deviceContext->OMSetDepthStencilState(m_depthStencilDiabledState, 1);
+			break;
+		}
+		}
 	}
 }

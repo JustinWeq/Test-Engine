@@ -73,6 +73,14 @@ namespace JR_Graphics
 		//vram-- the amount of vram to assign to
 		void GetVideoCardInfo(char* description, int& vram);
 
+		//zBufferState-- turns the z buffer on or off
+		//state- the state to turn the zbuffer to
+		void zBufferState(bool state);
+
+		//alphaBlendingState-- turns alpha blending on or off
+		//state- the state to turn alpha blending to
+		void alphaBlendingState(bool state);
+
 	private:
 		//vsync-- vsync
 		bool m_vsync;
@@ -102,5 +110,7 @@ namespace JR_Graphics
 		D3DXMATRIX m_worldMatrix;
 		//the orth matrix of the graphics object, for use in 2D drawing
 		D3DXMATRIX m_orthoMatrix;
+		//a depth stencil state with the z buffer disabled.
+		ID3D11DepthStencilState* m_depthStencilDiabledState;
 	};
 }
