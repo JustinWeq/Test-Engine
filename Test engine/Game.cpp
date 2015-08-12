@@ -89,7 +89,7 @@ void init()
 	 bitmap = new Bitmap();
 
 	 //init bitmap
-	 bitmap->init(graphics->getDevice(), app.getScreenWidth, app.getScreenHeight, TEXT("texture.dds"), 100, 100);
+	 bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 100, 100);
 	 
 }
 
@@ -187,13 +187,14 @@ void updateViewMatrix()
 
 void draw()
 {
-	D3DXMATRIX world,projection,ortho;
+	D3DXMATRIX world,world2,projection,ortho;
 	bool result;
 
 	//Clear the buffers to begin the scene.
 	graphics->beginDrawing(0, 1, 0, 1);
 
 	graphics->getWorldMatrix(world);
+	graphics->getWorldMatrix(world2);
 	graphics->getProjectionMatrix(projection);
 	graphics->getOrthoMatrix(ortho);
 	D3DXMatrixRotationY(&world,cubeRot);
@@ -215,14 +216,14 @@ void draw()
 	graphics->zBufferState(false);
 
 	//prepare the bitmap for rendering
-	result = bitmap->render(graphics->getDeviceContext(), 100, 100);
+	result = bitmap->render(graphics->getDeviceContext(), 0, 0);
 	if (!result)
 	{
 		error = true;
 	}
 
 	//render the bitmap with the texture shader
-	result = shader->renderTexture(graphics->getDeviceContext(), bitmap->getIndexCount(), world, view, ortho, bitmap->getTexture());
+	result = shader->renderTexture(graphics->getDeviceContext(), bitmap->getIndexCount(), world2, view, ortho, bitmap->getTexture());
 	if (!result)
 	{
 		error = true;;

@@ -207,7 +207,7 @@ namespace JR_Shader
 		}
 
 		//Create the texture vertex shader frome the buffer
-		result = device->CreateVertexShader(textureVertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_textureVertexShader);
+		result = device->CreateVertexShader(textureVertexShaderBuffer->GetBufferPointer(), textureVertexShaderBuffer->GetBufferSize(), NULL, &m_textureVertexShader);
 		if (FAILED(result))
 		{
 			return false;
@@ -221,7 +221,7 @@ namespace JR_Shader
 		}
 
 		//Create the texture pixel shader from the buffer
-		result = device->CreatePixelShader(texturePixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_texturePixelShader);
+		result = device->CreatePixelShader(texturePixelShaderBuffer->GetBufferPointer(), texturePixelShaderBuffer->GetBufferSize(), NULL, &m_texturePixelShader);
 		if (FAILED(result))
 		{
 			return false;
@@ -286,12 +286,12 @@ namespace JR_Shader
 		numElements = sizeof(texturePolygonLayout) / sizeof(texturePolygonLayout[0]);
 		
 		//Create the texture vertex input layout
-		result = device->CreateInputLayout(texturePolygonLayout, numElements, textureVertexShaderBuffer->GetBufferPointer(), textureVertexShaderBuffer->GetBufferSize(),
-			&m_textureLayout);
-		if (FAILED(result))
-		{
-			return false;
-		}
+		//result = device->CreateInputLayout(texturePolygonLayout, numElements, textureVertexShaderBuffer->GetBufferPointer(), textureVertexShaderBuffer->GetBufferSize(),
+		//	&m_textureLayout);
+		//if (FAILED(result))
+		//{
+		//	return false;
+		//}
 
 		//Release the texture vertex shader buffer and pixel shader buffer since they are no longer needed
 		textureVertexShaderBuffer->Release();
@@ -643,7 +643,7 @@ namespace JR_Shader
 	void Shader::renderTextureShader(ID3D11DeviceContext* deviceContext, int indexCount)
 	{
 		//Set the vertex input layout
-		deviceContext->IASetInputLayout(m_textureLayout);
+		deviceContext->IASetInputLayout(m_layout);
 
 		//Set the vertex and pixel shaders that will be used to render this triangle.
 		deviceContext->VSSetShader(m_textureVertexShader, NULL, 0);

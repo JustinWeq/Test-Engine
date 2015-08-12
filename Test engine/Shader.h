@@ -160,7 +160,7 @@ namespace JR_Shader
 			//layout-- the layout of the shader
 			ID3D11InputLayout* m_layout;
 			//textureLayout-- the layout of the texture shader
-			ID3D11InputLayout* m_textureLayout;
+			//ID3D11InputLayout* m_textureLayout;
 			//matrixBuffer-- the buffer for the matricies
 			ID3D11Buffer* m_matrixBuffer;
 			//sampleState-- the state of the sampler
