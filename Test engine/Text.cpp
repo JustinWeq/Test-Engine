@@ -61,6 +61,12 @@ namespace JR_Text
 			return false;
 		}
 
+		//init each of the sentences
+		for (int i = 0; i < m_numOfSentences; i++)
+		{
+			initSentence(&m_sentences[i], 256, device);
+		}
+
 
 	}
 
@@ -127,22 +133,22 @@ namespace JR_Text
 	{
 		bool result;
 		//check to see if the selected sentence exists and if it does not initialize it
-		if (!m_sentences[index])
-		{
-			//create new sentence
-			m_sentences[index] = new SentenceType;
-			if (!m_sentences[index])
-			{
-				return false;
-			}
+		//if (!m_sentences[index])
+		//{
+		//	//create new sentence
+		//	m_sentences[index] = new SentenceType;
+		//	if (!m_sentences[index])
+		//	{
+		//		return false;
+		//	}
 
-			//init the new sentence
-			result = initSentence(&m_sentences[index], 256, device);
-			if (!result)
-			{
-				return false;
-			}
-		}
+		//	//init the new sentence
+		//	result = initSentence(&m_sentences[index], 256, device);
+		//	if (!result)
+		//	{
+		//		return false;
+		//	}
+		//}
 
 		//update the sentence
 		result = updateSentence(m_sentences[index], text, x, y, red, green, blue, deviceContext);
@@ -384,6 +390,9 @@ namespace JR_Text
 
 		//create a pixel color vector with the input sentence volor
 		pixelColor = D3DXVECTOR4(sentence->red, sentence->green, sentence->blue, 1.0f);
+
+		//set the texture
+
 
 		//render the text using the shaders renderFont
 		result = shader->renderFont(deviceContext, sentence->indexCount, worldMatrix, m_baseViewMatrix, orthoMatrix,

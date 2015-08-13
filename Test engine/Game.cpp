@@ -9,6 +9,7 @@
 #include "Sound.h"
 #include "Object.h"
 #include "Bitmap.h"
+#include "Text.h"
 using namespace Application;
 using namespace std;
 using namespace JR_Model;
@@ -18,6 +19,7 @@ using namespace JR_Input;
 using namespace JR_Sound;
 using namespace JR_Object;
 using namespace JR_Bitmap;
+using namespace JR_Text;
 
 //prototypes
 void init();
@@ -34,6 +36,7 @@ Object* object;
 Input* input;
 Sound* sound;
 Bitmap* bitmap;
+Text* text;
 bool error = false;
 struct camera
 {
@@ -90,6 +93,23 @@ void init()
 
 	 //init bitmap
 	 bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 32, 32);
+
+	 //create text object
+	 text = new Text();
+	 D3DXMATRIX baseView;
+	 D3DXMatrixTranslation(&baseView,0,0,-1.0f);
+	 //init the text object
+	 text->init(graphics->getDevice(), graphics->getDeviceContext(), app.getHWND(),
+		 app.getScreenWidth(), app.getScreenHeight(), view, 3);
+
+	 //set up sentence 1
+	 text->setSentence(0, "Red", 32, 32, 1.0f, 0.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
+
+	 //set up sentence 2
+	 text->setSentence(1, "Blue", 32, 64, 0.0f, 1.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
+
+	 //set up sentence 3
+	 text->setSentence(2, "Green", 32, 96, 0.0f, 0.0f, 1.0f, graphics->getDeviceContext(), graphics->getDevice());
 	 
 }
 
@@ -191,7 +211,7 @@ void draw()
 	bool result;
 
 	//Clear the buffers to begin the scene.
-	graphics->beginDrawing(0, 1, 0, 1);
+	graphics->beginDrawing(0, 0, 0, 1);
 
 	graphics->getWorldMatrix(world);
 	graphics->getWorldMatrix(world2);
@@ -228,6 +248,15 @@ void draw()
 	{
 		error = true;;
 	}
+
+	//now begin rednering text
+
+	//turn on alpha blending
+	graphics->alphaBlendingState(true);
+	result = text->render(graphics->getDeviceContext(), world2, ortho, shader);
+
+	//disable alpha blending
+	graphics->alphaBlendingState(false);
 
 	//turn the z buffer back on now that 2D rendering is over
 	graphics->zBufferState(true);

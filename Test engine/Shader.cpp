@@ -726,6 +726,9 @@ namespace JR_Shader
 		bufferNumber = 0;
 		//Now set the constant buffer in the vertex shader with the updated values
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+		//Set shader texture resource in the pixel shader
+		deviceContext->PSSetShaderResources(0, 1, &texture);
 		
 		return true;
 	}
@@ -796,6 +799,9 @@ namespace JR_Shader
 		bufferNumber = 1;
 		//now set the constant buffer in the pixel shader with the updated values
 		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+		//Set shader texture resource in the pixel shader
+		deviceContext->PSSetShaderResources(0, 1, &texture);
 
 
 	}

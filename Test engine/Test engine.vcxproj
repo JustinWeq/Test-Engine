@@ -203,7 +203,9 @@
     <Media Include="..\..\..\Music\BarFight.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\fontdata.txt" />
+    <Text Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\fontdata.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
