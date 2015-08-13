@@ -26,6 +26,7 @@ void init();
 bool update();
 void draw();
 void updateViewMatrix();
+void shutdown();
 App app;
 Shader* shader;
 float cubeRot;
@@ -276,8 +277,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 			//there was a problem setting up so tell the user that
 			MessageBox(app.getHWND(), L"There was an error setting up D3D, closing application", L"Error", MB_OK);
 		}
-	
+
+		//now shutdown everything
+		shutdown();
 
 	app.shutdown();
 	return 0;
+}
+
+void shutdown()
+{
+	if (shader)
+	{
+		shader->shutdown();
+		shader = NULL;
+	}
+	if (graphics)
+	{
+		graphics->close();
+		graphics = NULL;
+	}
+	if (object)
+	{
+		object->shutdown();
+		object = NULL;
+	}
+	if (input)
+	{
+		input->shutdown();
+		input = NULL;
+	}
+	if (sound)
+	{
+		sound->shutdown();
+		sound = NULL;
+	}
+	if (bitmap)
+	{
+		bitmap->shutdown();
+		bitmap = NULL;
+	}
+	if (text)
+	{
+		text->shutdown();
+		text = NULL;
+	}
 }
