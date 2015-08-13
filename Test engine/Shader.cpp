@@ -798,7 +798,7 @@ namespace JR_Shader
 		//now set the position of the constant buffer in the pixel shader
 		bufferNumber = 1;
 		//now set the constant buffer in the pixel shader with the updated values
-		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_pixelColorBuffer);
 
 		//Set shader texture resource in the pixel shader
 		deviceContext->PSSetShaderResources(0, 1, &texture);

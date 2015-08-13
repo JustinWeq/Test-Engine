@@ -103,13 +103,13 @@ void init()
 		 app.getScreenWidth(), app.getScreenHeight(), view, 3);
 
 	 //set up sentence 1
-	 text->setSentence(0, "Red", 32, 32, 1.0f, 0.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
+	 text->setSentence(0, "Red", 0, 0, 1.0f, 0.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
 
 	 //set up sentence 2
-	 text->setSentence(1, "Blue", 32, 64, 0.0f, 1.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
+	 text->setSentence(1, "Blue", 0, 32, 0.0f, 1.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
 
 	 //set up sentence 3
-	 text->setSentence(2, "Green", 32, 96, 0.0f, 0.0f, 1.0f, graphics->getDeviceContext(), graphics->getDevice());
+	 text->setSentence(2, "Green", 0, 64, 0.0f, 0.0f, 1.0f, graphics->getDeviceContext(), graphics->getDevice());
 	 
 }
 

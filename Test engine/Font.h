@@ -49,6 +49,8 @@ namespace JR_Font
 		//drawY- the y draw coord
 		void buildVertexArray(void* vertices, char* sentence, float drawX, float drawY);
 
+		float getStringWidth(char* text);
+
 	private:
 		//loadFontData-- loads the data for the font
 		//fontFileName- the name of the font file
