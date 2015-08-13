@@ -112,5 +112,10 @@ namespace JR_Graphics
 		D3DXMATRIX m_orthoMatrix;
 		//a depth stencil state with the z buffer disabled.
 		ID3D11DepthStencilState* m_depthStencilDiabledState;
+
+		//alphaBlendingstateEnabled- an enabled alpha blending state
+		ID3D11BlendState* m_alphaBlendingStateEnabled;
+		//alphaBlendingStateDisabled-a disabled alpha blending state
+		ID3D11BlendState* m_alphaBlendingStateDisabled;
 	};
 }

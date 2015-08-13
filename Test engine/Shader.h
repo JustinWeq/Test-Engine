@@ -102,6 +102,17 @@ namespace JR_Shader
 		bool renderTexture(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
 
+		//renderFont-- renders using the shader and the passed in parameters
+		//deviceContext- the device context to use for drawing
+		//indexCount- the number of indicies
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		//texture- the texture to use for the model
+		//fontColor- the color of the font to use for rendering
+		bool renderFont(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture,D3DXVECTOR4 fontColor);
+
 	private:
 		//initShader-- sets up the shader
 		//device- The device to use to create the shader

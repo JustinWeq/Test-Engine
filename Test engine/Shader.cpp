@@ -97,6 +97,30 @@ namespace JR_Shader
 		renderTextureShader(deviceContext, indexCount);
 	}
 
+	//renderFont-- renders using the shader and the passed in parameters
+	//deviceContext- the device context to use for drawing
+	//indexCount- the number of indicies
+	//worldMatrix- the world matrix to use
+	//viewMatrix- the view matrix to use
+	//projectionMatrix- the projection matrix to use
+	//texture- the texture to use for the model
+	//fontColor- the color of the font to use for rendering
+	bool Shader::renderFont(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+		D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture,D3DXVECTOR4 pixelColor)
+	{
+		bool result;
+
+		//set the shader parameters that it will use when drawing
+		result = setFontShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture,pixelColor);
+		if (!result)
+		{
+			return false;
+		}
+
+		//now render the prepared shader
+		renderFontShader(deviceContext, indexCount);
+	}
+
 	//initShader-- sets up the shader
 	//device- The device to use to create the shader
 	//hwnd- the parent window
@@ -813,4 +837,5 @@ namespace JR_Shader
 		//redner the model
 		deviceContext->DrawIndexed(indexCount, 0, 0);
 	}
+
 }
