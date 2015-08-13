@@ -747,7 +747,7 @@ namespace JR_Shader
 		HRESULT result;
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		MatrixBuffer* dataPtr;
-		PixelColorBuffer* dataPtr2;
+		LightBuffer* dataPtr2;
 		unsigned int bufferNumber;
 
 		//Transpose the matricies to prepare them for the shader
@@ -781,24 +781,24 @@ namespace JR_Shader
 		//now update the color
 
 		//lock the constant buffer so it can be written to
-		result = deviceContext->Map(m_pixelColorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		result = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		if (FAILED(result))
 		{
 			return false;
 		}
 
 		//Get a pointer to the data in the constant buffer
-		dataPtr2 = (PixelColorBuffer*)mappedResource.pData;
+		dataPtr2 = (LightBuffer*)mappedResource.pData;
 		//copy the font color into the constant buffer
-		dataPtr2->pixelColor = fontColor;
+		dataPtr2->ambientColor = fontColor;
 
 		//unlock the constant buffer
-		deviceContext->Unmap(m_pixelColorBuffer, 0);
+		deviceContext->Unmap(m_lightBuffer, 0);
 
 		//now set the position of the constant buffer in the pixel shader
-		bufferNumber = 1;
+		bufferNumber = 0;
 		//now set the constant buffer in the pixel shader with the updated values
-		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_pixelColorBuffer);
+		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
 
 		//Set shader texture resource in the pixel shader
 		deviceContext->PSSetShaderResources(0, 1, &texture);
