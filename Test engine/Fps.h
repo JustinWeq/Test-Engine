@@ -30,5 +30,5 @@ namespace JR_Fps
 		int m_count;
 		//startTime- the time the timer started
 		unsigned long m_startTime;
-	}
+	};
 }

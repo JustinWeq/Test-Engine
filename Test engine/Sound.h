@@ -44,10 +44,14 @@ namespace JR_Sound
 
 		bool playWaveFile();
 
+		void frame();
+
 	private:
 		IDirectSound8* m_DirectSound;
 		IDirectSoundBuffer* m_primaryBuffer;
 
 		IDirectSoundBuffer8* m_secondaryBuffer;
+
+		bool looping;
 	};
 }

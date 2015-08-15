@@ -10,6 +10,10 @@
 #include "Object.h"
 #include "Bitmap.h"
 #include "Text.h"
+#include "Cpu.h"
+#include "Fps.h"
+#include "Timer.h"
+#include <string>
 using namespace Application;
 using namespace std;
 using namespace JR_Model;
@@ -20,6 +24,9 @@ using namespace JR_Sound;
 using namespace JR_Object;
 using namespace JR_Bitmap;
 using namespace JR_Text;
+using namespace JR_Timer;
+using namespace JR_Fps;
+using namespace JR_CPU;
 
 //prototypes
 void init();
@@ -38,7 +45,13 @@ Input* input;
 Sound* sound;
 Bitmap* bitmap;
 Text* text;
+Fps* fps;
+Timer* timer;
+Cpu* CPU;
 bool error = false;
+int cpuPercentage;
+float frameTime;
+int fpss;
 struct camera
 {
 public:
@@ -68,7 +81,7 @@ void init()
 	object = new Object();
 
 	//init the graphics
-	error !=  graphics->init(app.getScreenWidth(), app.getScreenHeight(),true, app.getHWND(), false, 1000, 0.2);
+	error !=  graphics->init(app.getScreenWidth(), app.getScreenHeight(),false, app.getHWND(), false, 1000, 0.2);
 
 
 	//init the shader
@@ -112,6 +125,23 @@ void init()
 	 //set up sentence 3
 	 text->setSentence(2, "Blue", 0, 64, 0.0f, 0.0f, 1.0f, graphics->getDeviceContext(), graphics->getDevice());
 	 
+	 //create the cpu object
+	 CPU = new Cpu();
+
+	 //init the Cpu object
+	 CPU->init();
+
+	 //create the fps object
+	 fps = new Fps();
+
+	 //init the fps object
+	 fps->init();
+
+	 //create the timer object
+	 timer = new Timer();
+
+	 //init the timer object
+	 timer->init();
 }
 
 bool update()
@@ -150,8 +180,8 @@ bool update()
 			if (finished)
 			{
 				done = true;
-			}
-			cubeRot += 0.02;
+			} 
+			cubeRot += (0.02)* frameTime;
 			 //modf(3.149,&cubeRot);
 			//now do the draw updates
 			draw();
@@ -190,12 +220,49 @@ bool update()
 			z += 1;
 		}
 
+		//do frame processing for the FPS CPU and timer objects
+		fps->frame();
+		timer->frame();
+		CPU->frame();
+
+		cpuPercentage = CPU->getCpuPercentage();
+		if (timer->getTime() > 14)
+			frameTime = 14 / timer->getTime();
+		else
+		    frameTime = timer->getTime()/14;
+		fpss = fps->getFps();
+
 		//D3DXMATRIX matrix = object->getWorld();
 		//D3DXMatrixRotationY(&matrix, cubeRot);
 		//D3DXMatrixTranslation(&matrix, x, y, z);
 		//(*object)*matrix;
+		//update the sentences
+		char tempString[32];
+		char cpuString[32];
+		char fpsString[32];
+		char frameTimeString[32];
+
+	    
+		_itoa_s(cpuPercentage, tempString, 10);
+		strcpy_s(cpuString, "Cpu: ");
+		strcat_s(cpuString, tempString);
+		strcat_s(cpuString, "%");
+		text->setSentence(0, cpuString, 10, 0, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		//set fps sentence
+		_itoa_s(fpss, tempString, 10);
+		strcpy_s(fpsString, "Fps: ");
+		strcat_s(fpsString, tempString);
+		text->setSentence(1, fpsString, 10, 32, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		//set frametime sentence
+		sprintf(tempString, "%f", frameTime);
+		strcpy_s(frameTimeString, "FrameTime: ");
+		strcat_s(frameTimeString, tempString);
+		text->setSentence(2, frameTimeString, 20,64, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+
+
 
 	}
+
 	return true;
 }
 

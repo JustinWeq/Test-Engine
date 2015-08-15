@@ -310,7 +310,7 @@ namespace JR_Sound
 		}
 
 		//Play the contents of the secondary sound buffer.
-		result = m_secondaryBuffer->Play(0, 0, 0);
+		result = m_secondaryBuffer->Play(0, 0,DSBPLAY_LOOPING);
 		if (FAILED(result))
 		{
 			return false;
@@ -318,4 +318,14 @@ namespace JR_Sound
 
 		return true;
 	}
+
+	//void Sound::frame()
+	//{
+	//	LPDWORD status;
+	//    m_secondaryBuffer->GetStatus(status);
+	//	if ((int)status == DSBSTATUS_PLAYING)
+	//	{
+	//		//if the sound is looping play back the sound
+	//	}
+	//}
 }
