@@ -20,6 +20,8 @@ namespace JR_Quaternion
 		quaternion.y /= Length;
 		quaternion.z /= Length;
 		quaternion.z /= Length;
+
+		return quaternion;
 	}
 
 	//conjugate--conjugates and returns the passed in quaternion

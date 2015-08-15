@@ -97,32 +97,32 @@ namespace JR_FlyCam
 		return m_z;
 	}
 
-	float FlyCam::setRotX(float rotX)
+	void FlyCam::setRotX(float rotX)
 	{
 		m_rotX = rotX;
 	}
 
-	float FlyCam::setRotY(float rotY)
+	void FlyCam::setRotY(float rotY)
 	{
 		m_rotY = rotY;
 	}
 
-	float FlyCam::setRotZ(float rotZ)
+	void FlyCam::setRotZ(float rotZ)
 	{
 		m_rotZ = rotZ;
 	}
 
-	float FlyCam::setPosX(float x)
+	void FlyCam::setPosX(float x)
 	{
 		m_x = x;
 	}
 
-	float FlyCam::setPosY(float y)
+	void FlyCam::setPosY(float y)
 	{
 		m_y = y;
 	}
 
-	float FlyCam::setPosZ(float z)
+	void FlyCam::setPosZ(float z)
 	{
 		m_z = z;
 	}

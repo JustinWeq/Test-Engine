@@ -29,17 +29,17 @@ namespace JR_FlyCam
 
 		float getPosZ();
 
-		float setRotX(float x);
+		void setRotX(float x);
 
-		float setRotY(float y);
+		void setRotY(float y);
 
-		float setRotZ(float z);
+		void setRotZ(float z);
 
-		float setPosX(float x);
+		void setPosX(float x);
 
-		float setPosY(float y);
+		void setPosY(float y);
 
-		float setPosZ(float z);
+		void setPosZ(float z);
 	private:
 		float m_rotX;
 		float m_rotY;
