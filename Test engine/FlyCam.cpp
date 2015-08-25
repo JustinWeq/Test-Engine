@@ -34,9 +34,9 @@ namespace JR_FlyCam
 		up.z = 0.0f;
 
 		// Setup the position of the camera in the world.
-		position.x = m_x;
-		position.y = m_x;
-		position.z = m_z;
+		position.x = -m_x;
+		position.y = -m_y;
+		position.z = -m_z;
 
 		// Setup where the camera is looking by default.
 		lookAt.x = 0.0f;

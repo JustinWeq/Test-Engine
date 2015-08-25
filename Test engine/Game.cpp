@@ -330,8 +330,8 @@ void draw()
 	graphics->getWorldMatrix(world2);
 	graphics->getProjectionMatrix(projection);
 	graphics->getOrthoMatrix(ortho);
-//	D3DXMatrixRotationY(&world,cubeRot);
-	//(*object)*world;
+	D3DXMatrixRotationY(&world,cubeRot);
+	(*object)*world;
 	//model->render(graphics->getDeviceContext());
 	object->render(graphics->getDeviceContext());
 
