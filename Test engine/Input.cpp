@@ -210,4 +210,10 @@ namespace JR_Input
 		mouseX = m_mouseX;
 		mouseY = m_mouseY;
 	}
+
+	void Input::GetRawLocation(int&x, int& y)
+	{
+		x = m_mouseState.lX;
+		y = m_mouseState.lY;
+	}
 }

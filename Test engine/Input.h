@@ -19,6 +19,8 @@ namespace JR_Input
 		bool IsKeyPressed(int key);
 		void GetMouseLocation(int& x, int& y);
 
+		void GetRawLocation(int&x, int& y);
+
 	private:
 		bool ReadKeyboard();
 		bool ReadMouse();

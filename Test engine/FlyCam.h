@@ -17,6 +17,8 @@ namespace JR_FlyCam
 
 		void getViewMatrix(D3DXMATRIX &matrix);
 
+		D3DXMATRIX getViewMatrix();
+
 		float getRotX();
 
 		float getRotY();
@@ -40,6 +42,8 @@ namespace JR_FlyCam
 		void setPosY(float y);
 
 		void setPosZ(float z);
+
+		void setView(D3DXMATRIX view);
 	private:
 		float m_rotX;
 		float m_rotY;

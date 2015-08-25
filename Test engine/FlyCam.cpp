@@ -126,4 +126,14 @@ namespace JR_FlyCam
 	{
 		m_z = z;
 	}
+
+	D3DXMATRIX FlyCam::getViewMatrix()
+	{
+		return m_view;
+	}
+
+	void FlyCam::setView(D3DXMATRIX view)
+	{
+		m_view = view;
+	}
 }

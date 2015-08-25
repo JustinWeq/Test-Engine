@@ -13,6 +13,7 @@
 #include "Cpu.h"
 #include "Fps.h"
 #include "Timer.h"
+#include "FlyCam.h"
 #include <string>
 using namespace Application;
 using namespace std;
@@ -27,6 +28,7 @@ using namespace JR_Text;
 using namespace JR_Timer;
 using namespace JR_Fps;
 using namespace JR_CPU;
+using namespace JR_FlyCam;
 
 //prototypes
 void init();
@@ -51,6 +53,8 @@ Cpu* CPU;
 bool error = false;
 int cpuPercentage;
 float frameTime;
+FlyCam cam;
+float dmx = 0, dmy = 0,dcx = 0,dcy = 0,dcz = 10;
 int fpss;
 struct camera
 {
@@ -66,6 +70,8 @@ void init()
 
 	//Create view matrix
 	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, 10), &D3DXVECTOR3(0, 0, -9), &D3DXVECTOR3(0, 1, 0));
+	cam.setView(view);
+	//cam.init(0, 0, 10, 0, 0, 0);
 
 	//Create the graphics
 	graphics = new Graphics();
@@ -195,30 +201,69 @@ bool update()
 
 		//read input for player movement.
 		float x = 0, y = 0, z = 0;
-		
+		float playSpeed = 1;
 		//read left movement
 		if (input->IsKeyPressed(DIK_A))
 		{
-			x += 1;
+			x += playSpeed*frameTime;
 		}
 
 		//read right movement
 		if (input->IsKeyPressed(DIK_D))
 		{
-			x -= 1;
+			x -= playSpeed*frameTime;
 		}
 
 		//read up movement
-		if (input->IsKeyPressed(DIK_W))
+		if (input->IsKeyPressed(DIK_E))
 		{
-			z -= 1;
+			y -= playSpeed*frameTime;
 		}
 
 		//read down movement
+		if (input->IsKeyPressed(DIK_Q))
+		{
+			y += playSpeed*frameTime;
+		}
+
+		//read forward movement
+		if (input->IsKeyPressed(DIK_W))
+		{
+			z -= playSpeed*frameTime;
+		}
+
+		//read backward movement
 		if (input->IsKeyPressed(DIK_S))
 		{
-			z += 1;
+			z += playSpeed*frameTime;
 		}
+
+		//move the camera
+
+		dcx += x;
+		dcy += y;
+		dcz += z;
+
+		cam.setPosX(dcx);
+		cam.setPosY(dcy);
+		cam.setPosZ(dcz);
+
+		//move view cam accordingly
+		int mx, my;
+		input->GetRawLocation(mx,my);
+
+		//move the view up and down
+
+		dmx += mx*frameTime;
+		dmy += my*frameTime;
+		cam.setRotZ(0);
+
+		cam.setRotX(dmy);
+
+		cam.setRotY(dmx);
+
+		cam.updateView();
+
 
 		//do frame processing for the FPS CPU and timer objects
 		fps->frame();
@@ -285,15 +330,15 @@ void draw()
 	graphics->getWorldMatrix(world2);
 	graphics->getProjectionMatrix(projection);
 	graphics->getOrthoMatrix(ortho);
-	D3DXMatrixRotationY(&world,cubeRot);
-	(*object)*world;
+//	D3DXMatrixRotationY(&world,cubeRot);
+	//(*object)*world;
 	//model->render(graphics->getDeviceContext());
 	object->render(graphics->getDeviceContext());
 
 	//render the model using the defualt shader
-	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() , world, view,
+	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() , world, cam.getViewMatrix(),
 		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(1, 1, 1, 0.2),
-		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0, 0, -10), D3DXVECTOR4(1, 1, 1, 1), 32);
+		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(dcx, dcy, dcz), D3DXVECTOR4(1, 1, 1, 1), 32);
 	if (!result)
 	{
 		error = true;
