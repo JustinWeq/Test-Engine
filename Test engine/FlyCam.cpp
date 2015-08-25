@@ -55,6 +55,10 @@ namespace JR_FlyCam
 		D3DXVec3TransformCoord(&lookAt, &lookAt, &rotationMatrix);
 		D3DXVec3TransformCoord(&up, &up, &rotationMatrix);
 
+
+		//rotate the position
+		D3DXVec3TransformCoord(&position, &position, &rotationMatrix);
+
 		// Translate the rotated camera position to the location of the viewer.
 		lookAt = position + lookAt;
 
