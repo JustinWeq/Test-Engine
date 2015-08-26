@@ -30,6 +30,12 @@ struct TexturePixelInput
  float2 tex : TEXCOORD0;
 };
 
+struct ColorPixelInput
+{
+ float4 position: SV_POSITION;
+ float4 color : COLOR;
+};
+
 
 float4 defualtPixelShader(PixelInput input) :SV_TARGET
 {
@@ -109,4 +115,9 @@ float4 fontPixelShader(TexturePixelInput input) :SV_TARGET
    
 
    return color;
+}
+
+float4 colorPixelShader(ColorPixelInput input): SV_TARGET
+{
+ return input.color;
 }

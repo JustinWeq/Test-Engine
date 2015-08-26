@@ -26,6 +26,12 @@ struct TextureVertexInput
  float2 tex :TEXCOORD0;
 };
 
+struct ColorVertexInput
+{
+ float4 position : POSITION;
+ float4 color : COLOR;
+};
+
 struct PixelInput
 {
  float4 position: SV_POSITION;
@@ -38,6 +44,12 @@ struct TexturePixelInput
 {
  float4 position: SV_POSITION;
  float2 tex : TEXCOORD0;
+};
+
+struct ColorPixelInput
+{
+ float4 position : SV_POSITION;
+ float4 color : COLOR;
 };
 
 PixelInput DefualtVertexShader(VertexInput input)
@@ -94,4 +106,26 @@ TexturePixelInput textureVertexShader(TextureVertexInput input)
 	worldPosition = mul(input.position,worldMatrix);
 
     return output;
+}
+
+ColorPixelInput colorVertexShader(ColorVertexInput input)
+{
+
+ ColorPixelInput output;
+ float4 worldPosition;
+ 
+ //Change the position vector to be four units for proper matrix calculations.
+ input.position.w = 1.0f;
+ 
+ //Calculate the position of the vertex against the world,view and projection matrices
+ output.position  =mul(input.position,worldMatrix);
+ output.position  =mul(output.position,viewMatrix);
+ output.position = mul(output.position,projectionMatrix);
+ 
+ 
+ //set the color of the vertex
+ output.color = input.color;
+ 
+ return output;
+ 
 }

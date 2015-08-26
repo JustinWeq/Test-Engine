@@ -14,6 +14,7 @@
 #include "Fps.h"
 #include "Timer.h"
 #include "FlyCam.h"
+#include "Terrain.h"
 #include <string>
 using namespace Application;
 using namespace std;
@@ -29,6 +30,7 @@ using namespace JR_Timer;
 using namespace JR_Fps;
 using namespace JR_CPU;
 using namespace JR_FlyCam;
+using namespace JR_Terrain;
 
 //prototypes
 void init();
@@ -50,6 +52,7 @@ Text* text;
 Fps* fps;
 Timer* timer;
 Cpu* CPU;
+Terrain* terrain;
 bool error = false;
 int cpuPercentage;
 float frameTime;
@@ -148,6 +151,11 @@ void init()
 
 	 //init the timer object
 	 timer->init();
+
+	 //create the terrain object
+	 terrain = new Terrain;
+
+	 terrain->init(graphics->getDevice(), 100, 100);
 }
 
 bool update()
@@ -320,23 +328,24 @@ void updateViewMatrix()
 
 void draw()
 {
-	D3DXMATRIX world,world2,projection,ortho;
+	D3DXMATRIX world,world2,world3,projection,ortho;
 	bool result;
 
 	//Clear the buffers to begin the scene.
 	graphics->beginDrawing(0, 0, 0, 1);
 
 	graphics->getWorldMatrix(world);
+	world3 = world;
 	graphics->getWorldMatrix(world2);
 	graphics->getProjectionMatrix(projection);
 	graphics->getOrthoMatrix(ortho);
-	D3DXMatrixRotationY(&world,cubeRot);
-	(*object)*world;
+	//D3DXMatrixRotationY(&world,cubeRot);
+	//(*object)*world;
 	//model->render(graphics->getDeviceContext());
 	object->render(graphics->getDeviceContext());
 
 	//render the model using the defualt shader
-	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() , world, cam.getViewMatrix(),
+	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() ,object->getWorld(), cam.getViewMatrix(),
 		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(1, 1, 1, 0.2),
 		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(dcx, dcy, dcz), D3DXVECTOR4(1, 1, 1, 1), 32);
 	if (!result)
@@ -344,6 +353,10 @@ void draw()
 		error = true;
 	}
 
+	//now draw the terrain
+	//terrain->render(graphics->getDeviceContext());
+
+	//result = shader->
 	//begin 2D drawing now
 	//disable 2 buffer
 	graphics->zBufferState(false);
@@ -359,7 +372,7 @@ void draw()
 	result = shader->renderTexture(graphics->getDeviceContext(), bitmap->getIndexCount(), world2, view, ortho, bitmap->getTexture());
 	if (!result)
 	{
-		error = true;;
+		error = true;
 	}
 
 	//now begin rednering text
