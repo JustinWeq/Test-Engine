@@ -354,8 +354,10 @@ void draw()
 	}
 
 	//now draw the terrain
-	//terrain->render(graphics->getDeviceContext());
+	terrain->render(graphics->getDeviceContext());
 
+
+	shader->renderColor(graphics->getDeviceContext(), terrain->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection);
 	//result = shader->
 	//begin 2D drawing now
 	//disable 2 buffer

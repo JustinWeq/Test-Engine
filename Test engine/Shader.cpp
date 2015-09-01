@@ -72,6 +72,8 @@ namespace JR_Shader
 
 		//now render the prepared shader
 		renderShader(deviceContext, indexCount);
+
+		return true;
 	}
 
 	//renderTexture-- renders using the shader and the passed in parameters
@@ -95,6 +97,8 @@ namespace JR_Shader
 
 		//now render the prepared shader
 		renderTextureShader(deviceContext, indexCount);
+
+		return true;
 	}
 
 	//renderFont-- renders using the shader and the passed in parameters
@@ -119,6 +123,32 @@ namespace JR_Shader
 
 		//now render the prepared shader
 		renderFontShader(deviceContext, indexCount);
+
+		return true;
+	}
+
+	//renderColor-- renders using the shader and the passed in parameters
+	//deviceContext- the device context to use for drawing
+	//indexCount- the number of indicies
+	//worldMatrix- the world matrix to use
+	//viewMatrix- the view matrix to use
+	//projectionMatrix- the projection matrix to use
+	bool Shader::renderColor(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+		D3DXMATRIX projectionMatrix)
+	{
+		bool result;
+
+		//set the shader paramters that will be used for drawing
+		result = setColorShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
+		if (!result)
+		{
+			return false;
+		}
+
+		//now render the prepared shader
+		renderColorShader(deviceContext, indexCount);
+
+		return true;
 	}
 
 	//initShader-- sets up the shader
@@ -135,8 +165,10 @@ namespace JR_Shader
 		ID3D10Blob* textureVertexShaderBuffer;
 		ID3D10Blob* texturePixelShaderBuffer;
 		ID3D10Blob* fontPixelShaderBuffer;
+		ID3D10Blob* colorVertexShaderBuffer;
+		ID3D10Blob* colorPixelShaderBuffer;
 		D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
-		D3D11_INPUT_ELEMENT_DESC texturePolygonLayout[2];
+		D3D11_INPUT_ELEMENT_DESC colorPolygonLayout[2];
 		unsigned int numElements;
 		D3D11_BUFFER_DESC matrixBufferDesc;
 		D3D11_SAMPLER_DESC samplerDesc;
@@ -189,9 +221,47 @@ namespace JR_Shader
 			return false;
 		}
 
+		//compile the color vertex shader code
+		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "colorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+			&colorVertexShaderBuffer, &errorMessage, NULL);
+		if (FAILED(result))
+		{
+			//If the shader failed to compile it should have written something tot he error message
+			if (errorMessage)
+			{
+				outputShaderErrorMessage(errorMessage, hwnd, L"defualt.vs");
+			}
+			else
+			{
+				//theres nothing in the error message
+				// so it could not find the shader file itself
+				MessageBox(hwnd, L"defualt.vs", L"Could not find the file for the shader", MB_OK);
+			}
+
+			return false;
+		}
+
 		//Compile the pixel shader code
 		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "defualtPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&pixelShaderBuffer, &errorMessage, NULL);
+		if (FAILED(result))
+		{
+			//if the shader failed to sompile it should have written something to the error message
+			if (errorMessage)
+			{
+				outputShaderErrorMessage(errorMessage, hwnd, L"defualt.ps");
+			}
+			else
+			{
+				//the was no error message so the program could not find the shader itself
+				MessageBox(hwnd, L"defualt.ps", L"Missing Shader File", MB_OK);
+			}
+			return false;
+		}
+
+		//Compile the color shader code
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "colorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+			&colorPixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
 			//if the shader failed to sompile it should have written something to the error message
@@ -278,6 +348,20 @@ namespace JR_Shader
 			return false;
 		}
 
+		//Create the color vertex shader from the buffer
+		result = device->CreateVertexShader(colorVertexShaderBuffer->GetBufferPointer(), colorVertexShaderBuffer->GetBufferSize(), NULL, &m_colorVertexShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//create the color pixel shader from the buffer
+		result = device->CreatePixelShader(colorPixelShaderBuffer->GetBufferPointer(), colorPixelShaderBuffer->GetBufferSize(), NULL, &m_colorPixelShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
 		//Create the vertex input layout description
 		//This setup needs to match the vertex type for the model and the vertex shader exactly
 		polygonLayout[0].SemanticName = "POSITION";
@@ -315,34 +399,37 @@ namespace JR_Shader
 			return false;
 		}
 
-		//Create the texture vertex input layout description
-		//This setup needs to match the vertex type for the model and the texture vertex shader exactly
-		polygonLayout[0].SemanticName = "POSITION";
-		polygonLayout[0].SemanticIndex = 0;
-		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		polygonLayout[0].InputSlot = 0;
-		polygonLayout[0].AlignedByteOffset = 0;
-		polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		polygonLayout[0].InstanceDataStepRate = 0;
 
-		polygonLayout[1].SemanticName = "TEXCOORD";
-		polygonLayout[1].SemanticIndex = 0;
-		polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-		polygonLayout[1].InputSlot = 0;
-		polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		polygonLayout[1].InstanceDataStepRate = 0;
+		//Create the color vertex input layout description
+		//This setup needs to match the vertex type for the model and the vertex shader exactly
+		colorPolygonLayout[0].SemanticName = "POSITION";
+		colorPolygonLayout[0].SemanticIndex = 0;
+		colorPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		colorPolygonLayout[0].InputSlot = 0;
+		colorPolygonLayout[0].AlignedByteOffset = 0;
+		colorPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		colorPolygonLayout[0].InstanceDataStepRate = 0;
 
-		//get a count of the number of elements in the texture layout
-		numElements = sizeof(texturePolygonLayout) / sizeof(texturePolygonLayout[0]);
+		colorPolygonLayout[1].SemanticName = "COLOR";
+		colorPolygonLayout[1].SemanticIndex = 0;
+		colorPolygonLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		colorPolygonLayout[1].InputSlot = 0;
+		colorPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		colorPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		colorPolygonLayout[1].InstanceDataStepRate = 0;
+
+
+		//get a count of the number of elemements in the layout
+		numElements = sizeof(colorPolygonLayout) / sizeof(colorPolygonLayout[0]);
+
+		//Create the vertex input layout
+		result = device->CreateInputLayout(colorPolygonLayout, numElements, colorVertexShaderBuffer->GetBufferPointer(),colorVertexShaderBuffer->GetBufferSize(),
+			&m_colorLayout);
+		if (FAILED(result))
+		{
+			return false;
+		}
 		
-		//Create the texture vertex input layout
-		//result = device->CreateInputLayout(texturePolygonLayout, numElements, textureVertexShaderBuffer->GetBufferPointer(), textureVertexShaderBuffer->GetBufferSize(),
-		//	&m_textureLayout);
-		//if (FAILED(result))
-		//{
-		//	return false;
-		//}
 
 		//Release the texture vertex shader buffer and pixel shader buffer since they are no longer needed
 		textureVertexShaderBuffer->Release();
@@ -361,6 +448,13 @@ namespace JR_Shader
 		//Release the pixel shader for the font pixel shader since it is no longer needed
 		fontPixelShaderBuffer->Release();
 		fontPixelShaderBuffer = NULL;
+
+		//release the vertex and pixel shader buffers
+		colorVertexShaderBuffer->Release();
+		colorVertexShaderBuffer = NULL;
+
+		colorPixelShaderBuffer->Release();
+		colorPixelShaderBuffer = NULL;
 
 		//Set up the description of the dynamic matrix constant buffer pointer so that
 		//it is in the vertex shader
@@ -841,6 +935,67 @@ namespace JR_Shader
 		deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 
 		//redner the model
+		deviceContext->DrawIndexed(indexCount, 0, 0);
+	}
+
+	//setColorShaderParameters-- sets the parameters for the color shader
+	//deviceContext- the device context to use for drawing
+	//indexCount- the number of indicies
+	//worldMatrix- the world matrix to use
+	//viewMatrix- the view matrix to use
+	//projectionMatrix- the projection matrix to use
+	bool Shader::setColorShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+		D3DXMATRIX projectionMatrix)
+	{
+		HRESULT result;
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		MatrixBuffer* dataPtr;
+		unsigned int bufferNumber;
+
+		//Transpose the matricies to prepare them for the shader
+		D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
+		D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
+		D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+
+		//lock the constant buffer so that it can be written to
+		result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Get a pointer to the data in the constant buffer
+		dataPtr = (MatrixBuffer*)mappedResource.pData;
+
+		//Copy the matrices into the constant buffer
+		dataPtr->world = worldMatrix;
+		dataPtr->view = viewMatrix;
+		dataPtr->projection = projectionMatrix;
+
+		//unlock the constant buffer
+		deviceContext->Unmap(m_matrixBuffer, 0);
+
+		//set the position of the constant buffer in the vertex shader
+		bufferNumber = 0;
+		//Now set the constant buffer in the vertex shader with the updated values
+		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+
+		return true;
+	}
+
+	//renderColorShader-- renders the model currently in the device context
+	//deviceContext- the device context to use for rendering
+	//indexCount- the number of indices in the model
+	void Shader::renderColorShader(ID3D11DeviceContext* deviceContext, int indexCount)
+	{
+		//set the vertex input layout
+		deviceContext->IASetInputLayout(m_colorLayout);
+
+		deviceContext->VSSetShader(m_colorVertexShader, NULL, 0);
+
+		deviceContext->PSSetShader(m_colorPixelShader, NULL, 0);
+
 		deviceContext->DrawIndexed(indexCount, 0, 0);
 	}
 

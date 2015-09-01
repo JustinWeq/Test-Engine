@@ -113,6 +113,15 @@ namespace JR_Shader
 		bool renderFont(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture,D3DXVECTOR4 fontColor);
 
+		//renderColor-- renders using the shader and the passed in parameters
+		//deviceContext- the device context to use for drawing
+		//indexCount- the number of indicies
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		bool renderColor(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix);
+
 	private:
 		//initShader-- sets up the shader
 		//device- The device to use to create the shader
@@ -157,7 +166,7 @@ namespace JR_Shader
 		bool setTextureShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
 
-		//setFontShaderParameters-- sets the parameters for the texture shader
+		//setFontShaderParameters-- sets the parameters for the font shader
 		//deviceContext- the device context to use for drawing
 		//indexCount- the number of indicies
 		//worldMatrix- the world matrix to use
@@ -167,6 +176,15 @@ namespace JR_Shader
 		//fontColor- the color to drw the font with
 		bool setFontShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture,D3DXVECTOR4 fontColor);
+
+		//setColorShaderParameters-- sets the parameters for the color shader
+		//deviceContext- the device context to use for drawing
+		//indexCount- the number of indicies
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		bool setColorShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix);
 
 		//renderShader-- renders the model currently in the device context
 		//deviceContext- the device context to use for rendering
@@ -183,7 +201,10 @@ namespace JR_Shader
 		//indexCount- the number of indices in the model
 		void renderFontShader(ID3D11DeviceContext* deviceContext, int indexCount);
 
-
+		//renderColorShader-- renders the model currently in the device context
+		//deviceContext- the device context to use for rendering
+		//indexCount- the number of indices in the model
+		void renderColorShader(ID3D11DeviceContext* deviceContext, int indexCount);
 		private:
 			//vertexShader-- the vertex shader
 			ID3D11VertexShader* m_vertexShader;
@@ -195,8 +216,14 @@ namespace JR_Shader
 			ID3D11PixelShader* m_texturePixelShader;
 			//fontPixelShader-- the pixel shader for the font
 			ID3D11PixelShader* m_fontPixelShader;
+			//colorVertexShader-- the color vertex shader
+			ID3D11VertexShader* m_colorVertexShader;
+			//colorPixelShader-- the color pixel shader
+			ID3D11PixelShader* m_colorPixelShader;
 			//layout-- the layout of the shader
 			ID3D11InputLayout* m_layout;
+			//colorLayout-- the layout of the color vertex
+			ID3D11InputLayout* m_colorLayout;
 			//matrixBuffer-- the buffer for the matricies
 			ID3D11Buffer* m_matrixBuffer;
 			//sampleState-- the state of the sampler
@@ -207,5 +234,6 @@ namespace JR_Shader
 			ID3D11Buffer* m_lightBuffer;
 			//pixelColorBuffer-- the buffer for the pixel color
 			ID3D11Buffer* m_pixelColorBuffer;
+
 	};
 }
