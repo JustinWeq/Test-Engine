@@ -13,6 +13,12 @@ namespace JR_Shader
 		m_pixelShader = NULL;
 		m_sampleState = NULL;
 		m_vertexShader = NULL;
+		m_colorLayout = NULL;
+		m_colorPixelShader = NULL;
+		m_colorVertexShader = NULL;
+		m_terrainLayout = NULL;
+		m_terrainPixelShader = NULL;
+		m_terrainVertexShader = NULL;
 	}
 
 	Shader::~Shader()
@@ -167,8 +173,11 @@ namespace JR_Shader
 		ID3D10Blob* fontPixelShaderBuffer;
 		ID3D10Blob* colorVertexShaderBuffer;
 		ID3D10Blob* colorPixelShaderBuffer;
+		ID3D10Blob* terrainVertexShaderBuffer;
+		ID3D10Blob* terrainPixelShaderBuffer;
 		D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 		D3D11_INPUT_ELEMENT_DESC colorPolygonLayout[2];
+		D3D11_INPUT_ELEMENT_DESC terrainPolygonLayout[2];
 		unsigned int numElements;
 		D3D11_BUFFER_DESC matrixBufferDesc;
 		D3D11_SAMPLER_DESC samplerDesc;
@@ -224,6 +233,26 @@ namespace JR_Shader
 		//compile the color vertex shader code
 		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "colorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&colorVertexShaderBuffer, &errorMessage, NULL);
+		if (FAILED(result))
+		{
+			//If the shader failed to compile it should have written something tot he error message
+			if (errorMessage)
+			{
+				outputShaderErrorMessage(errorMessage, hwnd, L"defualt.vs");
+			}
+			else
+			{
+				//theres nothing in the error message
+				// so it could not find the shader file itself
+				MessageBox(hwnd, L"defualt.vs", L"Could not find the file for the shader", MB_OK);
+			}
+
+			return false;
+		}
+
+		//compile the terrain vertex shader code
+		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "terrainVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+			&terrainVertexShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
 			//If the shader failed to compile it should have written something tot he error message
@@ -313,6 +342,24 @@ namespace JR_Shader
 			return false;
 		}
 
+		//Compile the terrain pixel shader code
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "terrainPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+			&terrainPixelShaderBuffer, &errorMessage, NULL);
+		if (FAILED(result))
+		{
+			//if the shader failed to sompile it should have written something to the error message
+			if (errorMessage)
+			{
+				outputShaderErrorMessage(errorMessage, hwnd, L"defualt.ps");
+			}
+			else
+			{
+				//the was no error message so the program could not find the shader itself
+				MessageBox(hwnd, L"defualt.ps", L"Missing Shader File", MB_OK);
+			}
+			return false;
+		}
+
 		//Create the vertex shader from the buffer
 		result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 		if (FAILED(result))
@@ -357,6 +404,20 @@ namespace JR_Shader
 
 		//create the color pixel shader from the buffer
 		result = device->CreatePixelShader(colorPixelShaderBuffer->GetBufferPointer(), colorPixelShaderBuffer->GetBufferSize(), NULL, &m_colorPixelShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//create the terrain vertex shader from the buffer
+		result = device->CreateVertexShader(terrainVertexShaderBuffer->GetBufferPointer(), terrainVertexShaderBuffer->GetBufferSize(), NULL, &m_terrainVertexShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//create the terrain pixel shader from the buffer
+		result = device->CreatePixelShader(terrainPixelShaderBuffer->GetBufferPointer(), terrainPixelShaderBuffer->GetBufferSize(), NULL, &m_terrainPixelShader);
 		if (FAILED(result))
 		{
 			return false;
@@ -429,6 +490,36 @@ namespace JR_Shader
 		{
 			return false;
 		}
+
+		//Create the terrain vertex input layout description
+		//This setup needs to match the vertex type for the model and the vertex shader exactly
+		terrainPolygonLayout[0].SemanticName = "POSITION";
+		terrainPolygonLayout[0].SemanticIndex = 0;
+		terrainPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		terrainPolygonLayout[0].InputSlot = 0;
+		terrainPolygonLayout[0].AlignedByteOffset = 0;
+		terrainPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		terrainPolygonLayout[0].InstanceDataStepRate = 0;
+
+		terrainPolygonLayout[1].SemanticName = "NORMAL";
+		terrainPolygonLayout[1].SemanticIndex = 0;
+		terrainPolygonLayout[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		terrainPolygonLayout[1].InputSlot = 0;
+		terrainPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		terrainPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		terrainPolygonLayout[1].InstanceDataStepRate = 0;
+
+
+		//get a count of the number of elemements in the layout
+		numElements = sizeof(terrainPolygonLayout) / sizeof(terrainPolygonLayout[0]);
+
+		//Create the vertex input layout
+		result = device->CreateInputLayout(terrainPolygonLayout, numElements, terrainVertexShaderBuffer->GetBufferPointer(), terrainVertexShaderBuffer->GetBufferSize(),
+			&m_terrainLayout);
+		if (FAILED(result))
+		{
+			return false;
+		}
 		
 
 		//Release the texture vertex shader buffer and pixel shader buffer since they are no longer needed
@@ -455,6 +546,13 @@ namespace JR_Shader
 
 		colorPixelShaderBuffer->Release();
 		colorPixelShaderBuffer = NULL;
+
+		//release the terrain vertex and pixel bufffers
+		terrainPixelShaderBuffer->Release();
+		terrainPixelShaderBuffer = NULL;
+
+		terrainVertexShaderBuffer->Release();
+		terrainVertexShaderBuffer = NULL;
 
 		//Set up the description of the dynamic matrix constant buffer pointer so that
 		//it is in the vertex shader
@@ -612,6 +710,42 @@ namespace JR_Shader
 		{
 			m_textureVertexShader->Release();
 			m_textureVertexShader = NULL;
+		}
+
+		if (m_colorLayout)
+		{
+			m_colorLayout->Release();
+			m_colorLayout = NULL;
+		}
+
+		if (m_colorPixelShader)
+		{
+			m_colorPixelShader->Release();
+			m_colorPixelShader = NULL;
+		}
+
+		if (m_colorVertexShader)
+		{
+			m_colorVertexShader->Release();
+			m_colorVertexShader = NULL;
+		}
+
+		if (m_terrainLayout)
+		{
+			m_terrainLayout->Release();
+			m_terrainLayout = NULL;
+		}
+
+		if (m_terrainPixelShader)
+		{
+			m_terrainPixelShader->Release();
+			m_terrainPixelShader = NULL;
+		}
+
+		if (m_terrainVertexShader)
+		{
+			m_terrainVertexShader->Release();
+			m_terrainVertexShader = NULL;
 		}
 	}
 
@@ -995,6 +1129,144 @@ namespace JR_Shader
 		deviceContext->VSSetShader(m_colorVertexShader, NULL, 0);
 
 		deviceContext->PSSetShader(m_colorPixelShader, NULL, 0);
+
+		deviceContext->DrawIndexed(indexCount, 0, 0);
+	}
+
+	//renderTerrain-- renders using the shader and the passed in parameters
+	//deviceContext- the device context to use for drawing
+	//indexCount- the number of indicies
+	//worldMatrix- the world matrix to use
+	//viewMatrix- the view matrix to use
+	//projectionMatrix- the projection matrix to use
+	//lightDirection- the direction of the light
+	//ambientColor- the color of the ambient light
+	//diffuseColor- the color of the diffuse light
+	bool Shader::renderTerrain(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+		D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor)
+	{
+		bool result;
+		
+		//set the shader parameters
+		result = setTerrainShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix,
+			lightDirection, ambientColor, diffuseColor);
+		if (!result)
+		{
+			return false;
+		}
+
+		//render the shader
+		renderTerrainShader(deviceContext, indexCount);
+
+		return true;
+	}
+
+	//setTerrainShaderParameters-- sets the parameters for the color shader
+	//deviceContext- the device context to use for drawing
+	//indexCount- the number of indicies
+	//worldMatrix- the world matrix to use
+	//viewMatrix- the view matrix to use
+	//projectionMatrix- the projection matrix to use
+	//lightDirection- the direction of the light
+	//ambientColor- the color of the ambient light
+	//diffuseColor- the color of the diffuse light
+	bool Shader::setTerrainShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+		D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor)
+	{
+		HRESULT result;
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		MatrixBuffer* dataPtr;
+		LightBuffer* dataPtr2;
+		CameraBuffer* dataPtr3;
+		unsigned int bufferNumber;
+
+		//Transpose the matricies to prepare them for the shader
+		D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
+		D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
+		D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+
+		//lock the constant buffer so that it can be written to
+		result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Get a pointer to the data in the constant buffer
+		dataPtr = (MatrixBuffer*)mappedResource.pData;
+
+		//Copy the matrices into the constant buffer
+		dataPtr->world = worldMatrix;
+		dataPtr->view = viewMatrix;
+		dataPtr->projection = projectionMatrix;
+
+		//unlock the constant buffer
+		deviceContext->Unmap(m_matrixBuffer, 0);
+
+		//set the position of the constant buffer in the vertex shader
+		bufferNumber = 0;
+		//Now set the constant buffer in the vertex shader with the updated values
+		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+
+		//now update the light buffer
+		//lock the buffer to write to it
+		result = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Get a pointer to the data
+		dataPtr2 = (LightBuffer*)mappedResource.pData;
+
+		//copy the new information onto the buffer
+		dataPtr2->ambientColor = ambientColor;
+		dataPtr2->diffuseColor = diffuseColor;
+		dataPtr2->lightDirection = lightDirection;
+
+		//unlock the constant buffer
+		deviceContext->Unmap(m_lightBuffer, 0);
+
+		//set the position of the buffer in the pixel shader
+		bufferNumber = 0;
+
+		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
+
+		//now update the camera buffer
+		//lock the constant buffer so it can be written to
+		result = deviceContext->Map(m_cameraBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		dataPtr3 = (CameraBuffer*)mappedResource.pData;
+
+		dataPtr3->padding = 0.0f;
+
+		//unlock the constant buffer
+		deviceContext->Unmap(m_cameraBuffer, 0);
+
+		//set the position of the buffer in the pixel shader
+		bufferNumber = 1;
+
+		//update the camera buffer
+		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_cameraBuffer);
+
+		return true;
+	}
+
+	//renderTerrainShader-- renders the model currently in the device context
+	//deviceContext- the device context to use for rendering
+	//indexCount- the number of indices in the model
+	void Shader::renderTerrainShader(ID3D11DeviceContext* deviceContext, int indexCount)
+	{
+		deviceContext->IASetInputLayout(m_terrainLayout);
+
+		deviceContext->VSSetShader(m_terrainVertexShader, NULL, 0);
+
+		deviceContext->PSSetShader(m_terrainPixelShader, NULL, 0);
 
 		deviceContext->DrawIndexed(indexCount, 0, 0);
 	}

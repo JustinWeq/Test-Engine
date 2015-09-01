@@ -36,6 +36,12 @@ struct ColorPixelInput
  float4 color : COLOR;
 };
 
+struct TerrainPixelInput
+{
+ float4 position : SV_POSITION;
+ float3 normal : NORMAL;
+};
+
 
 float4 defualtPixelShader(PixelInput input) :SV_TARGET
 {
@@ -121,3 +127,35 @@ float4 colorPixelShader(ColorPixelInput input): SV_TARGET
 {
  return input.color;
 }
+
+float4 terrainPixelShader(TerrainPixelInput input) : SV_TARGET
+{
+ float3 lightDir;
+ float lightIntensity;
+ float4 color;
+ 
+ //set the defualt output color to the ambient light value for all pixels
+ color = ambientColor;
+ 
+ //invert the light direction for calculations
+ lightDir = -lightDirection;
+ 
+ //Calculate the amount of light on this pixel.
+ lightIntensity = saturate(dot(input.normal,lightDir));
+ 
+ if(lightIntensity > 0.0)
+ {
+  //determine the final diffuse color based on the diffuse color and the amount of light intensity
+  color += (diffuseColor * lightIntensity);
+  }
+
+ 
+ //saturate the final light color
+ color = saturate(color);
+
+
+ return color;
+}
+
+
+

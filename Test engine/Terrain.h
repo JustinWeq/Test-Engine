@@ -17,14 +17,31 @@ namespace JR_Terrain
 		{
 			//position- the position of this vertex
 			D3DXVECTOR3 position;
-			//color- the color of this vertex
-			D3DXVECTOR4 color;
+			//normal- normal of this vertex
+			D3DXVECTOR3 normal;
 		};
 
 		//HeightMapType- a struct that contains information for a heghtmap
 		struct HeightMapType
 		{
 			//x- the x coord
+			float x;
+			//y- the y coord
+			float y;
+			//z- the z coord
+			float z;
+			//nx- the x normal 
+			float nx;
+			//ny- the y normal
+			float ny;
+			//nz- the z normal
+			float nz;
+		};
+
+		//Vector-- a simple struct defining a simple 3D vector
+		struct Vector
+		{
+			//x- the x coord 
 			float x;
 			//y- the y coord
 			float y;
@@ -60,6 +77,8 @@ namespace JR_Terrain
 		//device- the device to use for intialization
 		bool initBuffers(ID3D11Device* device);
 
+		//calculateNormals- calculates the normals for the terrain
+		bool calculateNormals();
 		//shutdownBuffers-- shuts down the buffers for the Terrain class
 		void shutdownBuffers();
 

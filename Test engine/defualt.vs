@@ -32,6 +32,13 @@ struct ColorVertexInput
  float4 color : COLOR;
 };
 
+struct TerrainVertexInput
+{
+ float4 position : POSITION;
+ float3 normal : NORMAL;
+};
+
+
 struct PixelInput
 {
  float4 position: SV_POSITION;
@@ -50,6 +57,12 @@ struct ColorPixelInput
 {
  float4 position : SV_POSITION;
  float4 color : COLOR;
+};
+
+struct TerrainPixelInput
+{
+ float4 position :SV_POSITION;
+ float3 normal : NORMAL;
 };
 
 PixelInput DefualtVertexShader(VertexInput input)
@@ -129,3 +142,29 @@ ColorPixelInput colorVertexShader(ColorVertexInput input)
  return output;
  
 }
+
+TerrainPixelInput terrainVertexShader(TerrainVertexInput input)
+{
+ TerrainPixelInput output;
+ //change the position vector to be four units for proper matrix calcualtions
+ input.position.w = 1.0f;
+ 
+ //Calculate the position ov the vertex agains the world view and projection matriceis
+ output.position = mul(input.position,worldMatrix);
+ output.position = mul(output.position,viewMatrix);
+ output.position = mul(output.position,projectionMatrix);
+ 
+ //Calculate the normal vector against the world matrix only
+ output.normal = mul(input.normal,(float3x3)worldMatrix);
+ 
+ //normalize the normal vector
+ output.normal = normalize(output.normal);
+ 
+ return output;
+}
+
+
+
+
+
+

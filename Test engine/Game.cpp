@@ -248,13 +248,14 @@ bool update()
 
 		//move the camera
 
-		/*dcx += x;
-		dcy += y;
-		dcz += z;*/
+
 
 		cam.setDeltaX(x);
 		cam.setDeltaY(y);
 		cam.setDeltaZ(z);
+		dcx = cam.getPosX();
+		dcy = cam.getPosY();
+		dcz = cam.getPosZ();
 
 		//move view cam accordingly
 		int mx, my;
@@ -346,7 +347,7 @@ void draw()
 
 	//render the model using the defualt shader
 	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() ,object->getWorld(), cam.getViewMatrix(),
-		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(1, 1, 1, 0.2),
+		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(0.5, 0.5, 0.5, 1),
 		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(dcx, dcy, dcz), D3DXVECTOR4(1, 1, 1, 1), 32);
 	if (!result)
 	{
@@ -357,7 +358,8 @@ void draw()
 	terrain->render(graphics->getDeviceContext());
 
 
-	shader->renderColor(graphics->getDeviceContext(), terrain->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection);
+	shader->renderTerrain(graphics->getDeviceContext(), terrain->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection,
+		D3DXVECTOR3(0, 0, 0.75), D3DXVECTOR4(0.5, 0.5, 0.5, 1), D3DXVECTOR4(1, 1, 1, 1));
 	//result = shader->
 	//begin 2D drawing now
 	//disable 2 buffer
