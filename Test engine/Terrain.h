@@ -2,7 +2,9 @@
 #include <D3D11.h>
 #include <D3DX10math.h>
 #include <stdio.h>
+#include "Texture.h"
 
+using namespace JR_Texture;
 using namespace std;
 
 namespace JR_Terrain
@@ -17,6 +19,8 @@ namespace JR_Terrain
 		{
 			//position- the position of this vertex
 			D3DXVECTOR3 position;
+			//texture- the texture coords
+			D3DXVECTOR2 texture;
 			//normal- normal of this vertex
 			D3DXVECTOR3 normal;
 		};
@@ -30,6 +34,10 @@ namespace JR_Terrain
 			float y;
 			//z- the z coord
 			float z;
+			//tu- the textures u coord
+			float tu;
+			//tv the texture v coord
+			float tv;
 			//nx- the x normal 
 			float nx;
 			//ny- the y normal
@@ -59,7 +67,8 @@ namespace JR_Terrain
 		//init-- initalizes the Terrain class
 		//device- the device to use for initializtion
 		//mapAddress- the address of the heightmap
-		bool init(ID3D11Device* device,char* mapAddress);
+		//textureAddress- the texture address
+		bool init(ID3D11Device* device,char* mapAddress,WCHAR* textureAddress);
 
 		//shutdown-- shutdown and cleans up memory for this Terrain instance
 		void shutdown();
@@ -70,6 +79,13 @@ namespace JR_Terrain
 
 		//getIndexCount- returns the number of indices for this Terrains model
 		int getIndexCount();
+
+		//setTextureRepeat- sets the amount of times the texture should repeat itself
+		//repeat- the amount of times to repeat
+		void setTextureRepeat(int repeat);
+
+		//getTexture-- returns the texture for this terrain
+		ID3D11ShaderResourceView* getTexture();
 
 	private:
 
@@ -95,6 +111,17 @@ namespace JR_Terrain
 		//shutdownHeightMap()-- cleans up memory for the heightmap
 		void shutdownHeightMap();
 
+		//calculateTextureCoords-- calculates the texture coordinates for this terrain
+		void calculateTextureCoords();
+
+		//loadTexture-- loads the texture for this terrain
+		//device- the device to load the texture with
+		//textureAddress- the address of the texture to use
+		bool loadTexture(ID3D11Device* device, WCHAR* textureAddress);
+		
+		//releaseTexture-- cleans up memory for the texture
+		void releaseTexture();
+
 	private:
 		//terrainWidth- the number of tiles horizontally
 		int m_terrainWidth;
@@ -116,6 +143,12 @@ namespace JR_Terrain
 
 		//heightMap- the array containing information for a height map
 		HeightMapType* m_heightMap;
+
+		//textureRepeat- the amount of times the texture repeats itself
+		int m_textureRepeat;
+
+		//texture- the texture for the terrain
+		Texture* m_texture;
 
 	};
 }

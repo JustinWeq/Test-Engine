@@ -11,6 +11,8 @@ namespace JR_Terrain
 		m_terrainWidth = 0;
 		m_vertexBuffer = NULL;
 		m_vertexCount = 0;
+		m_texture = 0;
+		m_textureRepeat = 8;
 	}
 
 	//deconstructor-- cleans up memory for Terrain
@@ -23,9 +25,17 @@ namespace JR_Terrain
 	//init-- initalizes the Terrain class
 	//device- the device to use for initializtion
 	//mapAddress- the address of the heightmap
-	bool Terrain::init(ID3D11Device* device, char* mapAddress)
+	//textureAddress- the texture address
+	bool Terrain::init(ID3D11Device* device, char* mapAddress,WCHAR* textureAddress)
 	{
 		bool result;
+
+		//load the texture
+		result = loadTexture(device, textureAddress);
+		if (!result)
+		{
+			return false;
+		}
 
 		//Load in the height map for the terrain
 		result = loadHeightMap(mapAddress);
@@ -43,6 +53,10 @@ namespace JR_Terrain
 		{
 			return false;
 		}
+
+		//calculate the tex coords
+
+		calculateTextureCoords();
 
 		//init the vertex and index buffer to hold the model for the terrain
 		result = initBuffers(device);
@@ -62,6 +76,9 @@ namespace JR_Terrain
 
 		//shutdown the heightmap
 		shutdownHeightMap();
+
+		//release the texture
+		releaseTexture();
 	}
 	//render-- puts the model for this terrain on the pipeline and prepares it for rendering
 	//deviceContext- the device context that will be used for rendering
@@ -89,6 +106,7 @@ namespace JR_Terrain
 		D3D11_SUBRESOURCE_DATA vertexData, indexData;
 		HRESULT result;
 		int index1, index2, index3, index4;
+		float tu, tv;
 
 		// Calculate the number of vertices in the terrain mesh.
 		m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 6;
@@ -124,42 +142,73 @@ namespace JR_Terrain
 			index4 = (m_terrainHeight * (j + 1)) + (i + 1);  // Upper right.
 
 															 // Upper left.
+			tv = m_heightMap[index3].tv;
+
+			// Modify the texture coordinates to cover the top edge.
+			if (tv == 1.0f) { tv = 0.0f; }
+
 			vertices[index].position = D3DXVECTOR3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+			vertices[index].texture = D3DXVECTOR2(m_heightMap[index3].tu, tv);
 			vertices[index].normal = D3DXVECTOR3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
 			indices[index] = index;
 			index++;
 
 			// Upper right.
+			tu = m_heightMap[index4].tu;
+			tv = m_heightMap[index4].tv;
+
+			// Modify the texture coordinates to cover the top and right edge.
+			if (tu == 0.0f) { tu = 1.0f; }
+			if (tv == 1.0f) { tv = 0.0f; }
+
 			vertices[index].position = D3DXVECTOR3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+			vertices[index].texture = D3DXVECTOR2(tu, tv);
 			vertices[index].normal = D3DXVECTOR3(m_heightMap[index4].nx, m_heightMap[index4].ny, m_heightMap[index4].nz);
 			indices[index] = index;
 			index++;
 
 			// Bottom left.
 			vertices[index].position = D3DXVECTOR3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+			vertices[index].texture = D3DXVECTOR2(m_heightMap[index1].tu, m_heightMap[index1].tv);
 			vertices[index].normal = D3DXVECTOR3(m_heightMap[index1].nx, m_heightMap[index1].ny, m_heightMap[index1].nz);
 			indices[index] = index;
 			index++;
 
 			// Bottom left.
 			vertices[index].position = D3DXVECTOR3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+			vertices[index].texture = D3DXVECTOR2(m_heightMap[index1].tu, m_heightMap[index1].tv);
 			vertices[index].normal = D3DXVECTOR3(m_heightMap[index1].nx, m_heightMap[index1].ny, m_heightMap[index1].nz);
 			indices[index] = index;
 			index++;
 
 			// Upper right.
+			tu = m_heightMap[index4].tu;
+			tv = m_heightMap[index4].tv;
+
+			// Modify the texture coordinates to cover the top and right edge.
+			if (tu == 0.0f) { tu = 1.0f; }
+			if (tv == 1.0f) { tv = 0.0f; }
+
 			vertices[index].position = D3DXVECTOR3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+			vertices[index].texture = D3DXVECTOR2(tu, tv);
 			vertices[index].normal = D3DXVECTOR3(m_heightMap[index4].nx, m_heightMap[index4].ny, m_heightMap[index4].nz);
 			indices[index] = index;
 			index++;
 
 			// Bottom right.
+			tu = m_heightMap[index2].tu;
+
+			// Modify the texture coordinates to cover the right edge.
+			if (tu == 0.0f) { tu = 1.0f; }
+
 			vertices[index].position = D3DXVECTOR3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+			vertices[index].texture = D3DXVECTOR2(tu, m_heightMap[index2].tv);
 			vertices[index].normal = D3DXVECTOR3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
 			indices[index] = index;
 			index++;
 		}
 	}
+
 
 
 
@@ -502,6 +551,109 @@ namespace JR_Terrain
 		normals = 0;
 
 		return true;
+
+	}
+
+	//loadTexture-- loads the texture for this terrain
+	//device- the device to load the texture with
+	//textureAddress- the address of the texture to use
+	bool Terrain::loadTexture(ID3D11Device* device, WCHAR* textureAddress)
+	{
+		bool result;
+		//create the texture object
+		m_texture = new Texture;
+		if (!m_texture)
+		{
+			return false;
+		}
+
+		//init the texture object
+		result = m_texture->init(device, textureAddress);
+		if (!result)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	//releaseTexture-- cleans up memory for the texture
+	void Terrain::releaseTexture()
+	{
+		if (m_texture)
+		{
+			m_texture->shutdown();
+			delete m_texture;
+			m_texture = NULL;
+		}
+	}
+
+	//setTextureRepeat- sets the amount of times the texture should repeat itself
+	//repeat- the amount of times to repeat
+	void Terrain::setTextureRepeat(int repeat)
+	{
+		m_textureRepeat = repeat;
+	}
+
+	//getTexture-- returns the texture for this terrain
+	ID3D11ShaderResourceView* Terrain::getTexture()
+	{
+		return m_texture->getTexture();
+	}
+
+	//calculateTextureCoords-- calculates the texture coordinates for this terrain
+	void Terrain::calculateTextureCoords()
+	{
+		int incrementCount, i, j, tuCount, tvCount;
+		float incrementValue, tuCoordinate, tvCoordinate;
+
+
+		// Calculate how much to increment the texture coordinates by.
+		incrementValue = (float)m_textureRepeat / (float)m_terrainWidth;
+
+		// Calculate how many times to repeat the texture.
+		incrementCount = m_terrainWidth / m_textureRepeat;
+
+		// Initialize the tu and tv coordinate values.
+		tuCoordinate = 0.0f;
+		tvCoordinate = 1.0f;
+
+		// Initialize the tu and tv coordinate indexes.
+		tuCount = 0;
+		tvCount = 0;
+
+		// Loop through the entire height map and calculate the tu and tv texture coordinates for each vertex.
+		for (j = 0; j<m_terrainHeight; j++)
+		{
+			for (i = 0; i<m_terrainWidth; i++)
+			{
+				// Store the texture coordinate in the height map.
+				m_heightMap[(m_terrainHeight * j) + i].tu = tuCoordinate;
+				m_heightMap[(m_terrainHeight * j) + i].tv = tvCoordinate;
+
+				// Increment the tu texture coordinate by the increment value and increment the index by one.
+				tuCoordinate += incrementValue;
+				tuCount++;
+
+				// Check if at the far right end of the texture and if so then start at the beginning again.
+				if (tuCount == incrementCount)
+				{
+					tuCoordinate = 0.0f;
+					tuCount = 0;
+				}
+			}
+
+			// Increment the tv texture coordinate by the increment value and increment the index by one.
+			tvCoordinate -= incrementValue;
+			tvCount++;
+
+			// Check if at the top of the texture and if so then start at the bottom again.
+			if (tvCount == incrementCount)
+			{
+				tvCoordinate = 1.0f;
+				tvCount = 0;
+			}
+		}
 
 	}
 }

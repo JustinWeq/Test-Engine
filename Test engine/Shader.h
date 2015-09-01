@@ -131,8 +131,9 @@ namespace JR_Shader
 		//lightDirection- the direction of the light
 		//ambientColor- the color of the ambient light
 		//diffuseColor- the color of the diffuse light
+		//texture- the texture to0 use for drawing
 		bool renderTerrain(ID3D11DeviceContext* deviceContext,int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-			D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor);
+			D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor,ID3D11ShaderResourceView* texture);
 
 	private:
 		//initShader-- sets up the shader
@@ -208,8 +209,9 @@ namespace JR_Shader
 		//lightDirection- the direction of the light
 		//ambientColor- the color of the ambient light
 		//diffuseColor- the color of the diffuse light
+		//texture- the texture to0 use for drawing
 		bool setTerrainShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-			D3DXMATRIX projectionMatrix,D3DXVECTOR3 lightDirection,D3DXVECTOR4 ambientColor,D3DXVECTOR4 diffuseColor);
+			D3DXMATRIX projectionMatrix,D3DXVECTOR3 lightDirection,D3DXVECTOR4 ambientColor,D3DXVECTOR4 diffuseColor,ID3D11ShaderResourceView* texture);
 
 		//renderShader-- renders the model currently in the device context
 		//deviceContext- the device context to use for rendering

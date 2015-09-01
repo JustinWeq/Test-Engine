@@ -155,7 +155,9 @@ void init()
 	 //create the terrain object
 	 terrain = new Terrain;
 
-	 terrain->init(graphics->getDevice(), "heightmap01.bmp");
+	 terrain->init(graphics->getDevice(), "heightmap01.bmp",TEXT("texture.dds"));
+
+	 terrain->setTextureRepeat(100);
 }
 
 bool update()
@@ -359,7 +361,7 @@ void draw()
 
 
 	shader->renderTerrain(graphics->getDeviceContext(), terrain->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection,
-		D3DXVECTOR3(0, 0, 0.75), D3DXVECTOR4(0.5, 0.5, 0.5, 1), D3DXVECTOR4(1, 1, 1, 1));
+		D3DXVECTOR3(0, 0, 0.75), D3DXVECTOR4(0.5, 0.5, 0.5, 1), D3DXVECTOR4(1, 1, 1, 1),terrain->getTexture());
 	//result = shader->
 	//begin 2D drawing now
 	//disable 2 buffer

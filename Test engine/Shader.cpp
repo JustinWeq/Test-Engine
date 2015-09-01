@@ -177,7 +177,7 @@ namespace JR_Shader
 		ID3D10Blob* terrainPixelShaderBuffer;
 		D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 		D3D11_INPUT_ELEMENT_DESC colorPolygonLayout[2];
-		D3D11_INPUT_ELEMENT_DESC terrainPolygonLayout[2];
+		D3D11_INPUT_ELEMENT_DESC terrainPolygonLayout[3];
 		unsigned int numElements;
 		D3D11_BUFFER_DESC matrixBufferDesc;
 		D3D11_SAMPLER_DESC samplerDesc;
@@ -501,13 +501,21 @@ namespace JR_Shader
 		terrainPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		terrainPolygonLayout[0].InstanceDataStepRate = 0;
 
-		terrainPolygonLayout[1].SemanticName = "NORMAL";
+		terrainPolygonLayout[1].SemanticName = "TEXCOORD";
 		terrainPolygonLayout[1].SemanticIndex = 0;
-		terrainPolygonLayout[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		terrainPolygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 		terrainPolygonLayout[1].InputSlot = 0;
 		terrainPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		terrainPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		terrainPolygonLayout[1].InstanceDataStepRate = 0;
+
+		terrainPolygonLayout[2].SemanticName = "NORMAL";
+		terrainPolygonLayout[2].SemanticIndex = 0;
+		terrainPolygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		terrainPolygonLayout[2].InputSlot = 0;
+		terrainPolygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		terrainPolygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		terrainPolygonLayout[2].InstanceDataStepRate = 0;
 
 
 		//get a count of the number of elemements in the layout
@@ -1142,14 +1150,15 @@ namespace JR_Shader
 	//lightDirection- the direction of the light
 	//ambientColor- the color of the ambient light
 	//diffuseColor- the color of the diffuse light
+	//texture- the texture to0 use for drawing
 	bool Shader::renderTerrain(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-		D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor)
+		D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor,ID3D11ShaderResourceView* texture)
 	{
 		bool result;
 		
 		//set the shader parameters
 		result = setTerrainShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix,
-			lightDirection, ambientColor, diffuseColor);
+			lightDirection, ambientColor, diffuseColor,texture);
 		if (!result)
 		{
 			return false;
@@ -1170,8 +1179,9 @@ namespace JR_Shader
 	//lightDirection- the direction of the light
 	//ambientColor- the color of the ambient light
 	//diffuseColor- the color of the diffuse light
+	//texture- the texture to0 use for drawing
 	bool Shader::setTerrainShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-		D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor)
+		D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor,ID3D11ShaderResourceView* texture)
 	{
 		HRESULT result;
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
