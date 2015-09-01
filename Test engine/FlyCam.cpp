@@ -6,7 +6,8 @@ namespace JR_FlyCam
 	{
 		m_rotX = m_rotY =
 			m_rotZ = m_x =
-			m_y = m_z = 0;
+			m_y = m_z = m_dx =
+			m_dy = m_dz =0;
 	}
 
 	void FlyCam::init(float posX, float posY, float posZ, float rotX, float rotY, float rotZ)
@@ -23,7 +24,7 @@ namespace JR_FlyCam
 
 	void FlyCam::updateView()
 	{
-		D3DXVECTOR3 up, position, lookAt;
+		D3DXVECTOR3 up, position,relativePosition, lookAt;
 		float yaw, pitch, roll;
 		D3DXMATRIX rotationMatrix;
 
@@ -33,10 +34,12 @@ namespace JR_FlyCam
 		up.y = 1.0f;
 		up.z = 0.0f;
 
-		// Setup the position of the camera in the world.
-		position.x = -m_x;
-		position.y = -m_y;
-		position.z = -m_z;
+		//// Setup the position of the camera in the world.
+		//position.x = -m_x;
+		//position.y = -m_y;
+		//position.z = -m_z;
+
+		////Setup the reative position
 
 		// Setup where the camera is looking by default.
 		lookAt.x = 0.0f;
@@ -55,10 +58,24 @@ namespace JR_FlyCam
 		D3DXVec3TransformCoord(&lookAt, &lookAt, &rotationMatrix);
 		D3DXVec3TransformCoord(&up, &up, &rotationMatrix);
 
+		//set up the relative position
+		relativePosition.x = m_dx;
+		relativePosition.y = m_dy;
+		relativePosition.z = m_dz;
 
-		//rotate the position
-		D3DXVec3TransformCoord(&position, &position, &rotationMatrix);
+		//rotate the relative position 
+		D3DXVec3TransformCoord(&relativePosition, &relativePosition, &rotationMatrix);
 
+
+		//adde the new position to the m
+
+		m_x += relativePosition.x;
+		m_y += relativePosition.y;
+		m_z += relativePosition.z;
+
+		position.x = -m_x;
+		position.y = -m_y;
+		position.z = -m_z;
 		// Translate the rotated camera position to the location of the viewer.
 		lookAt = position + lookAt;
 
@@ -139,5 +156,20 @@ namespace JR_FlyCam
 	void FlyCam::setView(D3DXMATRIX view)
 	{
 		m_view = view;
+	}
+
+	void FlyCam::setDeltaX(float dx)
+	{
+		m_dx = dx;
+	}
+
+	void FlyCam::setDeltaY(float dy)
+	{
+		m_dy = dy;
+	}
+
+	void FlyCam::setDeltaZ(float dz)
+	{
+		m_dz = dz;
 	}
 }

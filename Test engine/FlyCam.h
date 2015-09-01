@@ -43,11 +43,21 @@ namespace JR_FlyCam
 
 		void setPosZ(float z);
 
+		void setDeltaX(float dx);
+
+		void setDeltaY(float dy);
+
+		void setDeltaZ(float dz);
+
 		void setView(D3DXMATRIX view);
 	private:
 		float m_rotX;
 		float m_rotY;
 		float m_rotZ;
+
+		float m_dx;
+		float m_dy;
+		float m_dz;
 
 		float m_x;
 		float m_y;

@@ -248,13 +248,13 @@ bool update()
 
 		//move the camera
 
-		dcx += x;
+		/*dcx += x;
 		dcy += y;
-		dcz += z;
+		dcz += z;*/
 
-		cam.setPosX(dcx);
-		cam.setPosY(dcy);
-		cam.setPosZ(dcz);
+		cam.setDeltaX(x);
+		cam.setDeltaY(y);
+		cam.setDeltaZ(z);
 
 		//move view cam accordingly
 		int mx, my;
