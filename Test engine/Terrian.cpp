@@ -22,15 +22,20 @@ namespace JR_Terrain
 
 	//init-- initalizes the Terrain class
 	//device- the device to use for initializtion
-	//width- the number of tiles for the terrain
-	//height- the number of tiles for the height of the terrain
-	bool Terrain::init(ID3D11Device* device, int width, int height)
+	//mapAddress- the address of the heightmap
+	bool Terrain::init(ID3D11Device* device, char* mapAddress)
 	{
 		bool result;
 
-		//store the width and height of the terrain
-		m_terrainWidth = width;
-		m_terrainHeight = height;
+		//Load in the height map for the terrain
+		result = loadHeightMap(mapAddress);
+		if (!result)
+		{
+			return false;
+		}
+
+		//normalize the heightmap
+		normalizeHeightMap();
 
 		//init the vertex and index buffer to hold the model for the terrain
 		result = initBuffers(device);
@@ -47,6 +52,9 @@ namespace JR_Terrain
 	{
 		//release the vertex and index buffers
 		shutdownBuffers();
+
+		//shutdown the heightmap
+		shutdownHeightMap();
 	}
 	//render-- puts the model for this terrain on the pipeline and prepares it for rendering
 	//deviceContext- the device context that will be used for rendering
@@ -73,9 +81,10 @@ namespace JR_Terrain
 		D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 		D3D11_SUBRESOURCE_DATA vertexData, indexData;
 		HRESULT result;
+		int index1, index2, index3, index4;
 
 		// Calculate the number of vertices in the terrain mesh.
-		m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 8;
+		m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 12;
 
 		// Set the index count to the same as the vertex count.
 		m_indexCount = m_vertexCount;
@@ -94,91 +103,93 @@ namespace JR_Terrain
 			return false;
 		}
 
-		// Initialize the index to the vertex array.
-		index = 0;
+		// Initialize the index to the vertex buffer.
+	index = 0;
 
-		// Load the vertex and index arrays with the terrain data.
-		for (j = 0; j<(m_terrainHeight - 1); j++)
+	// Load the vertex and index array with the terrain data.
+	for(j=0; j<(m_terrainHeight-1); j++)
+	{
+		for(i=0; i<(m_terrainWidth-1); i++)
 		{
-			for (i = 0; i<(m_terrainWidth - 1); i++)
-			{
-				// LINE 1
-				// Upper left.
-				positionX = (float)i;
-				positionZ = (float)(j + 1);
+			index1 = (m_terrainHeight * j) + i;          // Bottom left.
+			index2 = (m_terrainHeight * j) + (i+1);      // Bottom right.
+			index3 = (m_terrainHeight * (j+1)) + i;      // Upper left.
+			index4 = (m_terrainHeight * (j+1)) + (i+1);  // Upper right.
 
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
+			// Upper left.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				// Upper right.
-				positionX = (float)(i + 1);
-				positionZ = (float)(j + 1);
+			// Upper right.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
+			// Upper right.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				// LINE 2
-				// Upper right.
-				positionX = (float)(i + 1);
-				positionZ = (float)(j + 1);
+			// Bottom left.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
+			// Bottom left.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				// Bottom right.
-				positionX = (float)(i + 1);
-				positionZ = (float)j;
+			// Upper left.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
+			// Bottom left.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				// LINE 3
-				// Bottom right.
-				positionX = (float)(i + 1);
-				positionZ = (float)j;
+			// Upper right.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
+			// Upper right.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				// Bottom left.
-				positionX = (float)i;
-				positionZ = (float)j;
+			// Bottom right.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
+			// Bottom right.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 
-				// LINE 4
-				// Bottom left.
-				positionX = (float)i;
-				positionZ = (float)j;
-
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
-
-				// Upper left.
-				positionX = (float)i;
-				positionZ = (float)(j + 1);
-
-				vertices[index].position = D3DXVECTOR3(positionX, 0.0f, positionZ);
-				vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-				indices[index] = index;
-				index++;
-			}
+			// Bottom left.
+			vertices[index].position = D3DXVECTOR3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+			vertices[index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+			indices[index] = index;
+			index++;
 		}
+	}
+
 
 		// Set up the description of the static vertex buffer.
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -266,5 +277,121 @@ namespace JR_Terrain
 
 		//Set the type of primitive layout
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	}
+
+	//loadHeightMap-- loads the height map using the passed in address
+	bool Terrain::loadHeightMap(char* mapAddress)
+	{
+		FILE* filePtr;
+		int error;
+		unsigned int count;
+		BITMAPFILEHEADER bitmapFileHeader;
+		BITMAPINFOHEADER bitmapInfoHeader;
+		int imageSize, i, j, k, index;
+		unsigned char* bitmapImage;
+		unsigned char height;
+
+		//Open the height map file in binary
+		error = fopen_s(&filePtr, mapAddress, "rb");
+		if (error != 0)
+		{
+			return false;
+		}
+
+		//Read in the file header
+		count = fread(&bitmapFileHeader, sizeof(BITMAPFILEHEADER), 1, filePtr);
+		if (count != 1)
+		{
+			return false;
+		}
+
+		//read in the bitmap info header
+		count = fread(&bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, filePtr);
+		if (count != 1)
+		{
+			return false;
+		}
+
+		//save the dimensions of the terrain
+		m_terrainWidth = bitmapInfoHeader.biWidth;
+		m_terrainHeight = bitmapInfoHeader.biHeight;
+
+		//calculate the size of the bitmap image data
+		imageSize = m_terrainWidth * m_terrainHeight * 3;
+
+		//allocate memory for the butmap image data.
+		bitmapImage = new unsigned char[imageSize];
+		if (!bitmapImage)
+		{
+			return false;
+		}
+
+		//Move to the beginning of the bitmap data.
+		fseek(filePtr, bitmapFileHeader.bfOffBits, SEEK_SET);
+
+		//Read in the bitmap image data
+		count = fread(bitmapImage, 1, imageSize, filePtr);
+
+		//Close the file
+		error = fclose(filePtr);
+		if (error != 0)
+		{
+			return false;
+		}
+
+		//Create the structure to hold the height map data
+		m_heightMap = new HeightMapType[m_terrainWidth*m_terrainHeight];
+		if (!m_heightMap)
+		{
+			return false;
+		}
+
+		//init the position in the image data buffer
+		k = 0;
+
+		//Read the image data into the heightmap
+		for (j = 0;j < m_terrainHeight;j++)
+		{
+			for (i = 0;i < m_terrainWidth;i++)
+			{
+				height = bitmapImage[k];
+
+				index = (m_terrainHeight*j) + i;
+
+				m_heightMap[index].x = (float)i;
+				m_heightMap[index].y = (float)height;
+				m_heightMap[index].z = (float)j;
+
+				k += 3;
+			}
+		}
+
+		//release the bitmap image data
+		delete[] bitmapImage;
+		bitmapImage = 0;
+
+		return true;
+	}
+
+	//normalizeHeightMap-- normalizes the heightmap
+	void Terrain::normalizeHeightMap()
+	{
+		for (int i = 0;i < m_terrainHeight;i++)
+		{
+			for (int j = 0;j < m_terrainWidth;j++)
+			{
+				m_heightMap[(m_terrainHeight*j) + i].y /= 15.0f;
+			}
+		}
+	}
+
+	//shutdownHeightMap()-- cleans up memory for the heightmap
+	void Terrain::shutdownHeightMap()
+	{
+		if (m_heightMap)
+		{
+			delete[] m_heightMap;
+			m_heightMap = NULL;
+		}
 	}
 }

@@ -155,7 +155,7 @@ void init()
 	 //create the terrain object
 	 terrain = new Terrain;
 
-	 terrain->init(graphics->getDevice(), 100, 100);
+	 terrain->init(graphics->getDevice(), "heightmap01.bmp");
 }
 
 bool update()

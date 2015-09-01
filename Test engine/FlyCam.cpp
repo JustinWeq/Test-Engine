@@ -121,11 +121,21 @@ namespace JR_FlyCam
 	void FlyCam::setRotX(float rotX)
 	{
 		m_rotX = rotX;
+		if (m_rotX > 90)
+		{
+			m_rotX = 90;
+		}
+
+		if (m_rotX < -90)
+		{
+			m_rotX = -90;
+		}
 	}
 
 	void FlyCam::setRotY(float rotY)
 	{
 		m_rotY = rotY;
+
 	}
 
 	void FlyCam::setRotZ(float rotZ)

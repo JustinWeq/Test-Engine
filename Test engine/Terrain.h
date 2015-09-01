@@ -1,6 +1,9 @@
 #pragma once
 #include <D3D11.h>
 #include <D3DX10math.h>
+#include <stdio.h>
+
+using namespace std;
 
 namespace JR_Terrain
 {
@@ -18,6 +21,17 @@ namespace JR_Terrain
 			D3DXVECTOR4 color;
 		};
 
+		//HeightMapType- a struct that contains information for a heghtmap
+		struct HeightMapType
+		{
+			//x- the x coord
+			float x;
+			//y- the y coord
+			float y;
+			//z- the z coord
+			float z;
+		};
+
 	public:
 		//defualt constructor-- creates a new instance of Terrain with defualt parameters
 		Terrain();
@@ -27,9 +41,8 @@ namespace JR_Terrain
 
 		//init-- initalizes the Terrain class
 		//device- the device to use for initializtion
-		//width- the number of tiles for the terrain
-		//height- the number of tiles for the height of the terrain
-		bool init(ID3D11Device* device, int width, int height);
+		//mapAddress- the address of the heightmap
+		bool init(ID3D11Device* device,char* mapAddress);
 
 		//shutdown-- shutdown and cleans up memory for this Terrain instance
 		void shutdown();
@@ -54,6 +67,15 @@ namespace JR_Terrain
 		//deviceContext- the device context to use for rendering
 		void renderBuffers(ID3D11DeviceContext* deviceContext);
 
+		//loadHeightMap-- loads the height map using the passed in address
+		bool loadHeightMap(char* mapAddress);
+
+		//normalizeHeightMap-- normalizes the heightmap
+		void normalizeHeightMap();
+
+		//shutdownHeightMap()-- cleans up memory for the heightmap
+		void shutdownHeightMap();
+
 	private:
 		//terrainWidth- the number of tiles horizontally
 		int m_terrainWidth;
@@ -73,7 +95,8 @@ namespace JR_Terrain
 		//indexBuffer- the index buffer for this terrains model
 		ID3D11Buffer* m_indexbuffer;
 
-
+		//heightMap- the array containing information for a height map
+		HeightMapType* m_heightMap;
 
 	};
 }

@@ -207,6 +207,12 @@
     <None Include="defualt.vs" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\Downloads\terexe02\terexe02\Engine\data\heightmap01.bmp">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="D:\HeightMaps\testmap.bmp">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\font.dds" />
     <Image Include="texture.dds" />
   </ItemGroup>
