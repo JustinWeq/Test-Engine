@@ -188,7 +188,7 @@ namespace JR_Frustum
 	//xSize- the width along the x axis
 	//ySize- the width along the y axis
 	//zSize- the width along the z axis
-	bool checkRectangle(float xCenter, float yCenter, float zCenter, float xSize, float ySize, float zSize)
+	bool Frustum::checkRectangle(float xCenter, float yCenter, float zCenter, float xSize, float ySize, float zSize)
 	{
 		int i;
 
