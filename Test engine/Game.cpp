@@ -157,7 +157,7 @@ void init()
 
 	 terrain->init(graphics->getDevice(), "heightmap01.bmp",TEXT("texture.dds"));
 
-	 terrain->setTextureRepeat(100);
+	 terrain->setTextureRepeat(1000);
 }
 
 bool update()

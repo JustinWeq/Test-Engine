@@ -99,6 +99,12 @@
     <ClCompile Include="Terrian.cpp">
       <Filter>Source Files\Terrian</Filter>
     </ClCompile>
+    <ClCompile Include="TerrainQuadTree.cpp">
+      <Filter>Source Files\Terrian</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -151,6 +157,12 @@
     </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>Source Files\Terrian</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainQuadTree.h">
+      <Filter>Source Files\Terrian</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Source Files\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
