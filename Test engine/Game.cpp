@@ -15,6 +15,8 @@
 #include "Timer.h"
 #include "FlyCam.h"
 #include "Terrain.h"
+#include "Frustum.h"
+#include "TerrainQuadTree.h"
 #include <string>
 using namespace Application;
 using namespace std;
@@ -31,7 +33,8 @@ using namespace JR_Fps;
 using namespace JR_CPU;
 using namespace JR_FlyCam;
 using namespace JR_Terrain;
-
+using namespace JR_Frustum;
+using namespace JR_TerrainQuadTree;
 //prototypes
 void init();
 bool update();
@@ -53,12 +56,16 @@ Fps* fps;
 Timer* timer;
 Cpu* CPU;
 Terrain* terrain;
+TerrainQuadTree* quadTree;
+Frustum* frustum;
+
 bool error = false;
 int cpuPercentage;
 float frameTime;
 FlyCam cam;
 float dmx = 0, dmy = 0,dcx = 0,dcy = 0,dcz = 10;
 int fpss;
+int numTriangles;
 struct camera
 {
 public:
@@ -72,7 +79,6 @@ void init()
 	app.init(800, 600, false , L"Test engine");
 
 	//Create view matrix
-	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, 10), &D3DXVECTOR3(0, 0, -9), &D3DXVECTOR3(0, 1, 0));
 	cam.setView(view);
 	//cam.init(0, 0, 10, 0, 0, 0);
 
@@ -123,7 +129,7 @@ void init()
 	 D3DXMatrixTranslation(&baseView,0,0,-1.0f);
 	 //init the text object
 	 text->init(graphics->getDevice(), graphics->getDeviceContext(), app.getHWND(),
-		 app.getScreenWidth(), app.getScreenHeight(), view, 3);
+		 app.getScreenWidth(), app.getScreenHeight(), view, 4);
 
 	 //set up sentence 1
 	// text->setSentence(0, "Red", 0, 0, 1.0f, 0.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
@@ -158,6 +164,15 @@ void init()
 	 terrain->init(graphics->getDevice(), "heightmap01.bmp",TEXT("texture.dds"));
 
 	 terrain->setTextureRepeat(1000);
+
+	 //setUp thefrustum
+	 frustum = new Frustum;
+	 
+	 quadTree = new TerrainQuadTree;
+
+	 quadTree->init(terrain,graphics->getDevice());
+
+
 }
 
 bool update()
@@ -253,11 +268,18 @@ bool update()
 
 
 		cam.setDeltaX(x);
-		cam.setDeltaY(y);
+		//cam.setDeltaY(y);
 		cam.setDeltaZ(z);
 		dcx = cam.getPosX();
 		dcy = cam.getPosY();
 		dcz = cam.getPosZ();
+
+		float height;
+
+		if (quadTree->getHeightAtPosition(-dcx, -dcz, height))
+		{
+			cam.setPosY(-height - 2.0f);
+		}
 
 		//move view cam accordingly
 		int mx, my;
@@ -296,6 +318,7 @@ bool update()
 		char tempString[32];
 		char cpuString[32];
 		char fpsString[32];
+		char drawsString[32];
 		char frameTimeString[32];
 
 	    
@@ -314,6 +337,11 @@ bool update()
 		strcpy_s(frameTimeString, "FrameTime: ");
 		strcat_s(frameTimeString, tempString);
 		text->setSentence(2, frameTimeString, 20,64, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		//set number of drawn triangles
+		_itoa_s(numTriangles, tempString, 10);
+		strcpy(drawsString, "Draws Triangles");
+		strcat_s(drawsString, tempString);
+		text->setSentence(3, drawsString, 20, 96, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
 
 
 
@@ -357,11 +385,21 @@ void draw()
 	}
 
 	//now draw the terrain
-	terrain->render(graphics->getDeviceContext());
+
+	//construct the frustum
+	frustum->constructFrustum(1000, projection, cam.getViewMatrix());
+
+	//render the terrain using the quad tree
+	quadTree->render(frustum, graphics->getDeviceContext(), shader);
+
+	//set the number of triangles since some where culled
+	numTriangles = quadTree->getDrawCount();
+
+	shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld(),cam.getViewMatrix(),projection,
+		D3DXVECTOR3(0, 0, 0.75), D3DXVECTOR4(0.5, 0.5, 0.5, 1), D3DXVECTOR4(1, 1, 1, 1), terrain->getTexture());
 
 
-	shader->renderTerrain(graphics->getDeviceContext(), terrain->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection,
-		D3DXVECTOR3(0, 0, 0.75), D3DXVECTOR4(0.5, 0.5, 0.5, 1), D3DXVECTOR4(1, 1, 1, 1),terrain->getTexture());
+
 	//result = shader->
 	//begin 2D drawing now
 	//disable 2 buffer

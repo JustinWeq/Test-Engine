@@ -135,6 +135,24 @@ namespace JR_Shader
 		bool renderTerrain(ID3D11DeviceContext* deviceContext,int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor,ID3D11ShaderResourceView* texture);
 
+		//setTerrainShaderParameters-- sets the parameters for the color shader
+		//deviceContext- the device context to use for drawing
+		//indexCount- the number of indicies
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		//lightDirection- the direction of the light
+		//ambientColor- the color of the ambient light
+		//diffuseColor- the color of the diffuse light
+		//texture- the texture to0 use for drawing
+		bool setTerrainShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambientColor, D3DXVECTOR4 diffuseColor, ID3D11ShaderResourceView* texture);
+
+		//renderTerrainShader-- renders the model currently in the device context
+		//deviceContext- the device context to use for rendering
+		//indexCount- the number of indices in the model
+		void renderTerrainShader(ID3D11DeviceContext* deviceContext, int indexCount);
+
 	private:
 		//initShader-- sets up the shader
 		//device- The device to use to create the shader
@@ -200,18 +218,7 @@ namespace JR_Shader
 			D3DXMATRIX projectionMatrix);
 
 
-		//setTerrainShaderParameters-- sets the parameters for the color shader
-		//deviceContext- the device context to use for drawing
-		//indexCount- the number of indicies
-		//worldMatrix- the world matrix to use
-		//viewMatrix- the view matrix to use
-		//projectionMatrix- the projection matrix to use
-		//lightDirection- the direction of the light
-		//ambientColor- the color of the ambient light
-		//diffuseColor- the color of the diffuse light
-		//texture- the texture to0 use for drawing
-		bool setTerrainShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-			D3DXMATRIX projectionMatrix,D3DXVECTOR3 lightDirection,D3DXVECTOR4 ambientColor,D3DXVECTOR4 diffuseColor,ID3D11ShaderResourceView* texture);
+		
 
 		//renderShader-- renders the model currently in the device context
 		//deviceContext- the device context to use for rendering
@@ -233,10 +240,7 @@ namespace JR_Shader
 		//indexCount- the number of indices in the model
 		void renderColorShader(ID3D11DeviceContext* deviceContext, int indexCount);
 
-		//renderTerrainShader-- renders the model currently in the device context
-		//deviceContext- the device context to use for rendering
-		//indexCount- the number of indices in the model
-		void renderTerrainShader(ID3D11DeviceContext* deviceContext, int indexCount);
+		
 		private:
 			//vertexShader-- the vertex shader
 			ID3D11VertexShader* m_vertexShader;

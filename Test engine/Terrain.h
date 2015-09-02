@@ -73,19 +73,19 @@ namespace JR_Terrain
 		//shutdown-- shutdown and cleans up memory for this Terrain instance
 		void shutdown();
 
-		//render-- puts the model for this terrain on the pipeline and prepares it for rendering
-		//deviceContext- the device context that will be used for rendering
-		void render(ID3D11DeviceContext* deviceContext);
-
-		//getIndexCount- returns the number of indices for this Terrains model
-		int getIndexCount();
-
 		//setTextureRepeat- sets the amount of times the texture should repeat itself
 		//repeat- the amount of times to repeat
 		void setTextureRepeat(int repeat);
 
 		//getTexture-- returns the texture for this terrain
 		ID3D11ShaderResourceView* getTexture();
+
+		//getVertexCount-- returns the number of vertices for this terrain
+		int getVertexCount();
+		
+		//copyVertexArray- copys the vertex data over to the passed in array
+		//vertexList- the list to copy the array to
+		void copyVertexArray(void* vertexList);
 
 	private:
 
@@ -97,10 +97,6 @@ namespace JR_Terrain
 		bool calculateNormals();
 		//shutdownBuffers-- shuts down the buffers for the Terrain class
 		void shutdownBuffers();
-
-		//renderBuffers-- preapres the buffers for rendering
-		//deviceContext- the device context to use for rendering
-		void renderBuffers(ID3D11DeviceContext* deviceContext);
 
 		//loadHeightMap-- loads the height map using the passed in address
 		bool loadHeightMap(char* mapAddress);
@@ -132,15 +128,6 @@ namespace JR_Terrain
 		//vertexCount- the number of vertices for this terrain
 		int m_vertexCount;
 
-		//indexCount- the number of indices for this terrain
-		int m_indexCount;
-
-		//vertexbuffer- the vertices for this terrains model
-		ID3D11Buffer* m_vertexBuffer;
-
-		//indexBuffer- the index buffer for this terrains model
-		ID3D11Buffer* m_indexbuffer;
-
 		//heightMap- the array containing information for a height map
 		HeightMapType* m_heightMap;
 
@@ -149,6 +136,9 @@ namespace JR_Terrain
 
 		//texture- the texture for the terrain
 		Texture* m_texture;
+
+		//vertices- the vertices in the terrain
+		VertexType* m_vertices;
 
 	};
 }
