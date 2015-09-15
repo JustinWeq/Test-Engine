@@ -78,8 +78,10 @@ void init()
 
 	app.init(800, 600, false , L"Test engine");
 
+	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, 10), &D3DXVECTOR3(0, 0, -9), &D3DXVECTOR3(0, 1, 0));
+
 	//Create view matrix
-	cam.setView(view);
+	//cam.setView(view);
 	//cam.init(0, 0, 10, 0, 0, 0);
 
 	//Create the graphics
@@ -161,9 +163,9 @@ void init()
 	 //create the terrain object
 	 terrain = new Terrain;
 
+
 	 terrain->init(graphics->getDevice(), "heightmap01.bmp",TEXT("texture.dds"));
 
-	 terrain->setTextureRepeat(1000);
 
 	 //setUp thefrustum
 	 frustum = new Frustum;
@@ -268,7 +270,7 @@ bool update()
 
 
 		cam.setDeltaX(x);
-		//cam.setDeltaY(y);
+		cam.setDeltaY(y);
 		cam.setDeltaZ(z);
 		dcx = cam.getPosX();
 		dcy = cam.getPosY();
