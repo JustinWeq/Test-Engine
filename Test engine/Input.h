@@ -1,5 +1,4 @@
 #pragma once
-
 #define DIRECTINPUT_VERSION 0x0800
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
@@ -20,6 +19,8 @@ namespace JR_Input
 		void GetMouseLocation(int& x, int& y);
 
 		void GetRawLocation(int&x, int& y);
+
+		bool isLeftClicked();
 
 	private:
 		bool ReadKeyboard();

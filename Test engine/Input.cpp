@@ -133,7 +133,6 @@ namespace JR_Input
 
 		//Process the changes in the mouse and keyboard.
 		ProcessInput();
-
 		return true;
 	}
 
@@ -215,5 +214,10 @@ namespace JR_Input
 	{
 		x = m_mouseState.lX;
 		y = m_mouseState.lY;
+	}
+
+	bool Input::isLeftClicked()
+	{
+		return (m_mouseState.rgbButtons[0] == 128);
 	}
 }

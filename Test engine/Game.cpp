@@ -112,7 +112,7 @@ void init()
 	//init the input device
 	input = new Input();
 
-	 input->init(app.getHinstance(), app.getHWND(), app.getScreenWidth(), app.getScreenHeight());
+	input->init(app.getHinstance(), app.getHWND(), app.getScreenWidth(), app.getScreenHeight());
 
 	 //create and set up the sound
 	 sound = new Sound();
@@ -131,7 +131,7 @@ void init()
 	 D3DXMatrixTranslation(&baseView,0,0,-1.0f);
 	 //init the text object
 	 text->init(graphics->getDevice(), graphics->getDeviceContext(), app.getHWND(),
-		 app.getScreenWidth(), app.getScreenHeight(), view, 4);
+		 app.getScreenWidth(), app.getScreenHeight(), view, 5);
 
 	 //set up sentence 1
 	// text->setSentence(0, "Red", 0, 0, 1.0f, 0.0f, 0.0f, graphics->getDeviceContext(), graphics->getDevice());
@@ -285,12 +285,13 @@ bool update()
 
 		//move view cam accordingly
 		int mx, my;
+		byte* buttons;
 		input->GetRawLocation(mx,my);
 
 		//move the view up and down
-
 		dmx += mx*frameTime;
 		dmy += my*frameTime;
+		
 		cam.setRotZ(0);
 
 		cam.setRotX(dmy);
@@ -322,7 +323,8 @@ bool update()
 		char fpsString[32];
 		char drawsString[32];
 		char frameTimeString[32];
-
+		char mouseButtonString[32];
+		bool clicked = input->isLeftClicked();
 	    
 		_itoa_s(cpuPercentage, tempString, 10);
 		strcpy_s(cpuString, "Cpu: ");
@@ -344,6 +346,18 @@ bool update()
 		strcpy(drawsString, "Draws Triangles");
 		strcat_s(drawsString, tempString);
 		text->setSentence(3, drawsString, 20, 96, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		//set mouse button
+		//sprintf(tempString, "%b", clicked);
+		//strcpy_s(mouseButtonString, "left button: ");
+		//strcat_s(mouseButtonString, tempString);
+		if (input->isLeftClicked())
+		{
+			text->setSentence(4,"mouse is clicked", 20, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		}
+		else
+		{
+			text->setSentence(4, "mouse is not clicked", 20, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		}
 
 
 
