@@ -12,4 +12,10 @@ namespace JR_Math
 	//numOfVertices- the number of vertices for the passed in vertices
 	//numOfHullVertices- the number of vertices to output the convex hull to.
 	bool quickHull(D3DXVECTOR3* inVertices,D3DXVECTOR3*& outVertices,int numOfVertices,int& numOfHullVertices);
+
+	//distance-- returns the distance between two points in 3d space
+	// distance is returned squared to save on processing time
+	//p1- the first point to be considred in the distance
+	//p2- the second point to be considred in the distance
+	float distance(D3DXVECTOR3 p1, D3DXVECTOR3 p2);
 }
