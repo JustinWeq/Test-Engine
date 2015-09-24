@@ -60,4 +60,15 @@ namespace JR_Object
 		return m_model->getTexture();
 	}
 
+	void Object::getVertices(D3DXVECTOR3* verticies)
+	{
+		//call the get vertices method on the model
+		m_model->copyVertices(verticies);
+	}
+
+	int Object::getModelVertexCount()
+	{
+		return m_model->getModelVertexCount();
+	}
+
 }

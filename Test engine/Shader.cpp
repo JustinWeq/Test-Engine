@@ -1138,7 +1138,31 @@ namespace JR_Shader
 
 		deviceContext->PSSetShader(m_colorPixelShader, NULL, 0);
 
-		deviceContext->DrawIndexed(indexCount, 0, 0);
+		deviceContext->DrawIndexed(indexCount,0,0);
+	}
+
+	//renderLine-- renders using the shader and the passed in parameters
+	//deviceContext- the device context to use for drawing
+	//lineCount- the number of lines
+	//worldMatrix- the world matrix to use
+	//viewMatrix- the view matrix to use
+	//projectionMatrix- the projection matrix to use
+	bool Shader::renderLine(ID3D11DeviceContext* deviceContext, int lineCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+		D3DXMATRIX projectionMatrix)
+	{
+		bool result;
+
+		//set the shader paramters that will be used for drawing
+		result = setColorShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
+		if (!result)
+		{
+			return false;
+		}
+
+		//now render the prepared shader
+		renderLineShader(deviceContext, lineCount);
+
+		return true;
 	}
 
 	//renderTerrain-- renders using the shader and the passed in parameters
@@ -1279,6 +1303,20 @@ namespace JR_Shader
 		deviceContext->PSSetShader(m_terrainPixelShader, NULL, 0);
 
 		deviceContext->DrawIndexed(indexCount, 0, 0);
+	}
+
+	//renderLineShader-- renders the model currently in the device context
+	//deviceContext- the device context to use for rendering
+	//lineCount- the number of lines in the model
+	void Shader::renderLineShader(ID3D11DeviceContext* deviceContext, int lineCount)
+	{
+		deviceContext->IASetInputLayout(m_colorLayout);
+
+		deviceContext->VSSetShader(m_colorVertexShader, NULL, 0);
+
+		deviceContext->PSSetShader(m_colorPixelShader, NULL, 0);
+
+		deviceContext->DrawIndexed(lineCount*2, 0, 0);
 	}
 
 }

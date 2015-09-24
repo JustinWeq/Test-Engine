@@ -122,6 +122,15 @@ namespace JR_Shader
 		bool renderColor(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
 			D3DXMATRIX projectionMatrix);
 
+		//renderLine-- renders using the shader and the passed in parameters
+		//deviceContext- the device context to use for drawing
+		//lineCount- the number of lines
+		//worldMatrix- the world matrix to use
+		//viewMatrix- the view matrix to use
+		//projectionMatrix- the projection matrix to use
+		bool renderLine(ID3D11DeviceContext* deviceContext, int lineCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+			D3DXMATRIX projectionMatrix);
+
 		//renderTerrain-- renders using the shader and the passed in parameters
 		//deviceContext- the device context to use for drawing
 		//indexCount- the number of indicies
@@ -239,6 +248,11 @@ namespace JR_Shader
 		//deviceContext- the device context to use for rendering
 		//indexCount- the number of indices in the model
 		void renderColorShader(ID3D11DeviceContext* deviceContext, int indexCount);
+
+		//renderLineShader-- renders the model currently in the device context
+		//deviceContext- the device context to use for rendering
+		//lineCount- the number of lines in the model
+		void renderLineShader(ID3D11DeviceContext* deviceContext, int lineCount);
 
 		
 		private:

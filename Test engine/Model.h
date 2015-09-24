@@ -62,8 +62,17 @@ namespace JR_Model
 
 		//getIndexCount-- returns the number of indices for this model
 		int getIndexCount();
+
+		//getModelVertexCount-- returns the number of vertices for the base model
+		int getModelVertexCount();
+
 		//getTexture-- returns the texture for this model
 		ID3D11ShaderResourceView* getTexture();
+
+		//copyVertices--copys the models vertices to the passed in 
+		// array, mostly to be used for debugging
+		//vertices- the vertices array to be copyied to
+		void copyVertices(D3DXVECTOR3* vertices);
 	private:
 
 		//initBuffers-- initializes the vertex and index buffer for this model
@@ -95,7 +104,6 @@ namespace JR_Model
 		//loadObjModel--loads the model in the obj format
 		//filename- the name of the model to load
 		bool loadObjModel(char* filename);
-
 
 	private:
 		//vertexBuffer-- the vertex buffer

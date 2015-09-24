@@ -559,4 +559,27 @@ namespace JR_Model
 		//succesfully loaded model;
 		return true;;
 	}
+
+	//copyVertices--copys the models vertices to the passed in 
+	// array, mostly to be used for debugging
+	//vertices- the vertices array to be copyied to
+	void Model::copyVertices(D3DXVECTOR3* vertices)
+	{
+		int size = m_vertexCount;
+		for (int i = 0;i < size;i++)
+		{
+			D3DXVECTOR3 vector;
+			vector.x = m_model[i].x;
+			vector.y = m_model[i].y;
+			vector.z = m_model[i].z;
+
+			vertices[i] = vector;
+		}
+	}
+
+	//getModelVertexCount-- returns the number of vertices for the base model
+	int Model::getModelVertexCount()
+	{
+		return m_vertexCount;
+	}
 }

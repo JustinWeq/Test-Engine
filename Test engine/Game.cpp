@@ -17,6 +17,7 @@
 #include "Terrain.h"
 #include "Frustum.h"
 #include "TerrainQuadTree.h"
+#include "LineModel.h"
 #include <string>
 using namespace Application;
 using namespace std;
@@ -35,6 +36,7 @@ using namespace JR_FlyCam;
 using namespace JR_Terrain;
 using namespace JR_Frustum;
 using namespace JR_TerrainQuadTree;
+
 //prototypes
 void init();
 bool update();
@@ -58,6 +60,8 @@ Cpu* CPU;
 Terrain* terrain;
 TerrainQuadTree* quadTree;
 Frustum* frustum;
+//line model
+LineModel* lineModel;
 
 bool error = false;
 int cpuPercentage;
@@ -174,6 +178,26 @@ void init()
 
 	 quadTree->init(terrain,graphics->getDevice());
 
+	 //set up line model
+	 lineModel = new LineModel;
+
+	 //set up and obtain model info to pass into the line model object
+	 D3DXVECTOR3* vertices;
+
+	 vertices = new D3DXVECTOR3[object->getModelVertexCount()];
+
+     object->getVertices(vertices);
+
+	 //initialize line model
+
+	 //vertices = new D3DXVECTOR3[2];
+
+	 //vertices[0] = D3DXVECTOR3(0, 0, 0);
+
+	 //vertices[1] = D3DXVECTOR3(0, 100, 0);
+
+     lineModel->init(graphics->getDevice(), vertices, D3DXVECTOR4(1, 0, 0, 1),object->getIndexCount());
+	 
 
 }
 
@@ -389,7 +413,16 @@ void draw()
 	//D3DXMatrixRotationY(&world,cubeRot);
 	//(*object)*world;
 	//model->render(graphics->getDeviceContext());
-	object->render(graphics->getDeviceContext());
+	//object->render(graphics->getDeviceContext());
+	//prepare the line model for rendering
+	lineModel->render(graphics->getDeviceContext());
+
+	//render the line model instead of the regular one using the color shader
+	result = shader->renderLine(graphics->getDeviceContext(), lineModel->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection);
+	if (!result)
+	{
+		error = true;
+	}
 
 	//render the model using the defualt shader
 	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() ,object->getWorld(), cam.getViewMatrix(),
