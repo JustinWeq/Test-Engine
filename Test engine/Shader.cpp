@@ -1316,7 +1316,7 @@ namespace JR_Shader
 
 		deviceContext->PSSetShader(m_colorPixelShader, NULL, 0);
 
-		deviceContext->DrawIndexed(lineCount*2, 0, 0);
+		deviceContext->Draw(lineCount*2, 0);
 	}
 
 }

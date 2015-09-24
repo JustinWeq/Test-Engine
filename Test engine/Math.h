@@ -18,4 +18,16 @@ namespace JR_Math
 	//p1- the first point to be considred in the distance
 	//p2- the second point to be considred in the distance
 	float distance(D3DXVECTOR3 p1, D3DXVECTOR3 p2);
+
+	//distanceFromLine-- returns the passed in points distance from
+	// the line defined be two passed in points
+	//lineP1- the first point on the line
+	//lineP2- the second point in the line
+	//p1- the point to get the distance from the line from
+	float distanceFromLine(D3DXVECTOR3 lineP1, D3DXVECTOR3 lineP2, D3DXVECTOR3 p1);
+
+	//crossProduct-- returns the cross product
+	//p1- th first point to calculate the cross product with
+	//p2- the second point to calculate the cross product with
+	D3DXVECTOR3 crossProduct(D3DXVECTOR3 p1,D3DXVECTOR3 p2);
 }

@@ -186,6 +186,8 @@ void init()
 
 	 vertices = new D3DXVECTOR3[object->getModelVertexCount()];
 
+	 D3DXVECTOR3 newVertices;
+
      object->getVertices(vertices);
 
 	 //initialize line model
