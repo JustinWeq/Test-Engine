@@ -168,7 +168,9 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GuiElement.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Label.cpp" />
     <ClCompile Include="LineModel.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -200,7 +202,9 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="GeometryArray.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GuiElement.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Label.h" />
     <ClInclude Include="LineModel.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Model.h" />

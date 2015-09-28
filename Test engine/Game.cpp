@@ -18,6 +18,7 @@
 #include "Frustum.h"
 #include "TerrainQuadTree.h"
 #include "LineModel.h"
+#include "Math.h"
 #include <string>
 using namespace Application;
 using namespace std;
@@ -36,7 +37,6 @@ using namespace JR_FlyCam;
 using namespace JR_Terrain;
 using namespace JR_Frustum;
 using namespace JR_TerrainQuadTree;
-
 //prototypes
 void init();
 bool update();
@@ -186,9 +186,16 @@ void init()
 
 	 vertices = new D3DXVECTOR3[object->getModelVertexCount()];
 
-	 D3DXVECTOR3 newVertices;
+	 D3DXVECTOR3* newVertices;
 
+	 newVertices = new D3DXVECTOR3[4];
      object->getVertices(vertices);
+
+	 D3DXVECTOR3 vertex = vertices[object->getModelVertexCount()];
+	 int vertexCount;
+		 //get the starting simplex for the convex hull
+
+	quickHull(vertices, newVertices, object->getModelVertexCount(), vertexCount);
 
 	 //initialize line model
 
@@ -198,7 +205,7 @@ void init()
 
 	 //vertices[1] = D3DXVECTOR3(0, 100, 0);
 
-     lineModel->init(graphics->getDevice(), vertices, D3DXVECTOR4(1, 0, 0, 1),object->getIndexCount());
+     lineModel->init(graphics->getDevice(), newVertices, D3DXVECTOR4(1, 0, 0, 1),4);
 	 
 
 }
@@ -441,7 +448,7 @@ void draw()
 	frustum->constructFrustum(1000, projection, cam.getViewMatrix());
 
 	//render the terrain using the quad tree
-	quadTree->render(frustum, graphics->getDeviceContext(), shader);
+	//quadTree->render(frustum, graphics->getDeviceContext(), shader);
 
 	//set the number of triangles since some where culled
 	numTriangles = quadTree->getDrawCount();

@@ -1,8 +1,7 @@
 #include "Math.h"
 
-namespace JR_Math
-{
-	bool quickHull(D3DXVECTOR3* inVertices, D3DXVECTOR3*& outVertices, int numOfVertices, int& numOfHullVertices)
+
+	bool quickHull(D3DXVECTOR3* inVertices, D3DXVECTOR3* outVertices, int numOfVertices, int& numOfHullVertices)
 	{
 		//check to see if a convex hull can even be found
 		if (numOfVertices < 4)
@@ -36,6 +35,7 @@ namespace JR_Math
 			//test max x
 			if (inVertices[i].x > maxX)
 			{
+				maxX = inVertices[i].x;
 				//max x point found
 				extremePoints[0] = inVertices[i];
 				//continue searching for other extreme points
@@ -45,6 +45,7 @@ namespace JR_Math
 			//test min x
 			if (inVertices[i].x < minX)
 			{
+				minX = inVertices[i].x;
 				//min x point found
 				extremePoints[1] = inVertices[i];
 				//continue searching for other extreme points
@@ -54,6 +55,7 @@ namespace JR_Math
 			//test max y
 			if (inVertices[i].y > maxY)
 			{
+				maxY = inVertices[i].y;
 				//max y point found
 				extremePoints[2] = inVertices[i];
 				//continue searching for other extreme points
@@ -63,6 +65,7 @@ namespace JR_Math
 			//test min y
 			if (inVertices[i].y < minY)
 			{
+				minY = inVertices[i].y;
 				//min y point found
 				extremePoints[3] = inVertices[i];
 				//continue searching for other extreme points
@@ -72,6 +75,7 @@ namespace JR_Math
 			//test max z
 			if (inVertices[i].z > maxZ)
 			{
+				maxZ = inVertices[i].z;
 				//max z point found
 				extremePoints[4] = inVertices[i];
 				//continue searching for other extreme points
@@ -81,6 +85,7 @@ namespace JR_Math
 			//test min z
 			if (inVertices[i].z > minZ)
 			{
+				minZ = inVertices[i].z;
 				//min point found
 				extremePoints[5] = inVertices[i];
 				//continue searching for other extreme points
@@ -89,9 +94,7 @@ namespace JR_Math
 			
 		}
 
-		//temporaly return extreme points
-		memcpy(outVertices, extremePoints, 6);
-		return true;
+
 		//all extreme points found,
 		// out of the extreme points fin the two that have the most distance
 
@@ -131,7 +134,7 @@ namespace JR_Math
 			
 			if (d > greatestDistance)
 			{
-				startSimplex[3] = extremePoints[i];
+				startSimplex[2] = extremePoints[i];
 				greatestDistance = d;
 			}
 
@@ -140,10 +143,21 @@ namespace JR_Math
 		//now that the first three points are found find the greatest
 		// distance point from all of the points from the triangle 
 		// to form the starting pyramid simplex
+		greatestDistance = 0;
+		for (int i = 0;i < numOfVertices;i++)
+		{
+			float d = 0;
+			d = distanceFromTrangle(inVertices[i], startSimplex[0], startSimplex[1], startSimplex[3]);
+			if (d > greatestDistance)
+			{
+				greatestDistance = d;
+				startSimplex[3] = inVertices[i];
+			}
+		}
 
-		
-
-
+		//temporaly return the starting simplex(pyramid)
+		memcpy(outVertices, startSimplex, 4*sizeof(D3DXVECTOR3));
+		return true;
 
 		//convex hull was found so return true;
 		return true;
@@ -165,9 +179,9 @@ namespace JR_Math
 	//p1- the point to get the distance from the line from
 	float distanceFromLine(D3DXVECTOR3 lineP1, D3DXVECTOR3 lineP2, D3DXVECTOR3 p1)
 	{
-		float x, x1, x2, x3, x4;
-		float y, y1, y2, y3, y4;
-		float z, z1, z2, z3, z4;
+		float x, x1, x2;
+		float y, y1, y2;
+		float z, z1, z2;
 
 		x = p1.x;
 		y = p1.y;
@@ -181,8 +195,17 @@ namespace JR_Math
 		y2 = lineP2.y;
 		z2 = lineP2.z;
 
+		D3DXVECTOR3 AB = D3DXVECTOR3(x2-x1,y2-y1,z2-z1);
 
+		D3DXVECTOR3 AP = D3DXVECTOR3(x-x1,y-y1,z-z1);
 
+		D3DXVECTOR3 a = crossProduct(AB, AP);
+
+		float A = sqrtf(powf(a.x, 2) + powf(a.y, 2) + powf(a.z, 2));
+
+		float ab = sqrtf(powf(AB.x, 2) + powf(AB.y, 2) + powf(AB.z, 2));
+
+		return (A / ab);
 
 	}
 
@@ -191,6 +214,37 @@ namespace JR_Math
 	//p2- the second point to calculate the cross product with
 	D3DXVECTOR3 crossProduct(D3DXVECTOR3 p1, D3DXVECTOR3 p2)
 	{
+		D3DXVECTOR3 product;
+		product.x = ((p1.y*p2.z) - (p1.z*p2.y));
+		product.y = (-((p1.x*p2.z) - (p2.x*p1.z)));
+		product.z = ((p1.x*p2.y) - (p2.x*p1.y));
 
+		return product;
 	}
-}
+
+	//distanceFromTriangle-- returns the distance between a point and a triangle
+	//P0- the point to get the distance from
+	//P1- the first point int the triangle
+	//P2- the second point in the triangle
+	//P3- the third point in the triangle.
+	float distanceFromTrangle(D3DXVECTOR3 P0, D3DXVECTOR3 P1, D3DXVECTOR3 P2, D3DXVECTOR3 P3)
+	{
+		//find averidge point in the triangle
+		float sumX;
+		float sumY;
+		float sumZ;
+
+		sumX = 0;
+		sumY = 0;
+		sumZ = 0;
+
+		sumX = P1.x + P2.x + P3.x;
+		sumY = P1.y + P2.y + P3.y;
+		sumZ = P1.z + P2.z + P3.z;
+
+		D3DXVECTOR3 averidgePoint = D3DXVECTOR3(sumX / 3, sumY / 3, sumZ / 3);
+
+		//get the distance between the point and the triangle
+
+		return distance(P0, averidgePoint);
+	}

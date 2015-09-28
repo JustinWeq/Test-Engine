@@ -1,7 +1,6 @@
 #pragma once
 
-namespace JR_Math
-{
+
 #include <D3DX10math.h>
 	//put math and related algorithmic methods here
 	//quickHull-- outputs the passed in vertices as the convex hill
@@ -11,7 +10,7 @@ namespace JR_Math
 	//outVertices- the vertices to output the found convex hull to, outputs null if no hull could be found
 	//numOfVertices- the number of vertices for the passed in vertices
 	//numOfHullVertices- the number of vertices to output the convex hull to.
-	bool quickHull(D3DXVECTOR3* inVertices,D3DXVECTOR3*& outVertices,int numOfVertices,int& numOfHullVertices);
+	bool quickHull(D3DXVECTOR3* inVertices,D3DXVECTOR3* outVertices,int numOfVertices,int& numOfHullVertices);
 
 	//distance-- returns the distance between two points in 3d space
 	// distance is returned squared to save on processing time
@@ -30,4 +29,10 @@ namespace JR_Math
 	//p1- th first point to calculate the cross product with
 	//p2- the second point to calculate the cross product with
 	D3DXVECTOR3 crossProduct(D3DXVECTOR3 p1,D3DXVECTOR3 p2);
-}
+
+	//distanceFromTriangle-- returns the distance between a point and a triangle
+	//P0- the point to get the distance from
+	//P1- the first point int the triangle
+	//P2- the second point in the triangle
+	//P3- the third point in the triangle.
+	float distanceFromTrangle(D3DXVECTOR3 P0, D3DXVECTOR3 P1, D3DXVECTOR3 P2, D3DXVECTOR3 P3);
