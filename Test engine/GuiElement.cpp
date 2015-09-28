@@ -23,5 +23,22 @@ namespace JR_Gui
 	void GuiElement::init(float x, float y, float width, float height)
 	{
 		setDimensions(Dimensions(x, y, width, height));
+		m_isVisable = true;
+		
 	}
+
+	//setVisability- sets the visability state
+	//isVisable- the state to set the visability to
+	void GuiElement::setVisability(bool isVisable)
+	{
+		m_isVisable = isVisable;
+	}
+
+	//isVisable-- returns the visability of the gui element
+	bool GuiElement::isVisable()
+	{
+		return m_isVisable;
+	}
+
+
 }

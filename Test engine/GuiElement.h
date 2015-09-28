@@ -69,6 +69,7 @@ namespace JR_Gui
 
 		//shutdown-- cleans up dynamic memory for the Gui elemn
 		virtual void shutdown();
+
 		//draw-- draws the gui element, must be overridden
 		//deviceContext- the device context to use for drawing
 		//shader- the shader to use for drawing
@@ -82,11 +83,18 @@ namespace JR_Gui
 		//setDimensions-- sets the dimensions for the gui element
 		//dimensions- the new dimensions ot he gui element
 		void setDimensions(Dimensions dimensions);
+
+		//setVisability- sets the visability state
+		//isVisable- the state to set the visability to
+		void setVisability(bool isVisable);
 		
+		//isVisable-- returns the visability of the gui element
+		bool isVisable();
 
-	protected:
-		//dimensions- the dimensions of this gui element
+	private:
+		//dimensions- the dimensions of this gui element, defualt = {0,0,0,0}
 		Dimensions* m_dimensions;
-
+		//isVisable- indicates whether the element is visable or not, defualt = false
+		bool m_isVisable;
 	};
 }

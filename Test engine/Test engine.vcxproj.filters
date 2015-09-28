@@ -147,6 +147,9 @@
     <ClCompile Include="GuiElement.cpp">
       <Filter>Source Files\Gui</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Graphics2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -244,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="GuiElement.h">
       <Filter>Source Files\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Source Files\Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Source Files\Graphics2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
