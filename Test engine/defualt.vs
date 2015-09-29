@@ -1,3 +1,5 @@
+//defines
+#define MAX_MATRICIES 10000
 //globals
 cbuffer Matrix
 {
@@ -5,6 +7,12 @@ cbuffer Matrix
  matrix viewMatrix;
  matrix projectionMatrix;
 };
+
+cbuffer MatrixInstances
+{
+ matrix matricies[MAX_MATRICIES];
+};
+
 
 cbuffer Camera
 {
@@ -24,6 +32,14 @@ struct TextureVertexInput
 {
  float4 position : POSITION;
  float2 tex :TEXCOORD0;
+};
+
+struct InstancedTextureVertexInput
+{
+ float4 position : POSITION;
+ float2 tex :TEXCOORD0;
+ float matrixID : TEXCOORD1;
+ float textureID : TEXCOORD2;
 };
 
 struct ColorVertexInput
