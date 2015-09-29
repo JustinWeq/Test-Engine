@@ -82,7 +82,7 @@ void init()
 
 	app.init(800, 600, false , L"Test engine");
 
-	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, 10), &D3DXVECTOR3(0, 0, -9), &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, -10.0f), &D3DXVECTOR3(0, 0, -9.0f), &D3DXVECTOR3(0, 1, 0));
 
 	//Create view matrix
 	//cam.setView(view);
@@ -102,7 +102,7 @@ void init()
 	object = new Object();
 
 	//init the graphics
-	error !=  graphics->init(app.getScreenWidth(), app.getScreenHeight(),false, app.getHWND(), false, 1000, 0.2);
+	error !=  graphics->init(app.getScreenWidth(), app.getScreenHeight(),false, app.getHWND(), false, 1000, 0.1);
 
 
 	//init the shader
@@ -127,7 +127,7 @@ void init()
 	 bitmap = new Bitmap();
 
 	 //init bitmap
-	 bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 32, 32);
+	 bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 256, 256);
 
 	 //create text object
 	 text = new Text();
@@ -373,23 +373,23 @@ bool update()
 		sprintf(tempString, "%f", frameTime);
 		strcpy_s(frameTimeString, "FrameTime: ");
 		strcat_s(frameTimeString, tempString);
-		text->setSentence(2, frameTimeString, 20,64, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		text->setSentence(2, frameTimeString, 10,64, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
 		//set number of drawn triangles
 		_itoa_s(numTriangles, tempString, 10);
 		strcpy(drawsString, "Draws Triangles");
 		strcat_s(drawsString, tempString);
-		text->setSentence(3, drawsString, 20, 96, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+		text->setSentence(3, drawsString, 10, 96, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
 		//set mouse button
 		//sprintf(tempString, "%b", clicked);
 		//strcpy_s(mouseButtonString, "left button: ");
 		//strcat_s(mouseButtonString, tempString);
 		if (input->isLeftClicked())
 		{
-			text->setSentence(4,"mouse is clicked", 20, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+			text->setSentence(4,"mouse is clicked", 10, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
 		}
 		else
 		{
-			text->setSentence(4, "mouse is not clicked", 20, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
+			text->setSentence(4, "mouse is not clicked", 10, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
 		}
 
 

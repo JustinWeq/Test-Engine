@@ -308,8 +308,8 @@ namespace JR_Text
 
 		float length = m_Font->getStringWidth(text);
 		//Calculate the X and Y pixel position on the screen to start drawing to.
-		drawX = (float)(((m_screenWidth/2)*-1)+m_screenWidth - positionX-length-5);
-		drawY = (float)(((m_screenHeight/2)*-1)+m_screenHeight - positionY-3);
+		drawX = (float)(((m_screenWidth / 2)*-1) + positionX);
+		drawY = (float)(((m_screenHeight / 2)*-1) +m_screenHeight- positionY);
 
 		//Use the font class to build the vertex array from the sentence text and sentence draw location.
 		m_Font->buildVertexArray((void*)vertices, text, drawX, drawY);
