@@ -32,10 +32,11 @@ namespace JR_Texture
 	//shutdown-- cleans up and releases the dynamic memory for the texture
 	void Texture::shutdown()
 	{
+		return;
 		if (m_texture)
 		{
 			m_texture->Release();
-			m_texture = NULL;
+//			m_texture = NULL;
 		}
 	}
 

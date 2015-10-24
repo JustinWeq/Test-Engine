@@ -1,3 +1,6 @@
+//defines
+#define SCALE 32;
+
 //globals
 cbuffer Matrix
 {
@@ -5,9 +8,6 @@ cbuffer Matrix
  matrix viewMatrix;
  matrix projectionMatrix;
 };
-
-
-
 
 cbuffer Camera
 {
@@ -32,17 +32,22 @@ struct TextureVertexInput
 struct InstancedVertexInput
 {
  float4 position : POSITION;
- float2 tex :TEXCOORD0;
- float textureID : TEXTUREID;
- float4x4 matrixInstance: MATRIX;
+ float2 tex :TEXCOORD;
+ int textureID : TEXTUREID;
+ float4 color: COLOR;
+ float2 UVAdd:UVADD;
+ float2 UVMultiply:UVMULTIPLY;
+ row_major float4x4 matrixInstance: MATRIX;
 };
 
-struct InstancedVertexOutput
+struct InstancedPixelInput
 {
- float4 position : SV_POSITION;
- float2 tex :TEXCOORD0;
- float textureID : TEXTUREID; 
+ float4 position: SV_POSITION;
+ float2 tex : TEXCOORD0;
+ int textureID : TEXTUREID;
+ float4 color :COLOR0;
 };
+
 
 struct ColorVertexInput
 {
@@ -183,6 +188,39 @@ TerrainPixelInput terrainVertexShader(TerrainVertexInput input)
  //normalize the normal vector
  output.normal = normalize(output.normal);
  
+ return output;
+}
+
+InstancedPixelInput instancedVertexShader(InstancedVertexInput input)
+{
+ InstancedPixelInput output;
+ //set the forth position for proper matrix calculations
+ input.position.w = 1.0f;
+ input.position.x *= 32;
+ input.position.y *= 32;
+ //multiply against the WVP matrix
+ 
+ output.position = input.position;
+ //output.position  = mul(input.position,input.matrixInstance);
+ //set the texture coords
+ if(input.tex.x+ input.tex.y > 0.001)
+ {
+  output.tex.x = input.tex.x*input.UVMultiply.x;
+  output.tex.y = input.tex.y*input.UVMultiply.y;
+ }
+ else
+ {
+  output.tex.x = input.tex.x + input.UVAdd.x;
+  output.tex.y = input.tex.y + input.UVAdd.y;
+ }
+ //set the texture id
+ output.textureID = input.textureID;
+ //set the output color
+ output.color = input.color;
+ 
+ output.color.r  = 1.0f;
+ 
+ output.color.a  = 1.0f;
  return output;
 }
 

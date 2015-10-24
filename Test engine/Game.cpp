@@ -18,10 +18,11 @@
 #include "Frustum.h"
 #include "TerrainQuadTree.h"
 #include "LineModel.h"
+#include "Rectangle.h"
+#include "Renderer.h"
 #include "Math.h"
 #include <string>
 using namespace Application;
-using namespace std;
 using namespace JR_Model;
 using namespace JR_Shader;
 using namespace JR_Graphics;
@@ -37,6 +38,7 @@ using namespace JR_FlyCam;
 using namespace JR_Terrain;
 using namespace JR_Frustum;
 using namespace JR_TerrainQuadTree;
+using namespace JR_Renderer;
 //prototypes
 void init();
 bool update();
@@ -60,8 +62,12 @@ Cpu* CPU;
 Terrain* terrain;
 TerrainQuadTree* quadTree;
 Frustum* frustum;
+Texture* rectTexture;
+JR_Rectangle::Rectangle* rectangle;
+Renderer* renderer;
 //line model
 LineModel* lineModel;
+Texture* texture;
 
 bool error = false;
 int cpuPercentage;
@@ -78,6 +84,8 @@ public:
 };
 void init()
 {
+
+	bool result;
 	app = App();
 
 	app.init(800, 600, false , L"Test engine");
@@ -116,7 +124,7 @@ void init()
 	//init the input device
 	input = new Input();
 
-	input->init(app.getHinstance(), app.getHWND(), app.getScreenWidth(), app.getScreenHeight());
+	 input->init(app.getHinstance(), app.getHWND(), app.getScreenWidth(), app.getScreenHeight());
 
 	 //create and set up the sound
 	 sound = new Sound();
@@ -127,14 +135,14 @@ void init()
 	 bitmap = new Bitmap();
 
 	 //init bitmap
-	 bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 256, 256);
+	 error !=  bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 256, 256);
 
 	 //create text object
 	 text = new Text();
 	 D3DXMATRIX baseView;
 	 D3DXMatrixTranslation(&baseView,0,0,-1.0f);
 	 //init the text object
-	 text->init(graphics->getDevice(), graphics->getDeviceContext(), app.getHWND(),
+	 error != text->init(graphics->getDevice(), graphics->getDeviceContext(), app.getHWND(),
 		 app.getScreenWidth(), app.getScreenHeight(), view, 5);
 
 	 //set up sentence 1
@@ -150,7 +158,7 @@ void init()
 	 CPU = new Cpu();
 
 	 //init the Cpu object
-	 CPU->init();
+	  CPU->init();
 
 	 //create the fps object
 	 fps = new Fps();
@@ -162,13 +170,13 @@ void init()
 	 timer = new Timer();
 
 	 //init the timer object
-	 timer->init();
+	 error != timer->init();
 
 	 //create the terrain object
 	 terrain = new Terrain;
 
 
-	 terrain->init(graphics->getDevice(), "heightmap01.bmp",TEXT("texture.dds"));
+	 error != terrain->init(graphics->getDevice(), "heightmap01.bmp",TEXT("texture.dds"));
 
 
 	 //setUp thefrustum
@@ -176,7 +184,7 @@ void init()
 	 
 	 quadTree = new TerrainQuadTree;
 
-	 quadTree->init(terrain,graphics->getDevice());
+	 error != quadTree->init(terrain,graphics->getDevice());
 
 	 //set up line model
 	 lineModel = new LineModel;
@@ -189,7 +197,7 @@ void init()
 	 D3DXVECTOR3* newVertices;
 
 	 newVertices = new D3DXVECTOR3[4];
-     object->getVertices(vertices);
+      object->getVertices(vertices);
 
 	 D3DXVECTOR3 vertex = vertices[object->getModelVertexCount()];
 	 int vertexCount;
@@ -205,8 +213,35 @@ void init()
 
 	 //vertices[1] = D3DXVECTOR3(0, 100, 0);
 
-     lineModel->init(graphics->getDevice(), newVertices, D3DXVECTOR4(1, 0, 0, 1),4);
+    error !=  lineModel->init(graphics->getDevice(), newVertices, D3DXVECTOR4(1, 0, 0, 1),4);
 	 
+	 //set up the rectangle
+	 rectangle = new JR_Rectangle::Rectangle();
+
+	 //init the rectangle
+	 error != rectangle->init(0, 0, 256, 256, 0, 0, D3DXVECTOR2(), D3DXVECTOR2(1, 1), D3DXVECTOR4(0, 0, 0, 0));
+
+	 //set up the renderer
+	 renderer = new Renderer();
+
+	 //init the renderer
+	 error = !renderer->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), app.getHWND());
+
+	 //load the texture
+	 rectTexture = new Texture();
+
+	 error != rectTexture->init(graphics->getDevice(), TEXT("texture.dds"));
+
+	 texture = new Texture();
+
+	 texture->init(graphics->getDevice(), TEXT("texture.dds"));
+
+	 for (int i = 0;i < 30;i++)
+	 {
+       renderer->addTexture(*texture);
+	 }
+
+	 int test = 0;
 
 }
 
@@ -258,7 +293,7 @@ bool update()
 		{
 			done = true;
 		}
-
+		"53453453453453453453";
 		//read input for player movement.
 		float x = 0, y = 0, z = 0;
 		float playSpeed = 1;
@@ -408,11 +443,11 @@ void updateViewMatrix()
 
 void draw()
 {
-	D3DXMATRIX world,world2,world3,projection,ortho;
+	D3DXMATRIX world, world2, world3, projection, ortho;
 	bool result;
 
 	//Clear the buffers to begin the scene.
-	graphics->beginDrawing(0, 0, 0, 1);
+	graphics->beginDrawing(1, 1, 0, 1);
 
 	graphics->getWorldMatrix(world);
 	world3 = world;
@@ -422,9 +457,11 @@ void draw()
 	//D3DXMatrixRotationY(&world,cubeRot);
 	//(*object)*world;
 	//model->render(graphics->getDeviceContext());
-	//object->render(graphics->getDeviceContext());
+	object->render(graphics->getDeviceContext());
 	//prepare the line model for rendering
 	lineModel->render(graphics->getDeviceContext());
+
+
 
 	//render the line model instead of the regular one using the color shader
 	result = shader->renderLine(graphics->getDeviceContext(), lineModel->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection);
@@ -432,9 +469,8 @@ void draw()
 	{
 		error = true;
 	}
-
 	//render the model using the defualt shader
-	result = shader->render(graphics->getDeviceContext(), object->getIndexCount() ,object->getWorld(), cam.getViewMatrix(),
+   result = shader->render(graphics->getDeviceContext(), object->getIndexCount() ,object->getWorld(), cam.getViewMatrix(),
 		projection, object->getTexture(), D3DXVECTOR3(0, 0, 1), D3DXVECTOR4(0.5, 0.5, 0.5, 1),
 		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(dcx, dcy, dcz), D3DXVECTOR4(1, 1, 1, 1), 32);
 	if (!result)
@@ -447,14 +483,18 @@ void draw()
 	//construct the frustum
 	frustum->constructFrustum(1000, projection, cam.getViewMatrix());
 
+shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld(),cam.getViewMatrix(),projection,
+		D3DXVECTOR3(0, 0, 0.75), D3DXVECTOR4(0.5, 0.5, 0.5, 1), D3DXVECTOR4(1, 1, 1, 1), terrain->getTexture());
+
+
+
 	//render the terrain using the quad tree
-	//quadTree->render(frustum, graphics->getDeviceContext(), shader);
+	quadTree->render(frustum, graphics->getDeviceContext(), shader);
 
 	//set the number of triangles since some where culled
 	numTriangles = quadTree->getDrawCount();
 
-	shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld(),cam.getViewMatrix(),projection,
-		D3DXVECTOR3(0, 0, 0.75), D3DXVECTOR4(0.5, 0.5, 0.5, 1), D3DXVECTOR4(1, 1, 1, 1), terrain->getTexture());
+	
 
 
 
@@ -476,6 +516,21 @@ void draw()
 	{
 		error = true;
 	}
+	
+	//prepare the Rectangle for redering
+	result = rectangle->draw(renderer);
+	if (!result)
+	{
+		error = true;
+	}
+
+	//draw everything in the renderer
+	result= renderer->presentDraw(graphics->getDeviceContext());
+	if (!result)
+	{
+		error = true;
+	}
+
 
 	//now begin rednering text
 

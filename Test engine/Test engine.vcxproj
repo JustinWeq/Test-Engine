@@ -179,6 +179,7 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sector.cpp" />
     <ClCompile Include="Shader.cpp" />

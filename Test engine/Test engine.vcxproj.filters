@@ -150,6 +150,9 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Graphics2D</Filter>
     </ClCompile>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Source Files\Graphics2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">

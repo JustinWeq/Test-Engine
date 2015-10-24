@@ -108,7 +108,7 @@ namespace JR_Graphics
 		D3DXMATRIX m_projectionMatrix;
 		//the world matrix(identity) of the graphics object
 		D3DXMATRIX m_worldMatrix;
-		//the orth matrix of the graphics object, for use in 2D drawing
+		//the ortho matrix of the graphics object, for use in 2D drawing
 		D3DXMATRIX m_orthoMatrix;
 		//a depth stencil state with the z buffer disabled.
 		ID3D11DepthStencilState* m_depthStencilDiabledState;
