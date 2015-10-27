@@ -196,12 +196,12 @@ InstancedPixelInput instancedVertexShader(InstancedVertexInput input)
  InstancedPixelInput output;
  //set the forth position for proper matrix calculations
  input.position.w = 1.0f;
- input.position.x *= 32;
- input.position.y *= 32;
+// input.position.x *= 32;
+// input.position.y *= 32;
  //multiply against the WVP matrix
  
  output.position = input.position;
- //output.position  = mul(input.position,input.matrixInstance);
+// output.position  = mul(input.position,input.matrixInstance);
  //set the texture coords
  if(input.tex.x+ input.tex.y > 0.001)
  {
@@ -218,9 +218,9 @@ InstancedPixelInput instancedVertexShader(InstancedVertexInput input)
  //set the output color
  output.color = input.color;
  
- output.color.r  = 1.0f;
+ //output.color.r  = 1.0f;
  
- output.color.a  = 1.0f;
+ //output.color.a  = 1.0f;
  return output;
 }
 

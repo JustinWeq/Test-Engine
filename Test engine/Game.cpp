@@ -219,7 +219,7 @@ void init()
 	 rectangle = new JR_Rectangle::Rectangle();
 
 	 //init the rectangle
-	 error != rectangle->init(0, 0, 256, 256, 0, 0, D3DXVECTOR2(), D3DXVECTOR2(1, 1), D3DXVECTOR4(0, 0, 0, 0));
+	 error != rectangle->init(0, 0, 256, 256, 0, 0, D3DXVECTOR2(), D3DXVECTOR2(1, 1), D3DXVECTOR4(0, 1, 0, 0));
 
 	 //set up the renderer
 	 renderer = new Renderer();

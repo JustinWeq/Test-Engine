@@ -345,10 +345,10 @@ float4 instancedPixelShader(InstancedPixelInput input) : SV_TARGET
  //multiply the two colors together
  outputColor = textureColor*outputColor;
  }
- outputColor.r = 1.0f;
- outputColor.g = 1.0f;
- outputColor.b = 1.0f;
- outputColor.a = 1.0f;
+ //outputColor.r = 1.0f;
+// outputColor.g = 1.0f;
+ //outputColor.b = 1.0f;
+ //outputColor.a = 1.0f;
  //return the final output color
  return outputColor;
 }
