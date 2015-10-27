@@ -238,7 +238,11 @@ namespace JR_Renderer
 		instanceDesc.StructureByteStride = 0;
 		instanceDesc.Usage = D3D11_USAGE_DYNAMIC;
 
-		instanceData.pSysMem = new InstanceVertex2[MAX_INSTANCES];
+		InstanceVertex2* instanceVertex = new InstanceVertex2[MAX_INSTANCES];
+
+			instanceVertex[0].color = D3DXVECTOR4(1, 1, 0, 1);
+		
+		instanceData.pSysMem = instanceVertex;
 		instanceData.SysMemPitch = 0;
 		instanceData.SysMemSlicePitch = 0;
 		
@@ -249,6 +253,7 @@ namespace JR_Renderer
 			return false;
 		}
 
+		//delete vertex buffer since it is no longer being used
 		return true;
 	}
 
@@ -501,7 +506,6 @@ namespace JR_Renderer
 	{
 		//update the buffer for the instances
 		D3D11_MAPPED_SUBRESOURCE data;
-		InstanceVertex2* instances =  &m_vertices[0];
 		InstanceVertex2* instancesPtr = NULL;
 		HRESULT result;
 
@@ -513,8 +517,16 @@ namespace JR_Renderer
 		}
 
 		instancesPtr = (InstanceVertex2*)data.pData;
+		for (int i = 0;i < m_vertices.size();i++)
+		{
+			instancesPtr[i].color = m_vertices[i].color;
+			instancesPtr[i].matrixInstance = m_vertices[i].matrixInstance;
+			instancesPtr[i].textureID = m_vertices[i].textureID;
+			instancesPtr[i].UVAdd = m_vertices[i].UVAdd;
+			instancesPtr[i].UVMultiply = m_vertices[i].UVMultiply;
+		}
 
-		memcpy(instancesPtr, (void*)instances, sizeof(&m_vertices[0]));
+		//memcpy(instancesPtr, (void*)instances, sizeof(&m_vertices[0]));
 
 		//now un map
 
