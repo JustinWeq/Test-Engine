@@ -90,7 +90,7 @@ void init()
 	bool result;
 	app = App();
 
-	app.init(800, 600, false , "Test engine");
+	app.init(800, 600, false , L"Test engine");
 
 	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, -10.0f), &D3DXVECTOR3(0, 0, -9.0f), &D3DXVECTOR3(0, 1, 0));
 
@@ -121,7 +121,7 @@ void init()
 	//init the model
 	//error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
 
-	error  != object->init(graphics->getDevice(), "brick.obj", "texture.dds");
+	error  != object->init(graphics->getDevice(), "brick.obj", TEXT("texture.dds"));
 
 	//init the input device
 	input = new Input();
@@ -137,7 +137,7 @@ void init()
 	 bitmap = new Bitmap();
 
 	 //init bitmap
-	 error !=  bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), "texture.dds", 256, 256);
+	 error !=  bitmap->init(graphics->getDevice(), app.getScreenWidth(), app.getScreenHeight(), TEXT("texture.dds"), 256, 256);
 
 	 //create text object
 	 text = new Text();
@@ -178,7 +178,7 @@ void init()
 	 terrain = new Terrain;
 
 
-	 error != terrain->init(graphics->getDevice(), "heightmap01.bmp","texture.dds");
+	 error != terrain->init(graphics->getDevice(), "heightmap01.bmp",TEXT("texture.dds"));
 
 
 	 //setUp thefrustum
@@ -232,11 +232,11 @@ void init()
 	 //load the texture
 	 rectTexture = new Texture();
 
-	 error != rectTexture->init(graphics->getDevice(), "texture.dds");
+	 error != rectTexture->init(graphics->getDevice(), TEXT("texture.dds"));
 
 	 texture = new Texture();
 
-	 texture->init(graphics->getDevice(), "texture.dds");
+	 texture->init(graphics->getDevice(), TEXT("texture.dds"));
 
 	 for (int i = 0;i < 30;i++)
 	 {
@@ -564,7 +564,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 		else
 		{
 			//there was a problem setting up so tell the user that
-			MessageBox(app.getHWND(), "There was an error setting up D3D, closing application", "Error", MB_OK);
+			MessageBox(app.getHWND(), L"There was an error setting up D3D, closing application", L"Error", MB_OK);
 		}
 
 		//now shutdown everything

@@ -16,7 +16,7 @@ namespace Application
 		App();
 		~App();
 
-		bool init(int screenWidth,int screenHeight,bool fullscreen,LPCSTR applicationName);
+		bool init(int screenWidth,int screenHeight,bool fullscreen,LPCWSTR applicationName);
 		void shutdown();
 		LRESULT CALLBACK MessageHandler(HWND parent, UINT command, WPARAM wparam, LPARAM lparam);
         bool frame();
@@ -39,7 +39,7 @@ namespace Application
 		void closeWindows();
 	private:
 		//the name of the win32 application
-		LPCSTR m_applicationName;
+		LPCWSTR m_applicationName;
 		//the hinstance of the window
 		HINSTANCE m_hinstance;
 		//the hwnd of the window

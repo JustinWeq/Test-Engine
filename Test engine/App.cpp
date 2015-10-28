@@ -22,7 +22,7 @@ namespace Application
 	//screenHeight- the height of the application
 	//fullscreen- boolean parameter indicating whether the app is full screen or not
 	//applicationName- the name of the application in both windows and the form
-	bool App::init(int screenWidth,int screenHeight,bool fullscreen,LPCSTR applicationName)
+	bool App::init(int screenWidth,int screenHeight,bool fullscreen,LPCWSTR applicationName)
 	{
 		//set the screen width and height
 		m_width = screenWidth;

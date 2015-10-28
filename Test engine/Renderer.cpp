@@ -277,7 +277,7 @@ namespace JR_Renderer
 		pixelShaderBuffer = NULL;
 
 		//compile the vertex shader code
-		result = D3DX11CompileFromFile("defualt.vs", NULL, NULL, "instancedVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "instancedVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&vertexShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -290,7 +290,7 @@ namespace JR_Renderer
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, "defualt.vs", "Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualt.vs", L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
@@ -304,7 +304,7 @@ namespace JR_Renderer
 		}
 
 		//compile the pixel shader code
-		result = D3DX11CompileFromFile("defualt.ps", NULL, NULL, "instancedPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "instancedPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&pixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -317,7 +317,7 @@ namespace JR_Renderer
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, "defualt.ps", "Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualt.ps", L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
@@ -599,7 +599,7 @@ namespace JR_Renderer
 		errorMessage = NULL;
 
 		//pop up a message saying to check the text file for errors
-		MessageBox(hwnd, "Error compiling shader. Check shader-error.txt for details", "Error", MB_OK);
+		MessageBox(hwnd, L"Error compiling shader. Check shader-error.txt for details", shaderFilename, MB_OK);
 	}
 
 	//createMatricies

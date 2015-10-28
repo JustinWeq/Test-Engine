@@ -48,7 +48,7 @@ namespace JR_Text
 		}
 
 		//init the font object
-		result = m_Font->init(device, "fontdata.txt", "font.dds");
+		result = m_Font->init(device, "fontdata.txt", L"font.dds");
 		if (!result)
 		{
 			return false;

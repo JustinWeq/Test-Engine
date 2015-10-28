@@ -68,7 +68,7 @@ namespace JR_Terrain
 		//device- the device to use for initializtion
 		//mapAddress- the address of the heightmap
 		//textureAddress- the texture address
-		bool init(ID3D11Device* device,char* mapAddress,LPCSTR textureAddress);
+		bool init(ID3D11Device* device,char* mapAddress,WCHAR* textureAddress);
 
 		//shutdown-- shutdown and cleans up memory for this Terrain instance
 		void shutdown();
@@ -113,7 +113,7 @@ namespace JR_Terrain
 		//loadTexture-- loads the texture for this terrain
 		//device- the device to load the texture with
 		//textureAddress- the address of the texture to use
-		bool loadTexture(ID3D11Device* device, LPCSTR textureAddress);
+		bool loadTexture(ID3D11Device* device, WCHAR* textureAddress);
 		
 		//releaseTexture-- cleans up memory for the texture
 		void releaseTexture();

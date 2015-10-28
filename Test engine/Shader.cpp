@@ -191,7 +191,7 @@ namespace JR_Shader
 		pixelShaderBuffer = NULL;
 
 		//compile the vertex shader code
-		result = D3DX11CompileFromFile( "defualt.vs", NULL, NULL, "DefualtVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile( L"defualt.vs", NULL, NULL, "DefualtVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&vertexShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -204,14 +204,14 @@ namespace JR_Shader
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, "defualt.vs",  "Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualt.vs",  L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
 		}
 
 		//compile the texture vertex shader code
-		result = D3DX11CompileFromFile("defualt.vs", NULL, NULL, "textureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "textureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&textureVertexShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -224,14 +224,14 @@ namespace JR_Shader
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, "defualt.vs", "Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualt.vs", L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
 		}
 
 		//compile the color vertex shader code
-		result = D3DX11CompileFromFile("defualt.vs", NULL, NULL, "colorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "colorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&colorVertexShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -244,14 +244,14 @@ namespace JR_Shader
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, "defualt.vs", "Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualt.vs", L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
 		}
 
 		//compile the terrain vertex shader code
-		result = D3DX11CompileFromFile("defualt.vs", NULL, NULL, "terrainVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "terrainVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&terrainVertexShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -264,14 +264,14 @@ namespace JR_Shader
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, "defualt.vs", "Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualt.vs", L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
 		}
 
 		//Compile the pixel shader code
-		result = D3DX11CompileFromFile("defualt.ps", NULL, NULL, "defualtPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "defualtPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&pixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -283,13 +283,13 @@ namespace JR_Shader
 			else
 			{
 				//the was no error message so the program could not find the shader itself
-				MessageBox(hwnd, "defualt.ps", "Missing Shader File", MB_OK);
+				MessageBox(hwnd, L"defualt.ps", L"Missing Shader File", MB_OK);
 			}
 			return false;
 		}
 
 		//Compile the color shader code
-		result = D3DX11CompileFromFile("defualt.ps", NULL, NULL, "colorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "colorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&colorPixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -301,13 +301,13 @@ namespace JR_Shader
 			else
 			{
 				//the was no error message so the program could not find the shader itself
-				MessageBox(hwnd, "defualt.ps", "Missing Shader File", MB_OK);
+				MessageBox(hwnd, L"defualt.ps", L"Missing Shader File", MB_OK);
 			}
 			return false;
 		}
 
 		//Compile the texture pixel shader code
-		result = D3DX11CompileFromFile("defualt.ps", NULL, NULL, "texturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "texturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&texturePixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -319,13 +319,13 @@ namespace JR_Shader
 			else
 			{
 				//the was no error message so the program could not find the shader itself
-				MessageBox(hwnd, "defualt.ps", "Missing Shader File", MB_OK);
+				MessageBox(hwnd, L"defualt.ps", L"Missing Shader File", MB_OK);
 			}
 			return false;
 		}
 
 		//Compile the font pixel shader code
-		result = D3DX11CompileFromFile("defualt.ps", NULL, NULL, "fontPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "fontPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&fontPixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -337,13 +337,13 @@ namespace JR_Shader
 			else
 			{
 				//the was no error message so the program could not find the shader itself
-				MessageBox(hwnd, "defualt.ps", "Missing Shader File", MB_OK);
+				MessageBox(hwnd, L"defualt.ps", L"Missing Shader File", MB_OK);
 			}
 			return false;
 		}
 
 		//Compile the terrain pixel shader code
-		result = D3DX11CompileFromFile("defualt.ps", NULL, NULL, "terrainPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "terrainPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&terrainPixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
@@ -355,7 +355,7 @@ namespace JR_Shader
 			else
 			{
 				//the was no error message so the program could not find the shader itself
-				MessageBox(hwnd, "defualt.ps", "Missing Shader File", MB_OK);
+				MessageBox(hwnd, L"defualt.ps", L"Missing Shader File", MB_OK);
 			}
 			return false;
 		}
@@ -791,7 +791,7 @@ namespace JR_Shader
 
 
 		//pop up a message saying to check the text file for errors
-		MessageBox(hwnd, "Error compiling shader. Check shader-error.txt for details", "Error", MB_OK);
+		MessageBox(hwnd, L"Error compiling shader. Check shader-error.txt for details", shaderFilename, MB_OK);
 
 	}
 

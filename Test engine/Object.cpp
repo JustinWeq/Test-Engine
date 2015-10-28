@@ -12,7 +12,7 @@ namespace JR_Object
 		shutdown();
 	}
 
-	bool Object::init(ID3D11Device* device, char*filename, LPCSTR textureName)
+	bool Object::init(ID3D11Device* device, char*filename, WCHAR* textureName)
 	{
 		bool result;
 		m_model = new Model();
