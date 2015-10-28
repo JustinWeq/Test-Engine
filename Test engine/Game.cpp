@@ -69,6 +69,8 @@ Renderer* renderer;
 LineModel* lineModel;
 Texture* texture;
 
+JR_Rectangle::Rectangle* rectangle2;
+
 bool error = false;
 int cpuPercentage;
 float frameTime;
@@ -219,7 +221,7 @@ void init()
 	 rectangle = new JR_Rectangle::Rectangle();
 
 	 //init the rectangle
-	 error != rectangle->init(0, 0, 256,256, 0, 0, D3DXVECTOR2(0,0), D3DXVECTOR2(1, 1), D3DXVECTOR4(1, 1, 1, 1));
+	 error != rectangle->init(0, 0, 256,256, 132, 0, D3DXVECTOR2(0,0), D3DXVECTOR2(1, 1), D3DXVECTOR4(1, 1, 1, 1));
 
 	 //set up the renderer
 	 renderer = new Renderer();
@@ -243,6 +245,9 @@ void init()
 
 	 int test = 0;
 
+	 rectangle2 = new JR_Rectangle::Rectangle();
+
+	 rectangle2->init(256, 0, 256, 256, 236, 0, D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), D3DXVECTOR4(1, 1, 1, 1));
 }
 
 bool update()
@@ -523,6 +528,8 @@ shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld
 	{
 		error = true;
 	}
+
+	result = rectangle2->draw(renderer);
 
 	//draw everything in the renderer
 	result= renderer->presentDraw(graphics->getDeviceContext());
