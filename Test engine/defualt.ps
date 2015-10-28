@@ -183,7 +183,7 @@ float4 instancedPixelShader(InstancedPixelInput input) : SV_TARGET
  float4 textureColor;
  //get the input color
  outputColor = input.color;
- if(input.textureID > 0)
+ if(input.textureID > -1)
  {
   textureColor = 1;
  //get the texture color

@@ -106,7 +106,7 @@ namespace JR_Renderer
 		//MAX_TEXTURES- the maximum number of textures for the renderer to contain
 		const int MAX_TEXTURES = 30;
 		//MAX_INSTANCES- the maximum amount of instances to draw at one time
-		const int MAX_INSTANCES = 10000;
+		const int MAX_INSTANCES = 1000000;
 		//vertexBuffer- the vertex buffer
 		ID3D11Buffer *m_vertexBuffer;
 		//instanceBuffer- the instance buffer

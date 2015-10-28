@@ -203,16 +203,26 @@ InstancedPixelInput instancedVertexShader(InstancedVertexInput input)
  output.position = input.position;
  output.position  = mul(input.position,input.matrixInstance);
  //set the texture coords
- if(input.tex.x+ input.tex.y > 0.001)
+ output.tex = input.tex;
+ if(input.tex.x < 0.0001f)
  {
-  output.tex.x = input.tex.x*input.UVMultiply.x;
-  output.tex.y = input.tex.y*input.UVMultiply.y;
+  output.tex.x += input.UVAdd.x;
  }
  else
  {
-  output.tex.x = input.tex.x + input.UVAdd.x;
-  output.tex.y = input.tex.y + input.UVAdd.y;
+  output.tex.x *=  input.UVMultiply.x;
  }
+
+ if(input.tex.y < 0.0001f)
+ {
+  output.tex.y += input.UVAdd.y;
+ }
+ else
+ {
+  output.tex.y *=  input.UVMultiply.y;
+ }
+
+ //output.tex  = input.tex;
  //set the texture id
  output.textureID = input.textureID;
  //set the output color
