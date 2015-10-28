@@ -16,7 +16,7 @@ namespace JR_Texture
 		//init-- initializes the texture
 		//device- the device to use for initialization
 		//filename- the name of the file to load the texture from
-		bool init(ID3D11Device* device, WCHAR* filename);
+		bool init(ID3D11Device* device, LPCSTR filename);
 		//shutdown-- cleans up and releases the dynamic memory for the texture
 		void shutdown();
 

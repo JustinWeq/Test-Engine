@@ -53,7 +53,7 @@ namespace JR_Model
 		//device- the device to use for initialization
 		//modelFileName- the name of the model to load
 		//textureFilename-- the name of the texture to load
-		bool init(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename);
+		bool init(ID3D11Device* device, char* modelFilename, LPCSTR textureFilename);
 		//shutdown-- releases all dynamic memory
 		void shutdown();
 		//render-- renders the model
@@ -87,7 +87,7 @@ namespace JR_Model
 		//loadTexture-- loads the texture for this model
 		//device- the device to use for loading
 		//filename- the name of the file the texture is in
-		bool loadTexture(ID3D11Device* device, WCHAR* filename);
+		bool loadTexture(ID3D11Device* device, LPCSTR filename);
 		//releaseTexture-- cleans up memory for the texture
 		void releaseTexture();
 

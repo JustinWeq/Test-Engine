@@ -21,7 +21,7 @@ namespace JR_Model
 	//device- the device to use for initialization
 	//modelFileName- the name of the model to load
 	//textureFilename-- the name of the texture to load
-	bool Model::init(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename)
+	bool Model::init(ID3D11Device* device, char* modelFilename, LPCSTR textureFilename)
 	{
 		bool result;
 
@@ -209,7 +209,7 @@ namespace JR_Model
 	//loadTexture-- loads the texture for this model
 	//device- the device to use for loading
 	//filename- the name of the file the texture is in
-	bool Model::loadTexture(ID3D11Device* device, WCHAR* filename)
+	bool Model::loadTexture(ID3D11Device* device, LPCSTR filename)
 	{
 		bool result;
 		//Create the texture object

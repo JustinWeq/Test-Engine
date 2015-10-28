@@ -32,7 +32,7 @@ namespace JR_Bitmap
 		//textureFileName- the file name of the texture to use(uncompresed formats only)
 		//bitmapWidth- the width of the bitmap
 		//bitmapHeight- the hight of the bitmap
-		bool init(ID3D11Device* device, int screenWidth, int screenHeight, WCHAR* textureFilename,
+		bool init(ID3D11Device* device, int screenWidth, int screenHeight, LPCSTR textureFilename,
 			int bitmapWidth, int bitmapHeight);
 
 		//shutdown- shuts down and cleans up the memory for this bitmap
@@ -71,7 +71,7 @@ namespace JR_Bitmap
 		//loadTexture-- loads the texture for the bitmap
 		//device- the divice to use for loading the texture
 		//name- the filename of the texture
-		bool loadTexture(ID3D11Device* device, WCHAR* name);
+		bool loadTexture(ID3D11Device* device, LPCSTR name);
 
 		//releaseTexture-- cleans up memory for the texture
 		void releaseTexture();

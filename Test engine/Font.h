@@ -34,7 +34,7 @@ namespace JR_Font
 		//device- the device to use for initialization
 		//fontFileName- the name of the font filw
 		//textureFileName- the name of the texture to use for the font
-		bool init(ID3D11Device* device, char* fontFileName, WCHAR* textureFileName);
+		bool init(ID3D11Device* device, char* fontFileName, LPCSTR textureFileName);
 
 		//cleans up memory for the font class
 		void shutdown();
@@ -62,7 +62,7 @@ namespace JR_Font
 		//loadTexture-- loads the texture for the font
 		//device- the device to use to load the texture
 		//textureFileName- the name of the textures file
-		bool loadTexture(ID3D11Device* device, WCHAR* textureFileName);
+		bool loadTexture(ID3D11Device* device, LPCSTR textureFileName);
 
 		//releaseTexture-- releases the data for the texture
 		void releaseTexture();
