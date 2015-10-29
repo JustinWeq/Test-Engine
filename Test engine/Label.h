@@ -71,6 +71,9 @@ namespace JR_Label
 
 	 //getMaxNumChars-- returns the maximum number of characters for the label
 	 int getMaxNumChars();
+
+	 //shutdown-- cleans up memory for the label
+	 void shutdown();
  private:
 	 //text- the text of the label
 	 char* m_text;
