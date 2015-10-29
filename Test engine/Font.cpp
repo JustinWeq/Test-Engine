@@ -128,6 +128,65 @@ namespace JR_Font
 		}
 	}
 
+	//buildRectangleArray-- builds the array of rectangles to draw
+	//rectangles- the array of rectangles to copy to
+	//sentence- the sentence the array of rectangles is based on
+	//drawX- the x coord of the sentence
+	//drawY- the y coord of the sentence
+	//color- the color of the sentence
+	//size- the size to multiply the font by
+	void Font::buildRectangleArray(void* rectangles, char* sentence, float drawX, float drawY, D3DXVECTOR4 color,float size)
+	{
+		JR_Rectangle::Rectangle* rectanglesPtr;
+		int numLetters, letter;
+		float oriX = drawX;
+		//cast void rectangles to rectanglesPtr
+		rectanglesPtr = (JR_Rectangle::Rectangle*)rectangles;
+
+		//get the number of letters in the sentence
+		numLetters = strlen(sentence);
+
+		
+		//create each letter
+		for (int i = 0;i < numLetters;i++)
+		{
+			letter = ((int)sentence[i]) - 32;
+
+           if (letter == 0)
+		   {
+			//it was a space so just add to the x draw location
+			drawX += 3.0f* size;
+		   }
+		   else
+			   if (letter+32 == '\n')
+			   {
+				   //character was a new line so make a new line for the characters
+				   drawX = oriX;
+				   //make the line move down one
+				   drawY -= 16 * size;
+			   }
+		   else
+		   {
+            //create the new rectangle to be added
+			JR_Rectangle::Rectangle rect = JR_Rectangle::Rectangle();
+
+			//set the propertys for the rectangle and add it to the rectangles array
+
+			rect.init(drawX, drawY, m_font[letter].size * size, 16*size, 0, 1, D3DXVECTOR2(m_font[letter].left, 0), D3DXVECTOR2(m_font[letter].right, 1), color);
+
+			//put the rectangle into the rectangles list
+
+			rectanglesPtr[i] = rect;
+
+			//update the x draw location
+			drawX += m_font[letter].size*size;
+		   }
+			
+
+
+		}
+	}
+
 	//loadFontData-- loads the data for the font
 	//fontFileName- the name of the font file
 	bool Font::loadFontData(char* fontFileName)

@@ -4,7 +4,9 @@
 #include <D3DX10math.h>
 #include <fstream>
 #include "Texture.h"
+#include "Rectangle.h"
 using namespace std;
+using namespace JR_Rectangle;
 using namespace JR_Texture;
 namespace JR_Font
 {
@@ -48,6 +50,15 @@ namespace JR_Font
 		//drawX- the x draw coord
 		//drawY- the y draw coord
 		void buildVertexArray(void* vertices, char* sentence, float drawX, float drawY);
+
+		//buildRectangleArray-- builds the array of rectangles to draw
+		//rectangles- the array of rectangles to copy to
+		//sentence- the sentence the array of rectangles is based on
+		//drawX- the x coord of the sentence
+		//drawY- the y coord of the sentence
+		//color- the color of the sentence
+		//size- the size to multiply the normal font size by
+		void buildRectangleArray(void* rectangles, char* sentence, float drawX, float drawY, D3DXVECTOR4 color, float size);
 
 		float getStringWidth(char* text);
 
