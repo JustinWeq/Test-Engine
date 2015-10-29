@@ -21,6 +21,7 @@
 #include "Rectangle.h"
 #include "Renderer.h"
 #include "Math.h"
+#include "Label.h"
 #include <string>
 using namespace Application;
 using namespace JR_Model;
@@ -39,6 +40,7 @@ using namespace JR_Terrain;
 using namespace JR_Frustum;
 using namespace JR_TerrainQuadTree;
 using namespace JR_Renderer;
+using namespace JR_Label;
 //prototypes
 void init();
 bool update();
@@ -68,6 +70,7 @@ Renderer* renderer;
 //line model
 LineModel* lineModel;
 Texture* texture;
+Label* label;
 
 JR_Rectangle::Rectangle* rectangle2;
 
@@ -248,6 +251,10 @@ void init()
 	 rectangle2 = new JR_Rectangle::Rectangle();
 
 	 rectangle2->init(256, 0, 256, 256, 236, 0, D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), D3DXVECTOR4(1, 1, 1, 1));
+
+	 //set up the label
+
+	 label
 }
 
 bool update()

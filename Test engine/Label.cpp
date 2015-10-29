@@ -172,4 +172,17 @@ namespace JR_Label
 			delete[] m_rectangles;
 		}
 	}
+
+	//draw-- draws the text
+	void Label::draw(Renderer* renderer)
+	{
+		//draw each of the letters
+		int count = strlen(m_text);
+
+		for (int i = 0;i < count;i++)
+		{
+			//draw each of the characters
+			m_rectangles[i].draw(renderer);
+		}
+	}
 }

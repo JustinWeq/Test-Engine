@@ -107,6 +107,9 @@ namespace JR_Text
 		//shader- the shader to use for rendering
 		bool renderSentence(ID3D11DeviceContext* deviceContext, SentenceType* sentence, D3DXMATRIX worldMatrix, D3DXMATRIX orthoMatrix, Shader* shader);
 
+		//getFont-- returns the font
+		Font* getFont();
+
 	private:
 		Font* m_Font;
 		int m_screenWidth;

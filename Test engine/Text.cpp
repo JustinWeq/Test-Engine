@@ -405,4 +405,10 @@ namespace JR_Text
 
 		return true;
 	}
+
+	//getFont-- returns the font
+	Font* Text::getFont()
+	{
+		return m_Font;
+	}
 }

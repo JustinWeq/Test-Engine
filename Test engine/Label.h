@@ -74,6 +74,8 @@ namespace JR_Label
 
 	 //shutdown-- cleans up memory for the label
 	 void shutdown();
+
+	 void draw(Renderer* renderer);
  private:
 	 //text- the text of the label
 	 char* m_text;
