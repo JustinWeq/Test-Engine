@@ -595,7 +595,6 @@ namespace JR_Graphics
 			m_deviceContext->OMSetBlendState(m_alphaBlendingStateEnabled, blendFactor, 0xffffffff);
 			break;
 		}
-
 		case false:
 		{
 

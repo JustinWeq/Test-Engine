@@ -22,6 +22,7 @@
     <ProjectGuid>{1D0E0F1A-B373-4B1E-B231-ADF50248EEC3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Testengine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.10240.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -168,7 +169,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="GuiElement.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="LineModel.cpp" />
@@ -204,7 +204,6 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="GeometryArray.h" />
     <ClInclude Include="Graphics.h" />
-    <ClInclude Include="GuiElement.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="LineModel.h" />
