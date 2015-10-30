@@ -78,6 +78,8 @@ namespace JR_Text
 		//deviceContext- the device context to update the sentence to
 		//device- the device context to use for initialization if the sentence does not already exist
 		bool setSentence(int index, char* text,int x,int y,float red,float green,float blue,ID3D11DeviceContext* deviceContext,ID3D11Device* device);
+		//getFont-- returns the font
+		Font* getFont();
 	private:
 		//initSentence-- initializes the passed in sentence
 		//sentence- the sentence to initialize
@@ -107,8 +109,6 @@ namespace JR_Text
 		//shader- the shader to use for rendering
 		bool renderSentence(ID3D11DeviceContext* deviceContext, SentenceType* sentence, D3DXMATRIX worldMatrix, D3DXMATRIX orthoMatrix, Shader* shader);
 
-		//getFont-- returns the font
-		Font* getFont();
 
 	private:
 		Font* m_Font;

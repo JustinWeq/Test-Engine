@@ -245,7 +245,7 @@
     <Image Include="D:\HeightMaps\testmap.bmp">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\font.dds" />
+    <Image Include="font.dds" />
     <Image Include="texture.dds" />
   </ItemGroup>
   <ItemGroup>

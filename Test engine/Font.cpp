@@ -172,14 +172,13 @@ namespace JR_Font
 
 			//set the propertys for the rectangle and add it to the rectangles array
 
-			rect.init(drawX, drawY, m_font[letter].size * size, 16*size, 0, 1, D3DXVECTOR2(m_font[letter].left, 0), D3DXVECTOR2(m_font[letter].right, 1), color);
+			rect.init(drawX, drawY, m_font[letter].size*size, 16*size, 0, 1, D3DXVECTOR2(m_font[letter].left, 0), D3DXVECTOR2(m_font[letter].right, 1), color);
 
 			//put the rectangle into the rectangles list
 
 			rectanglesPtr[i] = rect;
-
 			//update the x draw location
-			drawX += m_font[letter].size*size;
+			drawX = drawX+ ((m_font[letter].size +3)*size);
 		   }
 			
 
@@ -225,9 +224,14 @@ namespace JR_Font
 				fin.get(temp);
 			}
 
+			char c = i + 32;
+
+			c;
 			fin >> m_font[i].left;
 			fin >> m_font[i].right;
 			fin >> m_font[i].size;
+
+			int test = 0;
 		}
 
 		//close the file

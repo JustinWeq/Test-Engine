@@ -235,11 +235,11 @@ void init()
 	 //load the texture
 	 rectTexture = new Texture();
 
-	 error != rectTexture->init(graphics->getDevice(), TEXT("texture.dds"));
+	 error != rectTexture->init(graphics->getDevice(), TEXT("font.dds"));
 
 	 texture = new Texture();
 
-	 texture->init(graphics->getDevice(), TEXT("texture.dds"));
+	 texture->init(graphics->getDevice(), TEXT("font.dds"));
 
 	 for (int i = 0;i < 30;i++)
 	 {
@@ -254,7 +254,12 @@ void init()
 
 	 //set up the label
 
-	 label
+	 label = new Label();
+
+	 label->init(0,-100, 1, D3DXVECTOR4(1, 0, 0, 1), 256, text->getFont());
+
+	 //set the label sentence
+	 label->setText("i\n new line\nnewline\nnewline");
 }
 
 bool update()
@@ -536,14 +541,13 @@ shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld
 		error = true;
 	}
 
+	
+
 	result = rectangle2->draw(renderer);
 
-	//draw everything in the renderer
-	result= renderer->presentDraw(graphics->getDeviceContext());
-	if (!result)
-	{
-		error = true;
-	}
+	//prepare the text for rendering
+	label->draw(renderer);
+
 
 
 	//now begin rednering text
@@ -551,6 +555,13 @@ shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld
 	//turn on alpha blending
 	graphics->alphaBlendingState(true);
 	result = text->render(graphics->getDeviceContext(), world2, ortho, shader);
+
+	//draw everything in the renderer
+	result = renderer->presentDraw(graphics->getDeviceContext());
+	if (!result)
+	{
+		error = true;
+	}
 
 	//disable alpha blending
 	graphics->alphaBlendingState(false);

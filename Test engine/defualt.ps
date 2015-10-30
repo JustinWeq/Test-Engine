@@ -349,6 +349,10 @@ float4 instancedPixelShader(InstancedPixelInput input) : SV_TARGET
 // outputColor.g = 1.0f;
  //outputColor.b = 1.0f;
  //outputColor.a = 1.0f;
+ if(outputColor.r  == 0.0f)
+ {
+ outputColor.a = 0.0f;
+ }
  //return the final output color
  return outputColor;
 }

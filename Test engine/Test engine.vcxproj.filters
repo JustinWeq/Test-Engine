@@ -276,13 +276,13 @@
     <Image Include="texture.dds">
       <Filter>Source Files</Filter>
     </Image>
-    <Image Include="D:\Programs\C++\DirectX 11\Tutorial 12 Font Engine\Texture example\font.dds">
-      <Filter>Source Files</Filter>
-    </Image>
     <Image Include="D:\HeightMaps\testmap.bmp">
       <Filter>Source Files</Filter>
     </Image>
     <Image Include="..\..\..\Downloads\terexe02\terexe02\Engine\data\heightmap01.bmp">
+      <Filter>Source Files</Filter>
+    </Image>
+    <Image Include="font.dds">
       <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>
