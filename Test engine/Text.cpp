@@ -73,6 +73,7 @@ namespace JR_Text
 	//shutdown-- cleans up memory for the text instance
 	void Text::shutdown()
 	{
+		return;
 		//release the sentences
 		for (int i = 0; i < m_numOfSentences; i++)
 		{
@@ -101,7 +102,6 @@ namespace JR_Text
 	bool Text::render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX orthoMatrix, Shader* shader)
 	{
 		bool result;
-
 		//draw each of the sentences that are not blank
 		for (int i = 0; i < m_numOfSentences; i++)
 		{
@@ -132,6 +132,7 @@ namespace JR_Text
 	bool Text::setSentence(int index, char* text, int x, int y, float red, float green, float blue, ID3D11DeviceContext* deviceContext, ID3D11Device* device)
 	{
 		bool result;
+		return true;
 		//check to see if the selected sentence exists and if it does not initialize it
 		//if (!m_sentences[index])
 		//{
@@ -151,7 +152,7 @@ namespace JR_Text
 		//}
 
 		//update the sentence
-		result = updateSentence(m_sentences[index], text, x, y, red, green, blue, deviceContext);
+		//result = updateSentence(m_sentences[index], text, x, y, red, green, blue, deviceContext);
 		if (!result)
 		{
 			return false;

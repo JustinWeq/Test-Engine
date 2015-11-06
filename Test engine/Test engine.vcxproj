@@ -227,6 +227,7 @@
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Desktop\testfont.fnt" />
     <None Include="..\..\..\Downloads\cone.fbx">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -239,13 +240,18 @@
     <None Include="defualt.vs" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\Desktop\testfont.dds">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="..\..\..\Downloads\terexe02\terexe02\Engine\data\heightmap01.bmp">
       <DeploymentContent>true</DeploymentContent>
     </Image>
     <Image Include="D:\HeightMaps\testmap.bmp">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="font.dds" />
+    <Image Include="font.dds">
+      <DeploymentContent>false</DeploymentContent>
+    </Image>
     <Image Include="texture.dds" />
   </ItemGroup>
   <ItemGroup>

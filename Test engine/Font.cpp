@@ -22,9 +22,16 @@ namespace JR_Font
 	bool Font::init(ID3D11Device* device, char* fontFileName, WCHAR* textureFileName)
 	{
 		bool result;
-
+		m_charSet = new CharSet();
 		//load in the text file contianing the font data
 		result = loadFontData(fontFileName);
+		if (!result)
+		{
+			return false;
+		}
+
+		//loadbetterfont data
+		//result = loadBetterFontData("testfont.fnt");
 		if (!result)
 		{
 			return false;
@@ -135,7 +142,8 @@ namespace JR_Font
 	//drawY- the y coord of the sentence
 	//color- the color of the sentence
 	//size- the size to multiply the font by
-	void Font::buildRectangleArray(void* rectangles, char* sentence, float drawX, float drawY, D3DXVECTOR4 color,float size)
+	//textureChannel- the id for the texture
+	void Font::buildRectangleArray(void* rectangles,const char* sentence, float drawX, float drawY, D3DXVECTOR4 color,float size,int textureChannel)
 	{
 		JR_Rectangle::Rectangle* rectanglesPtr;
 		int numLetters, letter;
@@ -146,44 +154,45 @@ namespace JR_Font
 		//get the number of letters in the sentence
 		numLetters = strlen(sentence);
 
-		
+
 		//create each letter
 		for (int i = 0;i < numLetters;i++)
 		{
 			letter = ((int)sentence[i]) - 32;
 
-           if (letter == 0)
-		   {
-			//it was a space so just add to the x draw location
-			drawX += 3.0f* size;
-		   }
-		   else
-			   if (letter+32 == '\n')
-			   {
-				   //character was a new line so make a new line for the characters
-				   drawX = oriX;
-				   //make the line move down one
-				   drawY -= 16 * size;
-			   }
-		   else
-		   {
-            //create the new rectangle to be added
-			JR_Rectangle::Rectangle rect = JR_Rectangle::Rectangle();
+			if (letter+32 == 0)
+			{
+				//it was a space so just add to the x draw location
+				drawX += 3.0f* size;
+			}
+			else
+				if (letter + 32 == '\n')
+				{
+					//character was a new line so make a new line for the characters
+					drawX = oriX;
+					//make the line move down one
+					drawY -= 16 * size;
+				}
+				else
+				{
+					//create the new rectangle to be added
+					JR_Rectangle::Rectangle rect = JR_Rectangle::Rectangle();
 
-			//set the propertys for the rectangle and add it to the rectangles array
+					//set the propertys for the rectangle and add it to the rectangles array
 
-			rect.init(drawX, drawY, m_font[letter].size*size, 16*size, 0, 1, D3DXVECTOR2(m_font[letter].left, 0), D3DXVECTOR2(m_font[letter].right, 1), color);
+					rect.init(drawX, drawY, m_font[letter].size*size, 16 * size, 0, textureChannel, D3DXVECTOR2(m_font[letter].left, 0), D3DXVECTOR2(m_font[letter].right, 1), color);
 
-			//put the rectangle into the rectangles list
+					//put the rectangle into the rectangles list
 
-			rectanglesPtr[i] = rect;
-			//update the x draw location
-			drawX = drawX+ ((m_font[letter].size +3)*size);
-		   }
-			
+					rectanglesPtr[i] = rect;
+					//update the x draw location
+					drawX = drawX + ((m_font[letter].size + 3)*size);
+				}
+
 
 
 		}
+
 	}
 
 	//loadFontData-- loads the data for the font
@@ -283,5 +292,130 @@ namespace JR_Font
 			delete m_texture;
 			m_texture = NULL;
 		}
+	}
+
+	//loadBetterFontData-- replaces the old load font data method
+	//fontFileName- the name of the file to load
+	bool Font::loadBetterFontData(char* fontFileName)
+	{
+		string line;
+		string read, key, value;
+		size_t i;
+		fstream stream;
+
+		//open stream
+		stream.open(fontFileName);
+
+		if (stream.fail())
+		{
+			//return false, file could not be found or was bad
+			return false;
+		}
+
+		//continue reading the file
+			while (!stream.eof())
+			{
+				stringstream iss;
+				getline(stream, line);
+				iss << line;
+				//read the lines type
+				iss >> read;
+				if (read == "common")
+				{
+					while (!iss.eof())
+					{
+						stringstream converter;
+						iss >> read;
+						i = read.find('=');
+						key = read.substr(0, i);
+						value = read.substr(i + 1);
+
+						//assign the correct value
+						converter << value;
+						//choose the destination for the key
+						if (key == "lineHeight")
+						{
+							converter >> m_charSet->lineHeight;
+						}
+						else
+							if (key == "base")
+							{
+								converter >> m_charSet->base;
+							}
+							else if (key == "scaleW")
+							{
+								converter >> m_charSet->width;
+							}
+							else if (key == "scaleH")
+							{
+								converter >> m_charSet->height;
+							}
+							else if (key == "pages")
+							{
+								converter >> m_charSet->pages;
+							}
+							
+					}
+
+				}
+				else if (read == "char")
+				{
+					//this is data for a specific char
+					unsigned short charID = 0;
+
+					while (!iss.eof())
+					{
+						stringstream converter;
+						iss >> read;
+						i = read.find('=');
+						key = read.substr(0, 1);
+						value = read.substr(i + 1);
+					    //assign the correct value
+					    converter << value;
+					    if (key == "id")
+					    {
+							converter >> charID;
+					    }
+						else if (key == "x")
+						{
+							converter >> m_charSet->Chars[charID].x;
+						}
+						else if (key == "y")
+						{
+							converter >> m_charSet->Chars[charID].y;
+						}
+						else if (key == "width")
+						{
+							converter >> m_charSet->Chars[charID].width;
+						}
+						else if (key == "height")
+						{
+							converter >> m_charSet->Chars[charID].height;
+						}
+						else if (key == "xoffset")
+						{
+							converter >> m_charSet->Chars[charID].xoffset;
+						}
+						else if (key == "yoffset")
+						{
+							converter >> m_charSet->Chars[charID].yoffset;
+						}
+						else if (key == "xadvance")
+						{
+							converter >> m_charSet->Chars[charID].xadvance;
+						}
+						else if (key == "page")
+						{
+							converter >> m_charSet->Chars[charID].page;
+						}
+					}
+
+
+				}
+			
+
+
+		}
+		return true;
 	}
 }

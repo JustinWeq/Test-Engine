@@ -61,7 +61,7 @@ namespace Application
 		windowsClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 		windowsClass.hIconSm = windowsClass.hIcon;
 		windowsClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-		windowsClass.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
+		windowsClass.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(0x00,0x00,0x00));
 		windowsClass.lpszMenuName = m_applicationName;
 		windowsClass.lpszClassName = m_applicationName;
 		windowsClass.cbSize = sizeof(WNDCLASSEX);

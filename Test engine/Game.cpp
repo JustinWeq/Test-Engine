@@ -93,7 +93,7 @@ void init()
 	bool result;
 	app = App();
 
-	app.init(800, 600, false , L"Test engine");
+	app.init(1920, 1080, false , L"Test engine");
 
 	D3DXMatrixLookAtLH(&view, &D3DXVECTOR3(0, 0, -10.0f), &D3DXVECTOR3(0, 0, -9.0f), &D3DXVECTOR3(0, 1, 0));
 
@@ -235,17 +235,18 @@ void init()
 	 //load the texture
 	 rectTexture = new Texture();
 
-	 error != rectTexture->init(graphics->getDevice(), TEXT("font.dds"));
-
-	 texture = new Texture();
-
-	 texture->init(graphics->getDevice(), TEXT("font.dds"));
-
-	 for (int i = 0;i < 30;i++)
+	 error != rectTexture->init(graphics->getDevice(), TEXT("testfont.dds"));
+	 if (error)
 	 {
-       renderer->addTexture(*texture);
+		 int test = 0;
 	 }
 
+	  texture = new Texture();
+
+	 error != texture->init(graphics->getDevice(), TEXT("font.dds"));
+
+	 renderer->addTexture(*rectTexture);
+	 renderer->addTexture(*texture);
 	 int test = 0;
 
 	 rectangle2 = new JR_Rectangle::Rectangle();
@@ -256,10 +257,12 @@ void init()
 
 	 label = new Label();
 
-	 label->init(0,-100, 1, D3DXVECTOR4(1, 0, 0, 1), 256, text->getFont());
+	 label->init(0,-100, 3, D3DXVECTOR4(1, 0, 0, 1), 256, text->getFont());
+
+	 label->setTextureChannel(1);
 
 	 //set the label sentence
-	 label->setText("i\n new line\nnewline\nnewline");
+	 label->setText("i\nnew line\nnewline\nnewline");
 }
 
 bool update()
@@ -310,7 +313,7 @@ bool update()
 		{
 			done = true;
 		}
-		"53453453453453453453";
+
 		//read input for player movement.
 		float x = 0, y = 0, z = 0;
 		float playSpeed = 1;
@@ -403,47 +406,14 @@ bool update()
 		//D3DXMatrixTranslation(&matrix, x, y, z);
 		//(*object)*matrix;
 		//update the sentences
-		char tempString[32];
-		char cpuString[32];
-		char fpsString[32];
-		char drawsString[32];
-		char frameTimeString[32];
-		char mouseButtonString[32];
-		bool clicked = input->isLeftClicked();
-	    
-		_itoa_s(cpuPercentage, tempString, 10);
-		strcpy_s(cpuString, "Cpu: ");
-		strcat_s(cpuString, tempString);
-		strcat_s(cpuString, "%");
-		text->setSentence(0, cpuString, 10, 0, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
-		//set fps sentence
-		_itoa_s(fpss, tempString, 10);
-		strcpy_s(fpsString, "Fps: ");
-		strcat_s(fpsString, tempString);
-		text->setSentence(1, fpsString, 10, 32, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
-		//set frametime sentence
-		sprintf(tempString, "%f", frameTime);
-		strcpy_s(frameTimeString, "FrameTime: ");
-		strcat_s(frameTimeString, tempString);
-		text->setSentence(2, frameTimeString, 10,64, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
-		//set number of drawn triangles
-		_itoa_s(numTriangles, tempString, 10);
-		strcpy(drawsString, "Draws Triangles");
-		strcat_s(drawsString, tempString);
-		text->setSentence(3, drawsString, 10, 96, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
-		//set mouse button
-		//sprintf(tempString, "%b", clicked);
-		//strcpy_s(mouseButtonString, "left button: ");
-		//strcat_s(mouseButtonString, tempString);
-		if (input->isLeftClicked())
-		{
-			text->setSentence(4,"mouse is clicked", 10, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
-		}
-		else
-		{
-			text->setSentence(4, "mouse is not clicked", 10, 128, 0, 1, 0, graphics->getDeviceContext(), graphics->getDevice());
-		}
 
+
+		string test = "Fps: " + to_string(fpss) + "\n" +
+			"Cpu: " + to_string(cpuPercentage) + "\nFrametime: " +
+			to_string(frameTime);
+
+		//set the sentence
+		label->setText(test.c_str());
 
 
 	}

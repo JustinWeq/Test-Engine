@@ -3,6 +3,8 @@
 #include <D3D11.h>
 #include <D3DX10math.h>
 #include <fstream>
+#include <string>
+#include <sstream>
 #include "Texture.h"
 #include "Rectangle.h"
 using namespace std;
@@ -23,6 +25,24 @@ namespace JR_Font
 		{
 			D3DXVECTOR3 position;
 			D3DXVECTOR2 texture;
+		};
+
+		struct CharDescriptor
+		{
+			unsigned short x, y;
+			unsigned short width, height;
+			float xoffset, yoffset;
+			float xadvance;
+			unsigned short page;
+		};
+
+		struct CharSet
+		{
+			unsigned long lineHeight;
+			unsigned short base;
+			unsigned short width, height;
+			unsigned short pages;
+			CharDescriptor Chars[256];
 		};
 
 	public:
@@ -58,7 +78,8 @@ namespace JR_Font
 		//drawY- the y coord of the sentence
 		//color- the color of the sentence
 		//size- the size to multiply the normal font size by
-		void buildRectangleArray(void* rectangles, char* sentence, float drawX, float drawY, D3DXVECTOR4 color, float size);
+		//textureChannel- the id for the texture
+		void buildRectangleArray(void* rectangles,const char* sentence, float drawX, float drawY, D3DXVECTOR4 color, float size,int textureChannel);
 
 		float getStringWidth(char* text);
 
@@ -67,6 +88,9 @@ namespace JR_Font
 		//fontFileName- the name of the font file
 		bool loadFontData(char* fontFileName);
 
+		//loadBetterFontData-- replaces the old load font data method
+		//fontFileName- the name of the file to load
+		bool loadBetterFontData(char* fontFileName);
 		//releaseFontData-- releases the data for the font
 		void releaseFontData();
 
@@ -84,5 +108,8 @@ namespace JR_Font
 		//texture- the texture for the font
 		Texture* m_texture;
 
+		CharDescriptor* m_charDescriptions;
+
+		CharSet* m_charSet;
 	};
 }

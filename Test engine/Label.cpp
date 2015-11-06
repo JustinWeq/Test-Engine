@@ -40,25 +40,28 @@ namespace JR_Label
 		m_font = font;
 		//initialize the array for the letters
 		m_rectangles = new JR_Rectangle::Rectangle[maxNumOfChars];
+		m_text = new char[maxNumOfChars];
 
 		return true;
 	}
 
 	//setText-- sets the text for the label
 	//text- the text to set the label to
-	bool Label::setText(char* text)
+	bool Label::setText(const char* text)
 	{
 		if (strlen(text) > m_maxNumChars)
 		{
 			//return false since the max number of characters was exceeded
 			return false;
 		}
-		delete[] m_text;
 		//set the text
-		m_text = text;
+		strcpy(m_text, text);
+
+		//zero memory for rectangle array
+		ZeroMemory(m_rectangles, m_maxNumChars);
 
 		//update the rectangles array
-		m_font->buildRectangleArray(m_rectangles, m_text, m_x, m_y, m_color, m_size);
+		m_font->buildRectangleArray(m_rectangles, m_text, m_x, m_y, m_color, m_size, m_textureChannel);
 
 		//return true since it was successfull
 		return true;
@@ -108,7 +111,7 @@ namespace JR_Label
 
 		//update the letter size
 		delete[] m_rectangles;
-		
+
 		m_rectangles = new JR_Rectangle::Rectangle[m_maxNumChars];
 
 		//rebuild the text
@@ -184,5 +187,17 @@ namespace JR_Label
 			//draw each of the characters
 			m_rectangles[i].draw(renderer);
 		}
+	}
+
+	//setTextureChannel-- sets the texture channel
+	void Label::setTextureChannel(int textureChannel)
+	{
+		m_textureChannel = textureChannel;
+	}
+
+	//getTextureChannel-- returns the id for the texture of this label
+	int Label::getTextureChannel()
+	{
+		return m_textureChannel;
 	}
 }

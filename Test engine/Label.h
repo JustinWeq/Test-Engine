@@ -24,7 +24,7 @@ namespace JR_Label
 
 	 //setText-- sets the text for the label
 	 //text- the text to set the label to
-	 bool setText(char* text);
+	 bool setText(const char* text);
 
 	 //setX-- sets the x coord of the label
 	 void setX(float x);
@@ -44,6 +44,9 @@ namespace JR_Label
 	 //setFont-- sets the font for the label
 	 //font- the new font for the label
 	 void setFont(JR_Font::Font* font);
+
+	 //setTextureChannel-- sets the tex
+	 void setTextureChannel(int textureChannel);
 
 	 //setMaxNumChars-- sets the max number of characters for the label
 	 //maxNumChars- the maximum number of characters this label can hold(note this wipes the text that is in the label
@@ -72,6 +75,9 @@ namespace JR_Label
 	 //getMaxNumChars-- returns the maximum number of characters for the label
 	 int getMaxNumChars();
 
+	 //getTextureChannel-- returns the id for the texture of this label
+	 int getTextureChannel();
+
 	 //shutdown-- cleans up memory for the label
 	 void shutdown();
 
@@ -91,6 +97,9 @@ namespace JR_Label
 
 	 //size- the size to multiply the font by
 	 float m_size;
+
+	 //textureChannel- the id for the texture
+	 int m_textureChannel;
 
 	 //color- the color of the text
 	 D3DXVECTOR4 m_color;

@@ -19,7 +19,6 @@ namespace JR_Texture
 	bool Texture::init(ID3D11Device* device, WCHAR* filename)
 	{
 		HRESULT result;
-
 		//load in the texture
 		result = D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &m_texture,NULL);
 		if (FAILED(result))
