@@ -61,6 +61,8 @@ namespace JR_Renderer
 		//deviceContext
 		bool presentDraw(ID3D11DeviceContext* deviceContext);
 
+		bool presentTextDraw(ID3D11DeviceContext* deviceContext);
+
 		//addTexture
 		//texture- the texture to add, remember no more then 30 textures can be loaded at once
 		bool addTexture(Texture texture);
@@ -117,6 +119,8 @@ namespace JR_Renderer
 		ID3D11VertexShader* m_vertexShader;
 		//pixelShader- the pixel shader
 		ID3D11PixelShader* m_pixelShader;
+		//fontPixelShader- the pixel shader for the font
+		ID3D11PixelShader* m_fontPixelShader;
 		//layout- the layout of the vertex for the shader
 		ID3D11InputLayout* m_layout;
 		//vertices-the list of vertices for the instance

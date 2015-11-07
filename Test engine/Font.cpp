@@ -31,10 +31,13 @@ namespace JR_Font
 		}
 
 		//loadbetterfont data
-		//result = loadBetterFontData("testfont.fnt");
+		result = loadBetterFontData("Aerial.fnt");
 		if (!result)
 		{
+			MessageBox(NULL, L"Font was not loaded, most likely file was not found", L"File not found", MB_OK);
+
 			return false;
+			
 		}
 
 		//load the texture that has the font characters it it.
@@ -158,20 +161,20 @@ namespace JR_Font
 		//create each letter
 		for (int i = 0;i < numLetters;i++)
 		{
-			letter = ((int)sentence[i]) - 32;
+			letter = ((int)sentence[i]);
 
-			if (letter+32 == 0)
+			if (letter == 0)
 			{
 				//it was a space so just add to the x draw location
-				drawX += 3.0f* size;
+				drawX += m_charSet->base* size;
 			}
 			else
-				if (letter + 32 == '\n')
+				if (letter == '\n')
 				{
 					//character was a new line so make a new line for the characters
 					drawX = oriX;
 					//make the line move down one
-					drawY -= 16 * size;
+					drawY -= m_charSet->lineHeight * size;
 				}
 				else
 				{
@@ -180,19 +183,25 @@ namespace JR_Font
 
 					//set the propertys for the rectangle and add it to the rectangles array
 
-					rect.init(drawX, drawY, m_font[letter].size*size, 16 * size, 0, textureChannel, D3DXVECTOR2(m_font[letter].left, 0), D3DXVECTOR2(m_font[letter].right, 1), color);
+					rect.init(drawX, drawY
+						, m_charSet->Chars[letter].width*size, m_charSet->Chars[letter].height * size, 0, textureChannel,
+						D3DXVECTOR2((float)m_charSet->Chars[letter].x/(float)m_charSet->width,
+							(float)m_charSet->Chars[letter].y/(float)m_charSet->height),
+						D3DXVECTOR2((float)(m_charSet->Chars[letter].x+ m_charSet->Chars[letter].width)/(float)m_charSet->width,
+							(float)(m_charSet->Chars[letter].y+ m_charSet->Chars[letter].height)/(float)m_charSet->height), color);
 
 					//put the rectangle into the rectangles list
 
 					rectanglesPtr[i] = rect;
 					//update the x draw location
-					drawX = drawX + ((m_font[letter].size + 3)*size);
+					drawX = drawX + ((m_charSet->Chars[letter].width*size)+(m_charSet->Chars[letter].xadvance*size));
 				}
 
 
 
 		}
 
+		int test = 12;
 	}
 
 	//loadFontData-- loads the data for the font
@@ -368,7 +377,7 @@ namespace JR_Font
 						stringstream converter;
 						iss >> read;
 						i = read.find('=');
-						key = read.substr(0, 1);
+						key = read.substr(0, i);
 						value = read.substr(i + 1);
 					    //assign the correct value
 					    converter << value;

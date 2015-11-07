@@ -124,7 +124,7 @@ void init()
 	//init the model
 	//error != model->init(graphics->getDevice(), "cube.mdl", TEXT("texture.dds"));
 
-	error  != object->init(graphics->getDevice(), "brick.obj", TEXT("texture.dds"));
+	error  != object->init(graphics->getDevice(), "test.fbx", TEXT("texture.dds"));
 
 	//init the input device
 	input = new Input();
@@ -224,7 +224,7 @@ void init()
 	 rectangle = new JR_Rectangle::Rectangle();
 
 	 //init the rectangle
-	 error != rectangle->init(0, 0, 256,32, 132, 0, D3DXVECTOR2(0,0), D3DXVECTOR2(1, 1), D3DXVECTOR4(1, 1, 1, 1));
+	 error != rectangle->init(0, 0, 256,32, 132, 0, D3DXVECTOR2(0,0), D3DXVECTOR2(1, 1), D3DXVECTOR4(0, 0, 1, 1));
 
 	 //set up the renderer
 	 renderer = new Renderer();
@@ -235,7 +235,7 @@ void init()
 	 //load the texture
 	 rectTexture = new Texture();
 
-	 error != rectTexture->init(graphics->getDevice(), TEXT("testfont.dds"));
+	 error != rectTexture->init(graphics->getDevice(), TEXT("texture.dds"));
 	 if (error)
 	 {
 		 int test = 0;
@@ -243,7 +243,7 @@ void init()
 
 	  texture = new Texture();
 
-	 error != texture->init(graphics->getDevice(), TEXT("font.dds"));
+	 error != texture->init(graphics->getDevice(), TEXT("Aerial.png"));
 
 	 renderer->addTexture(*rectTexture);
 	 renderer->addTexture(*texture);
@@ -257,7 +257,7 @@ void init()
 
 	 label = new Label();
 
-	 label->init(0,-100, 3, D3DXVECTOR4(1, 0, 0, 1), 256, text->getFont());
+	 label->init(0,-100, 1, D3DXVECTOR4(0, 1, 0, 1), 256, text->getFont());
 
 	 label->setTextureChannel(1);
 
@@ -445,6 +445,9 @@ void draw()
 	//(*object)*world;
 	//model->render(graphics->getDeviceContext());
 	object->render(graphics->getDeviceContext());
+
+	shader->render(graphics->getDeviceContext(), object->getIndexCount(), object->getWorld(), cam.getViewMatrix(), projection, rectTexture->getTexture(), D3DXVECTOR3(0, 0, 0), D3DXVECTOR4(0.2, 0.2, 0.2, 1),
+		D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(cam.getPosX(), cam.getPosY(), cam.getPosZ()), D3DXVECTOR4(1, 0, 0, 1), 1.0);
 	//prepare the line model for rendering
 	lineModel->render(graphics->getDeviceContext());
 

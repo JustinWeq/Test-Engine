@@ -277,20 +277,20 @@ namespace JR_Renderer
 		pixelShaderBuffer = NULL;
 
 		//compile the vertex shader code
-		result = D3DX11CompileFromFile(L"defualt.vs", NULL, NULL, "instancedVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualtvertexshader.fx", NULL, NULL, "instancedVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&vertexShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
 			//if the shader faild to compile display error message to the user
 			if (errorMessage)
 			{
-				outputShaderErrorMessage(errorMessage, hwnd, L"defualt.vs");
+				outputShaderErrorMessage(errorMessage, hwnd, L"defualtvertexshader.fx");
 			}
 			else
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, L"defualt.vs", L"Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualtvertexshader.fx", L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
@@ -304,20 +304,20 @@ namespace JR_Renderer
 		}
 
 		//compile the pixel shader code
-		result = D3DX11CompileFromFile(L"defualt.ps", NULL, NULL, "instancedPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		result = D3DX11CompileFromFile(L"defualtpixelshader.fx", NULL, NULL, "instancedPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 			&pixelShaderBuffer, &errorMessage, NULL);
 		if (FAILED(result))
 		{
 			//if the shader faild to compile display error message to the user
 			if (errorMessage)
 			{
-				outputShaderErrorMessage(errorMessage, hwnd, L"defualt.ps");
+				outputShaderErrorMessage(errorMessage, hwnd, L"defualtpixelshader.fx");
 			}
 			else
 			{
 				//theres nothing in the error message
 				// so it could not find the shader file itself
-				MessageBox(hwnd, L"defualt.ps", L"Could not find the file for the shader", MB_OK);
+				MessageBox(hwnd, L"defualtpixelshader.fx", L"Could not find the file for the shader", MB_OK);
 			}
 
 			return false;
@@ -330,6 +330,32 @@ namespace JR_Renderer
 			return false;
 		}
 
+		//compile the font pixel shader code
+		result = D3DX11CompileFromFile(L"defualtpixelshader.fx", NULL, NULL, "fontPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+			&pixelShaderBuffer, &errorMessage, NULL);
+			if (FAILED(result))
+			{
+				//if the shader faild to compile display error message to the user
+				if (errorMessage)
+				{
+					outputShaderErrorMessage(errorMessage, hwnd, L"defualtpixelshader.fx");
+				}
+				else
+				{
+					//theres nothing in the error message
+					// so it could not find the shader file itself
+					MessageBox(hwnd, L"defualtpixelshader.fx", L"Could not find the file for the shader", MB_OK);
+				}
+
+				return false;
+			}
+
+			//create the pixel shader
+		result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_fontPixelShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
 		//vertex position, by vertex
 		polygonLayout[0].AlignedByteOffset = 0;
 		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;

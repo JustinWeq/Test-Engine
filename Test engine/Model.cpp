@@ -26,7 +26,7 @@ namespace JR_Model
 		bool result;
 
 		//load in the model data
-		result = loadObjModel(modelFilename);
+		result = loadFBXModel(modelFilename);
 		//result = loadModel(modelFilename);
 		if (!result)
 		{
@@ -90,7 +90,7 @@ namespace JR_Model
 		D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 		D3D11_SUBRESOURCE_DATA vertexData, indexData;
 		HRESULT result;
-
+		m_indexCount = m_vertexCount;
 		//create the vertex array
 		vertices = new Vertex[m_vertexCount];
 		if (!vertices)
@@ -112,7 +112,7 @@ namespace JR_Model
 			vertices[i].texture = D3DXVECTOR2(m_model[i].tu, m_model[i].tv);
 			vertices[i].normal = D3DXVECTOR3(m_model[i].nx, m_model[i].ny, m_model[i].nz);
 
-			indices[i] = i;
+			indices[i] = m_vertexCount-i-1;
 		}
 
 		//Set up the description of the static vertex buffer
@@ -308,46 +308,28 @@ namespace JR_Model
 	bool Model::loadFBXModel(char* filename)
 	{
 		bool result;
-		vector<Vertex> vertices;
-		vector<D3DXVECTOR3> coords;
-		vector<D3DXVECTOR2> uvCoordsf;
-		vector<D3DXVECTOR3> normalsf;
+		vector<D3DXVECTOR3> vertexes;
+		FbxManager* fbxManager = nullptr;
+		//create the fbx manager
+		fbxManager = FbxManager::Create();
 
+		//create the fbx io settings
+		FbxIOSettings* IOSettings = FbxIOSettings::Create(fbxManager,IOSROOT);
 
-		//set up the fbxmanager
-		FbxManager* fbxManager = FbxManager::Create();
+		//create the importer
+		FbxImporter* importer = FbxImporter::Create(fbxManager, "");
 
-		//set the settings for the manager
-		FbxIOSettings* ioSettings = FbxIOSettings::Create(fbxManager, IOSROOT);
-		fbxManager->SetIOSettings(ioSettings);
-		/*(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_MATERIAL, true);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_TEXTURE, true);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_LINK, false);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_SHAPE, false);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_GOBO, false);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_ANIMATION, true);
-		(*(fbxManager->GetIOSettings())).SetBoolProp(IMP_FBX_GLOBAL_SETTINGS, true);*/
-
-		//set the settings for the fbx io settings
-		//create and init the importer
-		FbxImporter *importer = FbxImporter::Create(fbxManager,"");
-
-		//create and init the scene
+		//create the scene
 		FbxScene* fbxScene = FbxScene::Create(fbxManager, "");
-		//init the importer
-		result = importer->Initialize(filename,-1, fbxManager->GetIOSettings());
+
+		//inialize the impoter
+		result = importer->Initialize(filename, -1, fbxManager->GetIOSettings());
 		if (!result)
 		{
-			string error = importer->GetStatus().GetErrorString();
-			FbxStatus status = importer->GetStatus().GetCode();
-			if (importer->GetStatus().GetCode() == FbxStatus::eFailure)
-			{
-				int test = 0;
-			}
 			return false;
 		}
 
-		//importer the scene
+		//import the scene
 		result = importer->Import(fbxScene);
 		if (!result)
 		{
@@ -357,94 +339,73 @@ namespace JR_Model
 		//destroy the importer
 		importer->Destroy();
 
-		//get the root node
+		//create the root node
 		FbxNode* fbxRootNode = fbxScene->GetRootNode();
-
 		if (fbxRootNode)
 		{
-			//get the x,y,z coords of the vertices
-			for (int i = 0; i < fbxRootNode->GetChildCount(); i++)
+			for (int i = 0;i < fbxRootNode->GetChildCount();i++)
 			{
 				FbxNode* fbxChildNode = fbxRootNode->GetChild(i);
 
 				if (fbxChildNode->GetNodeAttribute() == NULL)
-				{
 					continue;
-				}
 
 				FbxNodeAttribute::EType attributeType = fbxChildNode->GetNodeAttribute()->GetAttributeType();
 
 				if (attributeType != FbxNodeAttribute::eMesh)
-				{
 					continue;
-				}
 
-				FbxMesh* mesh =(FbxMesh*) fbxChildNode->GetNodeAttribute();
+				FbxMesh* mesh = (FbxMesh*)fbxChildNode->GetNodeAttribute();
 
-				//get the vertices
 				FbxVector4* vertices = mesh->GetControlPoints();
 
-				for (int j = 0; j < mesh->GetPolygonCount(); j++)
+				for (int j = 0;j < mesh->GetPolygonCount();j++)
 				{
-					int numVerticies = mesh->GetPolygonSize(j);
+					int numVertices = mesh->GetPolygonSize(i);
+					if (numVertices != 3)
+						continue;
+					for (int k = 0;k < numVertices;k++)
+					{
+						int controlPointIndex = mesh->GetPolygonVertex(j, k);
 
-					for (int k = 0; k < numVerticies; k++)
-					{
-						int iControlPointIndex = mesh->GetPolygonVertex(j, k);
-
-						D3DXVECTOR3 vertex;
-						vertex.x = vertices[iControlPointIndex].mData[0];
-						vertex.y = vertices[iControlPointIndex].mData[1];
-						vertex.z = vertices[iControlPointIndex].mData[2];
-						coords.push_back(vertex);
-					}
-				}
-				FbxLayerElementArrayTemplate<FbxVector4>** normals;
-				//get the normals
-				mesh->GetNormals(normals);
-				for (int j = 0; i < mesh->GetPolygonCount(); j++)
-				{
-					int numVertices = mesh->GetPolygonSize(j);
-					for (int k = 0; k < numVertices; k++)
-					{
-						D3DXVECTOR3 vertex;
-						vertex.x = normals[i][j][k].mData[0];
-						vertex.y = normals[i][j][k].mData[1];
-						vertex.z = normals[i][j][k].mData[2];
-						normalsf.push_back(vertex);
-					}
-				}
-				FbxLayerElementArrayTemplate<FbxVector2>** uvCoords;
-			    //get UV coords
-				mesh->GetTextureUV(uvCoords);
-				for (int j = 0; j < mesh->GetPolygonCount(); j++)
-				{
-					int numvertices = mesh->GetPolygonSize(j);
-					for (int k = 0; k < numvertices; k++)
-					{
-						D3DXVECTOR2 vertex;
-						vertex.x = uvCoords[i][j][k].mData[0];
-						vertex.y = uvCoords[i][j][k].mData[1];
-						uvCoordsf.push_back(vertex);
+						D3DXVECTOR3 point;
+						point.x = (float)vertices[controlPointIndex].mData[0];
+						point.y = (float)vertices[controlPointIndex].mData[1];
+						point.z = (float)vertices[controlPointIndex].mData[2];
+						vertexes.push_back(point);
+						
 					}
 				}
 			}
-
 		}
-
 		//now add the obtained model information to the m_model
-		m_model = new ModelType[coords.size()];
-		for (int i = 0; i < coords.size(); i++)
+		//m_model = new ModelType[coords.size()];
+		//for (int i = 0; i < coords.size(); i++)
+		//{
+		//	m_model[i].x = coords[i].x;
+		//	m_model[i].y = coords[i].y;
+		//	m_model[i].z = coords[i].z;
+		//	m_model[i].nx = normalsf[i].x;
+		//	m_model[i].ny = normalsf[i].y;
+		//	m_model[i].nz = normalsf[i].z;
+		//	m_model[i].tu = uvCoordsf[i].x;
+		//	m_model[i].tv = uvCoordsf[i].y;
+		//}
+
+		m_model = new ModelType[vertexes.size()];
+		//now add the points to the model
+		for (int i = 0;i < vertexes.size();i++)
 		{
-			m_model[i].x = coords[i].x;
-			m_model[i].y = coords[i].y;
-			m_model[i].z = coords[i].z;
-			m_model[i].nx = normalsf[i].x;
-			m_model[i].ny = normalsf[i].y;
-			m_model[i].nz = normalsf[i].z;
-			m_model[i].tu = uvCoordsf[i].x;
-			m_model[i].tv = uvCoordsf[i].y;
+			m_model[i].nx = 1;
+			m_model[i].ny = 0;
+			m_model[i].nz = 0;
+			m_model[i].tu = 0;
+			m_model[i].tv = 0;
+			m_model[i].x = vertexes[i].x;
+			m_model[i].y = vertexes[i].y;
+			m_model[i].z = vertexes[i].z;
 		}
+		m_vertexCount = vertexes.size();
 		return true;
 	}
 

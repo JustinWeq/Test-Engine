@@ -343,13 +343,13 @@ float4 instancedPixelShader(InstancedPixelInput input) : SV_TARGET
  }
  
  //multiply the two colors together
- outputColor = textureColor*outputColor;
+  outputColor = textureColor*outputColor;
  }
  //outputColor.r = 1.0f;
 // outputColor.g = 1.0f;
  //outputColor.b = 1.0f;
  //outputColor.a = 1.0f;
- if(outputColor.r  == 0.0f)
+ if(outputColor.r + outputColor.g+outputColor.b  == 0.0f)
  {
  outputColor.a = 0.0f;
  }
@@ -357,5 +357,182 @@ float4 instancedPixelShader(InstancedPixelInput input) : SV_TARGET
  return outputColor;
 }
 
+float4 fontPixelShader(InstancedPixelInput input): SV_TARGET
+{
+float4 outputColor;
+float4 textureColor;
+//get the input color
+outputColor = input.color;
+if (input.textureID > -1)
+{
+	textureColor = 1;
+	//get the texture color
+	switch (input.textureID)
+	{
+	case 0:
+	{
+		textureColor = shaderTexture[0].Sample(SampleType, input.tex);
+		break;
+	}
+	case 1:
+	{
+		textureColor = shaderTexture[1].Sample(SampleType, input.tex);
+		break;
+	}
+	case 2:
+	{
+		textureColor = shaderTexture[2].Sample(SampleType, input.tex);
+		break;
+	}
+	case 3:
+	{
+		textureColor = shaderTexture[3].Sample(SampleType, input.tex);
+		break;
+	}
+	case 4:
+	{
+		textureColor = shaderTexture[4].Sample(SampleType, input.tex);
+		break;
+	}
+	case 5:
+	{
+		textureColor = shaderTexture[5].Sample(SampleType, input.tex);
+		break;
+	}
+	case 6:
+	{
+		textureColor = shaderTexture[6].Sample(SampleType, input.tex);
+		break;
+	}
+	case 7:
+	{
+		textureColor = shaderTexture[7].Sample(SampleType, input.tex);
+		break;
+	}
+	case 8:
+	{
+		textureColor = shaderTexture[8].Sample(SampleType, input.tex);
+		break;
+	}
+	case 9:
+	{
+		textureColor = shaderTexture[9].Sample(SampleType, input.tex);
+		break;
+	}
+	case 10:
+	{
+		textureColor = shaderTexture[10].Sample(SampleType, input.tex);
+		break;
+	}
+	case 11:
+	{
+		textureColor = shaderTexture[11].Sample(SampleType, input.tex);
+		break;
+	}
+	case 12:
+	{
+		textureColor = shaderTexture[12].Sample(SampleType, input.tex);
+		break;
+	}
+	case 13:
+	{
+		textureColor = shaderTexture[13].Sample(SampleType, input.tex);
+		break;
+	}
+	case 14:
+	{
+		textureColor = shaderTexture[14].Sample(SampleType, input.tex);
+		break;
+	}
+	case 15:
+	{
+		textureColor = shaderTexture[15].Sample(SampleType, input.tex);
+		break;
+	}
+	case 16:
+	{
+		textureColor = shaderTexture[16].Sample(SampleType, input.tex);
+		break;
+	}
+	case 17:
+	{
+		textureColor = shaderTexture[17].Sample(SampleType, input.tex);
+		break;
+	}
+	case 18:
+	{
+		textureColor = shaderTexture[18].Sample(SampleType, input.tex);
+		break;
+	}
+	case 19:
+	{
+		textureColor = shaderTexture[19].Sample(SampleType, input.tex);
+		break;
+	}
+	case 20:
+	{
+		textureColor = shaderTexture[20].Sample(SampleType, input.tex);
+		break;
+	}
+	case 21:
+	{
+		textureColor = shaderTexture[21].Sample(SampleType, input.tex);
+		break;
+	}
+	case 22:
+	{
+		textureColor = shaderTexture[22].Sample(SampleType, input.tex);
+		break;
+	}
 
+	case 23:
+	{
+		textureColor = shaderTexture[23].Sample(SampleType, input.tex);
+		break;
+	}
+	case 24:
+	{
+		textureColor = shaderTexture[24].Sample(SampleType, input.tex);
+		break;
+	}
+	case 25:
+	{
+		textureColor = shaderTexture[25].Sample(SampleType, input.tex);
+		break;
+	}
+	case 26:
+	{
+		textureColor = shaderTexture[26].Sample(SampleType, input.tex);
+		break;
+	}
+	case 27:
+	{
+		textureColor = shaderTexture[27].Sample(SampleType, input.tex);
+		break;
+	}
+	case 28:
+	{
+		textureColor = shaderTexture[28].Sample(SampleType, input.tex);
+		break;
+	}
+	case 29:
+	{
+		textureColor = shaderTexture[29].Sample(SampleType, input.tex);
+		break;
+	}
+	}
 
+	//multiply the two colors together
+	outputColor = textureColor*outputColor;
+}
+//outputColor.r = 1.0f;
+// outputColor.g = 1.0f;
+//outputColor.b = 1.0f;
+//outputColor.a = 1.0f;
+if (textureColor.r == 0.0f)
+{
+	outputColor.a = 0.0f;
+}
+//return the final output color
+return outputColor;
+}

@@ -236,8 +236,8 @@
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="D:\models\test.fbx" />
-    <None Include="defualt.ps" />
-    <None Include="defualt.vs" />
+    <None Include="defualtpixelshader.fx" />
+    <None Include="defualtvertexshader.fx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\Desktop\testfont.dds">
@@ -252,6 +252,7 @@
     <Image Include="font.dds">
       <DeploymentContent>false</DeploymentContent>
     </Image>
+    <Image Include="motorwork.dds" />
     <Image Include="texture.dds" />
   </ItemGroup>
   <ItemGroup>
