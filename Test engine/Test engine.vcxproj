@@ -160,6 +160,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Cpu.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="FlyCam.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Cpu.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="FlyCam.h" />

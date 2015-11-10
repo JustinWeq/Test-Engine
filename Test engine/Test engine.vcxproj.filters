@@ -149,6 +149,9 @@
     <ClCompile Include="Random.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -252,6 +255,9 @@
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Source Files\Gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

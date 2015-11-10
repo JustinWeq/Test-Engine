@@ -257,7 +257,7 @@ void init()
 
 	 label = new Label();
 
-	 label->init(0,-100, 1, D3DXVECTOR4(0, 1, 0, 1), 256, text->getFont());
+	 label->init(0,-100, 0.5, D3DXVECTOR4(0, 1, 0, 1), 256, text->getFont());
 
 	 label->setTextureChannel(1);
 
