@@ -22,6 +22,8 @@
 #include "Renderer.h"
 #include "Math.h"
 #include "Label.h"
+#include "Gui.h"
+#include "Button.h"
 #include <string>
 using namespace Application;
 using namespace JR_Model;
@@ -41,6 +43,8 @@ using namespace JR_Frustum;
 using namespace JR_TerrainQuadTree;
 using namespace JR_Renderer;
 using namespace JR_Label;
+using namespace JR_GuiManager;
+using namespace JR_Button;
 //prototypes
 void init();
 bool update();
@@ -71,6 +75,8 @@ Renderer* renderer;
 LineModel* lineModel;
 Texture* texture;
 Label* label;
+Button* button;
+JR_GuiManager::GuiManager* gui;
 
 JR_Rectangle::Rectangle* rectangle2;
 
@@ -257,12 +263,24 @@ void init()
 
 	 label = new Label();
 
-	 label->init(0,-100, 0.5, D3DXVECTOR4(0, 1, 0, 1), 256, text->getFont());
+	 label->init(0,-100, 1, D3DXVECTOR4(0, 1, 0, 1), 256, text->getFont());
 
 	 label->setTextureChannel(1);
 
 	 //set the label sentence
 	 label->setText("i\nnew line\nnewline\nnewline");
+
+	 //GuiManager
+	 gui = new JR_GuiManager::GuiManager();
+
+	 //initialize the GuiManager
+	 error != gui->init(graphics->getDevice(), "Aerial.fnt", TEXT("Aerial.png"), &app);
+
+	 //set up button
+	 button = new Button();
+
+	 //intialize the button
+	 error != button->init("Not clicked", 256, 256, 100, 100, D3DXVECTOR4(0, 1, 0, 1), D3DXVECTOR4(1, 0, 0, 1), gui);
 }
 
 bool update()
@@ -305,7 +323,7 @@ bool update()
 			cubeRot += (0.02)* frameTime;
 			 //modf(3.149,&cubeRot);
 			//now do the draw updates
-			draw();
+			
 		}
 		input->Frame();
 		////check to see if the escape key is pressed
@@ -415,7 +433,9 @@ bool update()
 		//set the sentence
 		label->setText(test.c_str());
 
-
+		//update the button
+		button->update(input);
+		draw();
 	}
 
 	return true;
@@ -528,6 +548,9 @@ shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld
 	//turn on alpha blending
 	graphics->alphaBlendingState(true);
 	result = text->render(graphics->getDeviceContext(), world2, ortho, shader);
+
+	//draw the button
+	button->draw(renderer);
 
 	//draw everything in the renderer
 	result = renderer->presentDraw(graphics->getDeviceContext());

@@ -152,6 +152,9 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\Gui</Filter>
     </ClCompile>
+    <ClCompile Include="Gui.cpp">
+      <Filter>Source Files\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -257,6 +260,9 @@
       <Filter>Source Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
+      <Filter>Source Files\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui.h">
       <Filter>Source Files\Gui</Filter>
     </ClInclude>
   </ItemGroup>

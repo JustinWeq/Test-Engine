@@ -56,7 +56,7 @@ namespace JR_Font
 		//device- the device to use for initialization
 		//fontFileName- the name of the font filw
 		//textureFileName- the name of the texture to use for the font
-		bool init(ID3D11Device* device, char* fontFileName, WCHAR* textureFileName);
+		bool init(ID3D11Device* device,const char* fontFileName, WCHAR* textureFileName);
 
 		//cleans up memory for the font class
 		void shutdown();
@@ -90,7 +90,7 @@ namespace JR_Font
 
 		//loadBetterFontData-- replaces the old load font data method
 		//fontFileName- the name of the file to load
-		bool loadBetterFontData(char* fontFileName);
+		bool loadBetterFontData(const char* fontFileName);
 		//releaseFontData-- releases the data for the font
 		void releaseFontData();
 

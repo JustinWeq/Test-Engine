@@ -19,19 +19,19 @@ namespace JR_Font
 	//device- the device to use for initialization
 	//fontFileName- the name of the font filw
 	//textureFileName- the name of the texture to use for the font
-	bool Font::init(ID3D11Device* device, char* fontFileName, WCHAR* textureFileName)
+	bool Font::init(ID3D11Device* device,const char* fontFileName, WCHAR* textureFileName)
 	{
 		bool result;
 		m_charSet = new CharSet();
 		//load in the text file contianing the font data
-		result = loadFontData(fontFileName);
-		if (!result)
-		{
-			return false;
-		}
+		//result = loadFontData(fontFileName);
+		//if (!result)
+		//{
+		//	return false;
+		//}
 
 		//loadbetterfont data
-		result = loadBetterFontData("Aerial.fnt");
+		result = loadBetterFontData(fontFileName);
 		if (!result)
 		{
 			MessageBox(NULL, L"Font was not loaded, most likely file was not found", L"File not found", MB_OK);
@@ -305,7 +305,7 @@ namespace JR_Font
 
 	//loadBetterFontData-- replaces the old load font data method
 	//fontFileName- the name of the file to load
-	bool Font::loadBetterFontData(char* fontFileName)
+	bool Font::loadBetterFontData(const char* fontFileName)
 	{
 		string line;
 		string read, key, value;
