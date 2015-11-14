@@ -79,6 +79,7 @@ Button* button;
 JR_GuiManager::GuiManager* gui;
 
 JR_Rectangle::Rectangle* rectangle2;
+JR_Rectangle::Rectangle* cursor;
 
 bool error = false;
 int cpuPercentage;
@@ -280,7 +281,13 @@ void init()
 	 button = new Button();
 
 	 //intialize the button
-	 error != button->init("Not clicked", 256, 256, 100, 100, D3DXVECTOR4(0, 1, 0, 1), D3DXVECTOR4(1, 0, 0, 1), gui);
+	 error != button->init("Not clicked", 0, 0, 100, 100, D3DXVECTOR4(0, 1, 0, 1), D3DXVECTOR4(1, 0, 0, 1), gui);
+
+	 //set up the cursor
+	 cursor = new JR_Rectangle::Rectangle();
+
+	 //intialize the cursor
+	 error != cursor->init(0, 0, 32, 32, 0, 0, D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), D3DXVECTOR4(1, 1, 1, 1));
 }
 
 bool update()
@@ -435,6 +442,18 @@ bool update()
 
 		//update the button
 		button->update(input);
+
+		//update the cursors position
+		int tx, ty;
+		input->GetMouseLocation(tx, ty);
+
+
+		cursor->setX(tx);
+
+		cursor->setY(ty);
+
+		//update the matrix
+		cursor->update();
 		draw();
 	}
 
@@ -551,6 +570,10 @@ shader->setTerrainShaderParameters(graphics->getDeviceContext(),object->getWorld
 
 	//draw the button
 	button->draw(renderer);
+
+	//draw the cursor
+	cursor->draw(renderer);
+
 
 	//draw everything in the renderer
 	result = renderer->presentDraw(graphics->getDeviceContext());

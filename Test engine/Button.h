@@ -105,6 +105,10 @@ namespace JR_Button
 		int m_x;
 		//y- the y coord of the button
 		int m_y;
+		//testX- the test x coord
+		int m_testX;
+		//testY- the test y coord
+		int m_testY;
 		//clicked- indicates whether the button is clicked on or not
 		bool m_clicked;
 		//hover- indicates whether the mouse is over the button or not

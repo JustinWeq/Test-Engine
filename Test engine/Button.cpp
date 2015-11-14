@@ -41,12 +41,16 @@ namespace JR_Button
 		m_y = y;
 		m_width = width;
 		m_height = height;
-
+		m_testX = x;
+		m_testY = y;
+		//set x and y accordin to screen dimensions
+		m_x -= parent->getApp()->getScreenWidth() / 2- (m_height/2);
+		m_y = m_y*-1 + (parent->getApp()->getScreenHeight() / 2)- (m_width/2);
 		//set up the label
 		m_label = new Label();
 
 		//initialize the label
-		m_label->init(x, y, 1, foreColor, 128,parent->getFont() );
+		m_label->init(m_x, m_y, 1, foreColor, 128,parent->getFont() );
 
 		//store the fore and back color
 		m_foreColor = foreColor;
@@ -58,7 +62,7 @@ namespace JR_Button
 		//set up the button
 		m_rectangle = new JR_Rectangle::Rectangle();
 		//initialize the rectanlge
-		m_rectangle->init(x, y, width, height, 0, -1, D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), m_backColor);
+		m_rectangle->init(m_x, m_y, width, height, 0, -1, D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), m_backColor);
 
 		return true;
 	}
@@ -236,8 +240,15 @@ namespace JR_Button
 		input->GetMouseLocation(x, y);
 
 		//test to see if the mouse is inside the button
-		return (x > m_x && x < m_x + m_width &&
-			y > m_y && y < m_y + m_height);
+		if (x > m_testX && x < m_testX + m_width &&
+			y > m_testY && y < m_testY + m_height)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 
 	}
 
