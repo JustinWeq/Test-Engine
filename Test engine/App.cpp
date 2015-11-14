@@ -110,7 +110,7 @@ namespace Application
 		SetFocus(m_hwnd);
 
 		//hide the mouse
-		ShowCursor(false);
+		while(ShowCursor(false) >= 0);
 	}
 
 	//closeWindows--exits the windows form
@@ -223,4 +223,13 @@ namespace Application
 	}
 
 	
+	//correctDrawLocation-- corrects the draw location in accordince with screen dimensions
+	//x- the x location to correct
+	//y- the y location to correct
+	void App::correctDrawLocation(int& x, int& y)
+	{
+		//invert y coord and add half of screen height
+		y = y*-1 + (m_height / 2);
+		x = x - (m_width / 2);
+	}
 }

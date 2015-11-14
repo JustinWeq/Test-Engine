@@ -446,7 +446,11 @@ bool update()
 		//update the cursors position
 		int tx, ty;
 		input->GetMouseLocation(tx, ty);
-
+		//fix the x and y draw coords
+		app.correctDrawLocation(tx, ty);
+		//apply offset for size
+		tx += cursor->getWidth() / 2;
+		ty -= cursor->getHeight() / 2;
 
 		cursor->setX(tx);
 

@@ -52,6 +52,9 @@ namespace JR_Button
 		//initialize the label
 		m_label->init(m_x, m_y, 1, foreColor, 128,parent->getFont() );
 
+		//set the texture channel for the label
+		m_label->setTextureChannel(1);
+
 		//store the fore and back color
 		m_foreColor = foreColor;
 		m_backColor = backColor;
@@ -179,22 +182,6 @@ namespace JR_Button
 	bool Button::update(Input* input)
 	{
 		//check to see if the button is clicked on
-		if (input->isLeftClicked())
-		{
-			m_clicked = true;
-			//set the color of the rectangle
-			m_rectangle->setColor(m_foreColor);
-
-			//set the color on the label
-			m_label->setColor(m_backColor);
-		}
-		else
-		{
-			m_clicked = false;
-			//reset the color on the rectangl and the label
-			m_rectangle->setColor(m_backColor);
-			m_rectangle->setColor(m_foreColor);
-		}
 
 
 		if (mouseHover(input))
@@ -205,14 +192,24 @@ namespace JR_Button
 
 			//set the color on the label
 			m_label->setColor(m_backColor);
+
+			//update the text since color was changed
+			m_label->setText(m_label->getText());
 		}
 		else
 		{
 			m_hover = false;
 			//reset the color on the rectangl and the label
 			m_rectangle->setColor(m_backColor);
-			m_rectangle->setColor(m_foreColor);
+
+			m_label->setColor(m_foreColor);
+
+			//update the text since color was changed
+			m_label->setText(m_label->getText());
 		}
+
+		//check to see if the button is clicked or not
+		m_clicked = (m_hover && input->isLeftClicked());
 		return true;
 	}
 

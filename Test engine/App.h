@@ -33,6 +33,11 @@ namespace Application
 		//getHinstance-- returns the hinstance of this app
 		HINSTANCE getHinstance();
 
+		//correctDrawLocation-- corrects the draw location in accordince with screen dimensions
+		//x- the x location to correct
+		//y- the y location to correct
+		void correctDrawLocation(int& x, int& y);
+
 	private:
 	    
 		void initWindows();
